@@ -59,32 +59,45 @@ async def get_barangays():
 
 
 @router.get("/{barangay_id}", response_model=BarangayDetail)
-def get_barangay(barangay_id: int):
-    # mock detail response
+async def get_barangay(barangay_id: int):
     barangay = next((b for b in barangays_data if b["id"] == barangay_id), None)
     if not barangay:
         return {"error": "Barangay not found"}
-    
+
+    # Fetch current weather data
+    async with httpx.AsyncClient() as client:
+        params = {
+            "latitude": barangay["lat"],
+            "longitude": barangay["lon"],
+            "current": ["temperature_2m", "relative_humidity_2m"]
+        }
+        r = await client.get(OPEN_METEO_URL, params=params)
+        data = r.json()
+        temp_c = data["current"]["temperature_2m"]
+        humidity = data["current"]["relative_humidity_2m"]
+        hi, risk = calculate_heat_index(temp_c, humidity)
+
     return {
         "id": barangay["id"],
         "name": barangay["name"],
         "lat": barangay["lat"],
         "lon": barangay["lon"],
         "current": {
-            "temperature": 34.5,
-            "humidity": 72,
-            "heat_index": barangay["heat_index"],
-            "risk_level": barangay["risk_level"],
-            "updated_at": barangay["updated_at"]
+            "temperature": temp_c,
+            "humidity": humidity,
+            "heat_index": hi,
+            "risk_level": risk,
+            "updated_at": datetime.utcnow()
         },
         "daily_briefing": {
+            # Example briefing data
+            # TODO: Generate based on actual data
             "safe_hours": "Before 10AM, After 4PM",
             "avoid_hours": "11AM–3PM",
             "advice": "Hydrate frequently and avoid prolonged outdoor work."
         },
         "forecast": [
-            {"time": "2025-08-29T08:00:00Z", "heat_index": 34.5, "risk_level": "Caution"},
-            {"time": "2025-08-29T11:00:00Z", "heat_index": 41.3, "risk_level": "Danger"},
-            {"time": "2025-08-29T14:00:00Z", "heat_index": 43.0, "risk_level": "Danger"}
+            # Future implementation: Add forecast data here
+            # For now, return empty list
         ]
     }
