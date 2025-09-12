@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from datetime import datetime
-from schemas.barangay import (
+from app.schemas.barangay import (
     BarangayBase,
     BarangaySummary,
     BarangayDetail
