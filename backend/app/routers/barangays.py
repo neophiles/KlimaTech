@@ -1,5 +1,10 @@
 from fastapi import APIRouter
 from datetime import datetime
+from schemas.barangay import (
+    BarangayBase,
+    BarangaySummary,
+    BarangayDetail
+)
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
@@ -26,13 +31,13 @@ barangays_data = [
     }
 ]
 
-@router.get("/")
+@router.get("/", response_model=list[BarangaySummary])
 def get_barangays():
     return barangays_data
 
 
 
-@router.get("/{barangay_id}")
+@router.get("/{barangay_id}", response_model=BarangayDetail)
 def get_barangay(barangay_id: int):
     # mock detail response
     barangay = next((b for b in barangays_data if b["id"] == barangay_id), None)
