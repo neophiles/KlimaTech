@@ -6,34 +6,55 @@ from app.schemas.barangay import (
     BarangayDetail
 )
 
+import httpx
+from app.utils.heat_index import calculate_heat_index
+from datetime import datetime
+
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
 
-# Mock data
+# Hardcode 2 barangays (later move to DB)
 barangays_data = [
-    {
-        "id": 1,
-        "name": "Gulang-Gulang",
-        "lat": 13.9432,
-        "lon": 121.6224,
-        "heat_index": 41.3,
-        "risk_level": "Danger",
-        "updated_at": datetime.utcnow()
-    },
-    {
-        "id": 2,
-        "name": "Ibabang Dupay",
-        "lat": 13.9368,
-        "lon": 121.6179,
-        "heat_index": 36.7,
-        "risk_level": "Extreme Caution",
-        "updated_at": datetime.utcnow()
-    }
+    {"id": 1, "name": "Barangay Dalahican, Lucena", "lat": 13.9317, "lon": 121.6233},
+    {"id": 2, "name": "Barangay Ibabang Dupay, Lucena", "lat": 13.9405, "lon": 121.6170},
 ]
 
-@router.get("/", response_model=list[BarangaySummary])
-def get_barangays():
-    return barangays_data
+
+OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+
+
+@router.get("/barangays", response_model=list[BarangaySummary])
+async def get_barangays():
+    results = []
+
+    async with httpx.AsyncClient() as client:
+        for b in barangays_data:
+            # Fetch current weather data
+            params = {
+                "latitude": b["lat"],
+                "longitude": b["lon"],
+                "current": ["temperature_2m", "relative_humidity_2m"]
+            }
+            r = await client.get(OPEN_METEO_URL, params=params)
+            data = r.json()
+
+            temp_c = data["current"]["temperature_2m"]
+            humidity = data["current"]["relative_humidity_2m"]
+
+            # Calculate heat index and risk level
+            hi, risk = calculate_heat_index(temp_c, humidity)
+
+            results.append({
+                "id": b["id"],
+                "name": b["name"],
+                "lat": b["lat"],
+                "lon": b["lon"],
+                "heat_index": hi,
+                "risk_level": risk,
+                "updated_at": datetime.utcnow()
+            })
+
+    return results
 
 
 
