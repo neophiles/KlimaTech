@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from app.routers import barangays
 
-app = FastAPI(title="Heat Risk API", version="0.1.0")
+
+app = FastAPI()
 
 
 app.include_router(barangays.router)
