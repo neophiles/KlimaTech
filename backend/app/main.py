@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from app.routers import barangays
+from db import init_db
 
 
 app = FastAPI()
-
 
 app.include_router(barangays.router)
 

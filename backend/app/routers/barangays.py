@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlmodel import Session, select
 from datetime import datetime
 from app.schemas.barangay import (
     BarangayBase,
@@ -9,6 +10,9 @@ from app.schemas.barangay import (
 import httpx
 from app.utils.heat_index import calculate_heat_index
 from datetime import datetime
+from app.models.barangay import Barangay
+from app.models.heat_log import HeatLog
+from app.db import get_session
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
@@ -24,15 +28,17 @@ OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 
 @router.get("/barangays", response_model=list[BarangaySummary])
-async def get_barangays():
+async def get_barangays(session: Session = next(get_session())):
+    # Fetch barangays from DB
+    barangays_data = session.exec(select(Barangay)).all()
     results = []
 
     async with httpx.AsyncClient() as client:
         for b in barangays_data:
             # Fetch current weather data
             params = {
-                "latitude": b["lat"],
-                "longitude": b["lon"],
+                "latitude": b.lat,
+                "longitude": b.lon,
                 "current": ["temperature_2m", "relative_humidity_2m"]
             }
             r = await client.get(OPEN_METEO_URL, params=params)
@@ -45,10 +51,10 @@ async def get_barangays():
             hi, risk = calculate_heat_index(temp_c, humidity)
 
             results.append({
-                "id": b["id"],
-                "name": b["name"],
-                "lat": b["lat"],
-                "lon": b["lon"],
+                "id": b.id,
+                "name": b.name,
+                "lat": b.lat,
+                "lon": b.lon,
                 "heat_index": hi,
                 "risk_level": risk,
                 "updated_at": datetime.utcnow()
