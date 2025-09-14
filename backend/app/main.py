@@ -7,6 +7,9 @@ app = FastAPI()
 
 app.include_router(barangays.router)
 
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 @app.get("/")
 def root():
