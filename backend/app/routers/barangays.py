@@ -17,12 +17,6 @@ from app.db import get_session
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
 
-# Hardcode 2 barangays (later move to DB)
-barangays_data = [
-    {"id": 1, "name": "Barangay Dalahican, Lucena", "lat": 13.9317, "lon": 121.6233},
-    {"id": 2, "name": "Barangay Ibabang Dupay, Lucena", "lat": 13.9405, "lon": 121.6170},
-]
-
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -65,16 +59,16 @@ async def get_barangays(session: Session = Depends(get_session)):
 
 
 @router.get("/{barangay_id}", response_model=BarangayDetail)
-async def get_barangay(barangay_id: int):
-    barangay = next((b for b in barangays_data if b["id"] == barangay_id), None)
-    if not barangay:
+async def get_barangay(barangay_id: int, session: Session = Depends(get_session)):
+    barangay_data = session.get(Barangay, barangay_id)
+    if not barangay_data:
         return {"error": "Barangay not found"}
 
     # Fetch current weather data
     async with httpx.AsyncClient() as client:
         params = {
-            "latitude": barangay["lat"],
-            "longitude": barangay["lon"],
+            "latitude": barangay_data.lat,
+            "longitude": barangay_data.lon,
             "current": ["temperature_2m", "relative_humidity_2m"]
         }
         r = await client.get(OPEN_METEO_URL, params=params)
@@ -84,10 +78,10 @@ async def get_barangay(barangay_id: int):
         hi, risk = calculate_heat_index(temp_c, humidity)
 
     return {
-        "id": barangay["id"],
-        "name": barangay["name"],
-        "lat": barangay["lat"],
-        "lon": barangay["lon"],
+        "id": barangay_data.id,
+        "name": barangay_data.name,
+        "lat": barangay_data.lat,
+        "lon": barangay_data.lon,
         "current": {
             "temperature": temp_c,
             "humidity": humidity,
