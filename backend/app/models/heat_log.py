@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
+from .barangay import Barangay
 
 
 class HeatLog(SQLModel, table=True):
@@ -13,4 +14,5 @@ class HeatLog(SQLModel, table=True):
     risk_level: str
 
     recorded_at: datetime = Field(default_factory=datetime.utcnow)
+    barangay: Optional["Barangay"] = Relationship(back_populates="heat_logs")
 

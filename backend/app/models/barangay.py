@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
+from .heat_log import HeatLog
 
 
 class Barangay(SQLModel, table=True):
@@ -8,3 +9,4 @@ class Barangay(SQLModel, table=True):
     lat: float
     lon: float
 
+    heat_logs: List["HeatLog"] = Relationship(back_populates="barangay")
