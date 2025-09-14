@@ -1,0 +1,51 @@
+Create and Activate Virtual Environment:
+
+python -m venv venv
+venv\Scripts\activate   # (Windows)
+
+----------------------------------------
+
+Install Dependencies:
+
+pip install -r requirements.txt
+
+----------------------------------------
+
+Configure Environment Variables:
+
+Create a `.env` file in the project root with:
+DB_USER=your_postgres_user
+DB_PASSWORD=your_postgres_password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=heat_project
+
+----------------------------------------
+
+Create the Database in PostgreSQL:
+
+psql -U your_postgres_user
+CREATE DATABASE heat_project;
+\q
+
+----------------------------------------
+
+Initialize Database Tables:
+
+python -m app.scripts.init_db
+
+----------------------------------------
+
+Add Initial Barangays Data:
+
+python -m app.scripts.add_barangays
+
+----------------------------------------
+
+Run the FastAPI Server:
+
+uvicorn app.main:app --reload
+
+API Docs:
+
+Visit http://localhost:8000/docs
