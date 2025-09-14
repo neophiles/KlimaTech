@@ -10,8 +10,8 @@ from app.schemas.barangay import (
 import httpx
 from app.utils.heat_index import calculate_heat_index
 from datetime import datetime
-from app.models.barangay import Barangay
-from app.models.heat_log import HeatLog
+from app.models import Barangay
+from app.models import HeatLog
 from app.db import get_session
 
 
@@ -28,7 +28,7 @@ OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 
 @router.get("/barangays", response_model=list[BarangaySummary])
-async def get_barangays(session: Session = next(get_session())):
+async def get_barangays(session: Session = Depends(get_session)):
     # Fetch barangays from DB
     barangays_data = session.exec(select(Barangay)).all()
     results = []
