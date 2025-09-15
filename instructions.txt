@@ -30,12 +30,6 @@ CREATE DATABASE heat_project;
 
 ----------------------------------------
 
-Initialize Database Tables:
-
-python -m app.scripts.init_db
-
-----------------------------------------
-
 Add Initial Barangays Data:
 
 python -m app.scripts.add_barangays
