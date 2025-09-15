@@ -3,7 +3,7 @@ from app.db import get_session
 from sqlalchemy import text
 
 barangays_data = [
-    {"id": 1, "name": "Barangay Dalahican, Lucena, Quezon", "lat": 13.9317, "lon": 121.6233},
+    {"id": 1, "name": "Barangay Ibabang Dupay, Lucena, Quezon", "lat": 13.9405, "lon": 121.617},
     {"id": 2, "name": "Bgry. Ikirin, Pagbilao, Quezon", "lat": 13.9968, "lon": 121.7309},
 ]
 
