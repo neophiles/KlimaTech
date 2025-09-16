@@ -6,7 +6,7 @@ from app.schemas.barangay import (
     BarangaySummary,
     BarangayDetail
 )
-from schemas.database import HeatLogRead
+from app.schemas.database import HeatLogRead, HeatLogCreate
 
 import httpx
 from app.utils.heat_index import calculate_heat_index
@@ -52,7 +52,7 @@ async def save_heatlog(barangay_id: int, session: Session = Depends(get_session)
     session.add(heatlog)
     session.commit()
     session.refresh(heatlog)
-    return {"message": "HeatLog saved", "heatlog_id": heatlog.id}
+    return heatlog
 
 
 @router.get("/barangays", response_model=list[BarangaySummary])
