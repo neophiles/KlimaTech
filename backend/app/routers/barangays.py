@@ -23,13 +23,7 @@ router = APIRouter(prefix="/barangays", tags=["Barangays"])
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
-
-@router.post("/{barangay_id}/heatlog", response_model=HeatLogRead)
-async def save_heatlog(barangay_id: int, session: Session = Depends(get_session)):
-    barangay = session.get(Barangay, barangay_id)
-    if not barangay:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Barangay not found")
-
+async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLog:
     async with httpx.AsyncClient() as client:
         params = {
             "latitude": barangay.lat,
@@ -43,7 +37,7 @@ async def save_heatlog(barangay_id: int, session: Session = Depends(get_session)
         hi, risk = calculate_heat_index(temp_c, humidity)
 
     heatlog = HeatLog(
-        barangay_id=barangay_id,
+        barangay_id=barangay.id,
         temperature_c=temp_c,
         humidity=humidity,
         heat_index_c=hi,
@@ -54,6 +48,14 @@ async def save_heatlog(barangay_id: int, session: Session = Depends(get_session)
     session.commit()
     session.refresh(heatlog)
     return heatlog
+
+
+@router.post("/{barangay_id}/heatlog", response_model=HeatLogRead)
+async def save_heatlog_endpoint(barangay_id: int, session: Session = Depends(get_session)):
+    barangay = session.get(Barangay, barangay_id)
+    if not barangay:
+        raise HTTPException(status_code=404, detail="Barangay not found")
+    return await fetch_and_save_heatlog(barangay, session)
 
 
 @router.get("/barangays", response_model=list[BarangaySummary])
