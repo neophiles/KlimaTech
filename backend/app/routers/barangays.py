@@ -114,7 +114,7 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         log = latest_log
     else:
         # Generate new HeatLog and save to DB
-        log = save_heatlog(barangay_id, session)
+        log = await fetch_and_save_heatlog(barangay_data, session)
 
     return {
         "id": barangay_data.id,
