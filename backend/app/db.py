@@ -9,7 +9,7 @@ ENV = os.getenv("ENV", "dev")  # Set ENV=prod in your .env for production
 
 if ENV == "dev":
     # SQLite for development
-    DATABASE_URL = "sqlite:///./dev.db"
+    DATABASE_URL = "sqlite:///./heat_project.db"
     engine = create_engine(DATABASE_URL, echo=True)
 else:
     # PostgreSQL for production
