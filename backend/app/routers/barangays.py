@@ -15,6 +15,7 @@ from app.models import Barangay, HeatLog
 from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
+from datetime import datetime, timedelta
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
@@ -98,18 +99,20 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
     if not barangay_data:
         return {"error": "Barangay not found"}
 
-    # Fetch current weather data
-    async with httpx.AsyncClient() as client:
-        params = {
-            "latitude": barangay_data.lat,
-            "longitude": barangay_data.lon,
-            "current": ["temperature_2m", "relative_humidity_2m"]
-        }
-        r = await client.get(OPEN_METEO_URL, params=params)
-        data = r.json()
-        temp_c = data["current"]["temperature_2m"]
-        humidity = data["current"]["relative_humidity_2m"]
-        hi, risk = calculate_heat_index(temp_c, humidity)
+    # Get latest HeatLog for this barangay
+    latest_log = session.exec(
+        select(HeatLog)
+        .where(HeatLog.barangay_id == barangay_id)
+        .order_by(HeatLog.recorded_at.desc())
+    ).first()
+
+    now = datetime.utcnow()
+    if latest_log and (now - latest_log.recorded_at) < timedelta(hours=1):
+        # Use cached data if less than 1 hour old
+        log = latest_log
+    else:
+        # Generate new HeatLog and save to DB
+        log = save_heatlog(barangay_id, session)
 
     return {
         "id": barangay_data.id,
@@ -117,21 +120,16 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         "lat": barangay_data.lat,
         "lon": barangay_data.lon,
         "current": {
-            "temperature": temp_c,
-            "humidity": humidity,
-            "heat_index": hi,
-            "risk_level": risk,
-            "updated_at": datetime.utcnow()
+            "temperature": log.temperature_c,
+            "humidity": log.humidity,
+            "heat_index": log.heat_index_c,
+            "risk_level": log.risk_level,
+            "updated_at": log.recorded_at
         },
         "daily_briefing": {
-            # Example briefing data
-            # TODO: Generate based on actual data
             "safe_hours": "Before 10AM, After 4PM",
             "avoid_hours": "11AM–3PM",
             "advice": "Hydrate frequently and avoid prolonged outdoor work."
         },
-        "forecast": [
-            # Future implementation: Add forecast data here
-            # For now, return empty list
-        ]
+        "forecast": []
     }
