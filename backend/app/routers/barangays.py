@@ -58,38 +58,35 @@ async def save_heatlog_endpoint(barangay_id: int, session: Session = Depends(get
     return await fetch_and_save_heatlog(barangay, session)
 
 
-@router.get("/barangays", response_model=list[BarangaySummary])
+
+@router.get("/all", response_model=list[BarangaySummary])
 async def get_barangays(session: Session = Depends(get_session)):
-    # Fetch barangays from DB
     barangays_data = session.exec(select(Barangay)).all()
     results = []
+    now = datetime.utcnow()
 
-    async with httpx.AsyncClient() as client:
-        for b in barangays_data:
-            # Fetch current weather data
-            params = {
-                "latitude": b.lat,
-                "longitude": b.lon,
-                "current": ["temperature_2m", "relative_humidity_2m"]
-            }
-            r = await client.get(OPEN_METEO_URL, params=params)
-            data = r.json()
+    for b in barangays_data:
+        # Check for latest HeatLog
+        latest_log = session.exec(
+            select(HeatLog)
+            .where(HeatLog.barangay_id == b.id)
+            .order_by(HeatLog.recorded_at.desc())
+        ).first()
 
-            temp_c = data["current"]["temperature_2m"]
-            humidity = data["current"]["relative_humidity_2m"]
+        if latest_log and (now - latest_log.recorded_at) < timedelta(hours=1):
+            log = latest_log
+        else:
+            log = await fetch_and_save_heatlog(b, session)
 
-            # Calculate heat index and risk level
-            hi, risk = calculate_heat_index(temp_c, humidity)
-
-            results.append({
-                "id": b.id,
-                "name": b.name,
-                "lat": b.lat,
-                "lon": b.lon,
-                "heat_index": hi,
-                "risk_level": risk,
-                "updated_at": datetime.utcnow()
-            })
+        results.append({
+            "id": b.id,
+            "name": b.name,
+            "lat": b.lat,
+            "lon": b.lon,
+            "heat_index": log.heat_index_c,
+            "risk_level": log.risk_level,
+            "updated_at": log.recorded_at
+        })
 
     return results
 
