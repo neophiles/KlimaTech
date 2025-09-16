@@ -6,19 +6,53 @@ from app.schemas.barangay import (
     BarangaySummary,
     BarangayDetail
 )
+from schemas.database import HeatLogRead
 
 import httpx
 from app.utils.heat_index import calculate_heat_index
 from datetime import datetime
-from app.models import Barangay
-from app.models import HeatLog
+from app.models import Barangay, HeatLog
 from app.db import get_session
+from fastapi import HTTPException
+from fastapi import status
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
 
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+
+
+@router.post("/{barangay_id}/heatlog", response_model=HeatLogRead)
+async def save_heatlog(barangay_id: int, session: Session = Depends(get_session)):
+    barangay = session.get(Barangay, barangay_id)
+    if not barangay:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Barangay not found")
+
+    async with httpx.AsyncClient() as client:
+        params = {
+            "latitude": barangay.lat,
+            "longitude": barangay.lon,
+            "current": ["temperature_2m", "relative_humidity_2m"]
+        }
+        r = await client.get(OPEN_METEO_URL, params=params)
+        data = r.json()
+        temp_c = data["current"]["temperature_2m"]
+        humidity = data["current"]["relative_humidity_2m"]
+        hi, risk = calculate_heat_index(temp_c, humidity)
+
+    heatlog = HeatLog(
+        barangay_id=barangay_id,
+        temperature_c=temp_c,
+        humidity=humidity,
+        heat_index_c=hi,
+        risk_level=risk,
+        recorded_at=datetime.utcnow()
+    )
+    session.add(heatlog)
+    session.commit()
+    session.refresh(heatlog)
+    return {"message": "HeatLog saved", "heatlog_id": heatlog.id}
 
 
 @router.get("/barangays", response_model=list[BarangaySummary])
