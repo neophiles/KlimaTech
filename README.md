@@ -1,4 +1,4 @@
-# KlimaTech
+# Cool'To!
 
 Welcome!
 
