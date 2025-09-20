@@ -54,14 +54,6 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
     return heatlog
 
 
-@router.post("/{barangay_id}/heatlog", response_model=HeatLogRead)
-async def save_heatlog_endpoint(barangay_id: int, session: Session = Depends(get_session)):
-    barangay = session.get(Barangay, barangay_id)
-    if not barangay:
-        raise HTTPException(status_code=404, detail="Barangay not found")
-    return await fetch_and_save_heatlog(barangay, session)
-
-
 
 @router.get("/all", response_model=list[BarangaySummary])
 async def get_barangays(session: Session = Depends(get_session)):
