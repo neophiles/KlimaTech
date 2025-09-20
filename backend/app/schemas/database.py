@@ -6,6 +6,8 @@ class HeatLogCreate(BaseModel):
     barangay_id: int
     temperature_c: float
     humidity: float
+    wind_speed: float
+    precipitation: float
     heat_index_c: float
     risk_level: str
 
@@ -14,6 +16,8 @@ class HeatLogRead(BaseModel):
     barangay_id: int
     temperature_c: float
     humidity: float
+    wind_speed: float
+    precipitation: float
     heat_index_c: float
     risk_level: str
     recorded_at: datetime
