@@ -117,7 +117,9 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
 
     return {
         "id": barangay_data.id,
-        "name": barangay_data.name,
+        "barangay": barangay_data.barangay,
+        "locality": barangay_data.locality,
+        "province": barangay_data.province,
         "lat": barangay_data.lat,
         "lon": barangay_data.lon,
         "current": {
