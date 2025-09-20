@@ -1,0 +1,108 @@
+import { useEffect, useRef } from "react";
+import { Chart } from "chart.js/auto";
+import annotationPlugin from 'chartjs-plugin-annotation';
+import { getIndexByHeat } from "../scripts/utils";
+
+Chart.register(annotationPlugin);
+
+const COLORS = ["#4caf50", "#cddc39", "#ffeb3b", "#ff9800", "#f44336"];
+const MIN = 0;
+const MAX = 60;
+
+function rand(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function formatTime(timestamp) {
+    return timestamp 
+        ? new Date(timestamp).toLocaleTimeString([], { 
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        })
+        : "--:--";
+}
+
+export function HeatGauge({ heatIndex, timestamp }) {
+    const chartRef = useRef(null);
+    const chartInstance = useRef(null);
+
+    useEffect(() => {
+        const time = formatTime(timestamp);
+
+        // const value = rand(MIN, MAX);
+
+        const data = {
+            datasets: [{
+                data: [heatIndex, MAX - heatIndex],
+                backgroundColor(ctx) {
+                    if (ctx.type !== 'data') {
+                        return;
+                    }
+                    if (ctx.dataIndex === 1) {
+                        return '#eaeaeaff';
+                    }
+                    return COLORS[getIndexByHeat(ctx.raw)];
+                },
+                borderWidth: 0,
+                borderRadius: 5
+            }]
+        };
+
+        const annotation = {
+            type: 'doughnutLabel',
+            content: ({ chart }) => [
+                chart.data.datasets[0].data[0].toFixed(2) + '°C',
+                `${ time }`,
+            ],
+            position: {
+                y: 'center'
+            },
+            font: [{ size: 50, weight: 'bold' }, { size: 40 }],
+            color: ({ chart }) => [COLORS[getIndexByHeat(chart.data.datasets[0].data[0])], 'grey']
+        };
+
+        const config = {
+            type: 'doughnut',
+            data,
+            options: {
+                aspectRatio: 2,
+                circumference: 220,
+                rotation: -110,
+                plugins: {
+                    tooltip: {
+                        enabled: false
+                    },
+                    annotation: {
+                        annotations: {
+                            annotation
+                        }
+                    }
+                }
+            }
+        };
+
+        // Destroy the previous chart instance if it exists
+        if (chartInstance.current) {
+            chartInstance.current.destroy();
+        }
+
+        // Create the new chart and store its instance
+        const canvasCtx = chartRef.current.getContext('2d');
+        chartInstance.current = new Chart(canvasCtx, config);
+
+        // The cleanup function will run when the component unmounts
+        return () => {
+            if (chartInstance.current) {
+                chartInstance.current.destroy();
+            }
+        };
+
+    }, [heatIndex, timestamp]); // re-run effect if these props change
+
+    return (
+        <div className="canvas-container">
+            <canvas className="gauge-canvas" ref={ chartRef }></canvas>
+        </div>
+    )
+}
