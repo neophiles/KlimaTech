@@ -28,18 +28,22 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         params = {
             "latitude": barangay.lat,
             "longitude": barangay.lon,
-            "current": ["temperature_2m", "relative_humidity_2m"]
+            "current": ["temperature_2m", "relative_humidity_2m","wind_speed_10m", "precipitation"]
         }
         r = await client.get(OPEN_METEO_URL, params=params)
         data = r.json()
         temp_c = data["current"]["temperature_2m"]
         humidity = data["current"]["relative_humidity_2m"]
+        wind_speed = data["current"]["wind_speed_10m"]
+        precipitation = data["current"]["precipitation"]
         hi, risk = calculate_heat_index(temp_c, humidity)
 
     heatlog = HeatLog(
         barangay_id=barangay.id,
         temperature_c=temp_c,
         humidity=humidity,
+        wind_speed=wind_speed,
+        precipitation=precipitation,
         heat_index_c=hi,
         risk_level=risk,
         recorded_at=datetime.utcnow()
