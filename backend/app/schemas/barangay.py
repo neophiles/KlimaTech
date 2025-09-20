@@ -4,7 +4,9 @@ from datetime import datetime
 
 class BarangayBase(BaseModel):
     id: int
-    name: str
+    barangay: str
+    locality: str
+    province: str
     lat: float
     lon: float
 
