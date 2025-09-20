@@ -129,6 +129,8 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         "current": {
             "temperature": log.temperature_c,
             "humidity": log.humidity,
+            "wind_speed": log.wind_speed,
+            "precipitation": log.precipitation,
             "heat_index": log.heat_index_c,
             "risk_level": log.risk_level,
             "updated_at": log.recorded_at
