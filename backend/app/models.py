@@ -5,7 +5,9 @@ from datetime import datetime
 
 class Barangay(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
+    barangay: str
+    locality: str
+    province: str
     lat: float
     lon: float
     heat_logs: List["HeatLog"] = Relationship(back_populates="barangay")
