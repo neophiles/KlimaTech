@@ -51,6 +51,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
     session.add(heatlog)
     session.commit()
     session.refresh(heatlog)
+    session.close()
     return heatlog
 
 
