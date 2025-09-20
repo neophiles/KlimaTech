@@ -18,6 +18,8 @@ class HeatLog(SQLModel, table=True):
     barangay_id: int = Field(foreign_key="barangay.id")
     temperature_c: float
     humidity: float
+    wind_speed: float
+    precipitation: float
     heat_index_c: float
     risk_level: str
     recorded_at: datetime = Field(default_factory=datetime.utcnow)
