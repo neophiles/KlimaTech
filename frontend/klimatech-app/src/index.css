@@ -21,6 +21,7 @@
 
 :root {
   --main-font: "PT Sans", sans-serif;
+  --header-footer-height: 3rem;
 }
 
 * {
@@ -31,7 +32,7 @@
 }
 
 html, body {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
