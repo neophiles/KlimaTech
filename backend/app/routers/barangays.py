@@ -80,7 +80,9 @@ async def get_barangays(session: Session = Depends(get_session)):
 
         results.append({
             "id": b.id,
-            "name": b.name,
+            "barangay": b.barangay,
+            "locality": b.locality,
+            "province": b.province,
             "lat": b.lat,
             "lon": b.lon,
             "heat_index": log.heat_index_c,
