@@ -1,7 +1,7 @@
 export function Header() {
     return (
-        <div className="header">
+        <header>
             <h1>COOL'TO</h1>
-        </div>
+        </header>
     );
 }
