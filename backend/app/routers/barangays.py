@@ -15,12 +15,14 @@ from app.models import Barangay, HeatLog
 from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
 
 
+
+PH_TZ = timezone(timedelta(hours=8))
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLog:
@@ -46,7 +48,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         precipitation=precipitation,
         heat_index_c=hi,
         risk_level=risk,
-        recorded_at=datetime.utcnow()
+        recorded_at=datetime.now(PH_TZ)
     )
     session.add(heatlog)
     session.commit()
@@ -68,7 +70,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
 async def get_barangays(session: Session = Depends(get_session)):
     barangays_data = session.exec(select(Barangay)).all()
     results = []
-    now = datetime.utcnow()
+    now = datetime.now(PH_TZ)
 
     for b in barangays_data:
         # Check for latest HeatLog
@@ -112,7 +114,7 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         .order_by(HeatLog.recorded_at.desc())
     ).first()
 
-    now = datetime.utcnow()
+    now = datetime.now(PH_TZ)
     if latest_log and (now - latest_log.recorded_at) < timedelta(hours=1):
         # Use cached data if less than 1 hour old
         log = latest_log
