@@ -16,10 +16,10 @@ from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
 from datetime import datetime, timedelta, timezone
+import pytz 
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
-
 
 
 PH_TZ = timezone(timedelta(hours=8))
@@ -30,14 +30,22 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         params = {
             "latitude": barangay.lat,
             "longitude": barangay.lon,
-            "current": ["temperature_2m", "relative_humidity_2m","wind_speed_10m", "precipitation"]
+            "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m"],
+            "hourly": ["precipitation"],
+            "timezone": "Asia/Manila"  # Ensures times match PH time
         }
         r = await client.get(OPEN_METEO_URL, params=params)
         data = r.json()
         temp_c = data["current"]["temperature_2m"]
         humidity = data["current"]["relative_humidity_2m"]
         wind_speed = data["current"]["wind_speed_10m"]
-        precipitation = data["current"]["precipitation"]
+
+        # Get the latest hourly precipitation value
+        precip_times = data["hourly"]["time"]
+        precip_values = data["hourly"]["precipitation"]
+        # Find the latest hour (last in the list)
+        precipitation = precip_values[-1] if precip_values else 0.0
+
         hi, risk = calculate_heat_index(temp_c, humidity)
 
     heatlog = HeatLog(
@@ -48,7 +56,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         precipitation=precipitation,
         heat_index_c=hi,
         risk_level=risk,
-        recorded_at=datetime.now(PH_TZ)
+        recorded_at=datetime.now(PH_TZ).replace(tzinfo=None)
     )
     session.add(heatlog)
     session.commit()
@@ -70,7 +78,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
 async def get_barangays(session: Session = Depends(get_session)):
     barangays_data = session.exec(select(Barangay)).all()
     results = []
-    now = datetime.now(PH_TZ)
+    now = datetime.now(PH_TZ).replace(tzinfo=None)
 
     for b in barangays_data:
         # Check for latest HeatLog
@@ -114,7 +122,7 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         .order_by(HeatLog.recorded_at.desc())
     ).first()
 
-    now = datetime.now(PH_TZ)
+    now = datetime.now(PH_TZ).replace(tzinfo=None)
     if latest_log and (now - latest_log.recorded_at) < timedelta(hours=1):
         # Use cached data if less than 1 hour old
         log = latest_log

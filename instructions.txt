@@ -43,3 +43,28 @@ uvicorn app.main:app --reload
 API Docs:
 
 Visit http://localhost:8000/docs
+
+
+----------------------------------------
+
+Run in SQLlite to make sure that recorded_at is TEXT:
+
+ALTER TABLE heatlog RENAME TO heatlog_old;
+
+CREATE TABLE heatlog (
+    id INTEGER PRIMARY KEY,
+    barangay_id INTEGER,
+    temperature_c REAL,
+    humidity REAL,
+    wind_speed REAL,
+    precipitation REAL,
+    heat_index_c REAL,
+    risk_level TEXT,
+    recorded_at TEXT
+);
+
+INSERT INTO heatlog (id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at)
+SELECT id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at
+FROM heatlog_old;
+
+DROP TABLE heatlog_old;
