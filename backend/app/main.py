@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import barangays
+from app.routers import barangays, predictor
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler

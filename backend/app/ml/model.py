@@ -4,8 +4,9 @@ from sklearn.linear_model import LinearRegression
 from sqlmodel import Session, select
 from app.db import engine
 from app.models import HeatLog
+import os
 
-MODEL_PATH = "ml/heat_model.pkl"
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "hourly_temp_model.pkl")
 
 def train_model():
     with Session(engine) as session:
@@ -16,18 +17,24 @@ def train_model():
         return
 
     df = pd.DataFrame([{
-        "temp": log.temperature_c,
+        "hour": log.recorded_at.hour,
         "humidity": log.humidity,
         "wind": log.wind_speed,
         "precip": log.precipitation,
-        "heat_index": log.heat_index_c
+        "temperature": log.temperature_c
     } for log in logs])
 
-    X = df[["temp", "humidity", "wind", "precip"]]
-    y = df["heat_index"]
+    # Only keep hours between 8 and 18
+    df = df[(df["hour"] >= 8) & (df["hour"] <= 18)]
+
+    X = df[["hour", "humidity", "wind", "precip"]]
+    y = df["temperature"]
 
     model = LinearRegression()
     model.fit(X, y)
 
     joblib.dump(model, MODEL_PATH)
-    print("Model trained and saved")
+    print("Hourly temperature model trained and saved")
+
+if __name__ == "__main__":
+    train_model()
