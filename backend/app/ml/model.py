@@ -2,8 +2,8 @@ import joblib
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sqlmodel import Session, select
-from db import engine
-from models import HeatLog
+from app.db import engine
+from app.models import HeatLog
 
 MODEL_PATH = "ml/heat_model.pkl"
 
