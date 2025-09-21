@@ -2,3 +2,4 @@ venv
 __pycache__
 .env
 frontend\klimatech-app\node_modules
+heat_project.db
