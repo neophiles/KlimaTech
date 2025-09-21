@@ -1,15 +1,26 @@
 from fastapi import FastAPI
 from app.routers import barangays
 from app.db import init_db
+from app.tasks.collector import collect_heat_data
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 app = FastAPI()
+scheduler = BackgroundScheduler()
 
 app.include_router(barangays.router)
 
 @app.on_event("startup")
 def on_startup():
     init_db()
+    # Schedule job: run every 60 minutes
+    scheduler.add_job(collect_heat_data, "interval", minutes=60)
+    scheduler.start()
+    print("APScheduler started. Collecting heat data every hour.")
+
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
 
 @app.get("/")
 def root():
