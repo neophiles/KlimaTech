@@ -30,4 +30,4 @@ def train_model():
     model.fit(X, y)
 
     joblib.dump(model, MODEL_PATH)
-    print("✅ Model trained and saved")
+    print("Model trained and saved")
