@@ -16,7 +16,6 @@ from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
 from datetime import datetime, timedelta, timezone
-import pytz 
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])

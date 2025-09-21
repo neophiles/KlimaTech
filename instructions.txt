@@ -1,70 +1,70 @@
-Create and Activate Virtual Environment:
+==========================
+1. Environment Setup
+==========================
 
-python -m venv venv
-venv\Scripts\activate   # (Windows)
+Create and activate a virtual environment:
+    python -m venv venv
+    venv\Scripts\activate   # (Windows)
 
-----------------------------------------
+Install dependencies:
+    pip install -r requirements.txt
 
-Install Dependencies:
+Configure environment variables:
+- Create a `.env` file in the project root with:
+    DB_USER=your_postgres_user
+    DB_PASSWORD=your_postgres_password
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_NAME=heat_project
 
-pip install -r requirements.txt
+==========================
+2. Database Commands
+==========================
 
-----------------------------------------
+Create the PostgreSQL database:
+    psql -U your_postgres_user
+    CREATE DATABASE heat_project;
+    \q
 
-Configure Environment Variables:
+Look inside the database:
+    psql -h localhost -U your_postgres_user -d heat_project
+    \dt
+    SELECT * FROM heatlog;
+    SELECT * FROM barangay;
 
-Create a `.env` file in the project root with:
-DB_USER=your_postgres_user
-DB_PASSWORD=your_postgres_password
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=heat_project
+(For SQLite only, to ensure `recorded_at` is TEXT:)
+    ALTER TABLE heatlog RENAME TO heatlog_old;
+    CREATE TABLE heatlog (
+        id INTEGER PRIMARY KEY,
+        barangay_id INTEGER,
+        temperature_c REAL,
+        humidity REAL,
+        wind_speed REAL,
+        precipitation REAL,
+        heat_index_c REAL,
+        risk_level TEXT,
+        recorded_at TEXT
+    );
+    INSERT INTO heatlog (id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at)
+    SELECT id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at
+    FROM heatlog_old;
+    DROP TABLE heatlog_old;
 
-----------------------------------------
+==========================
+3. Scripts & Data Loading
+==========================
 
-Create the Database in PostgreSQL:
+Add initial barangays data:
+    python -m app.scripts.add_barangays
 
-psql -U your_postgres_user
-CREATE DATABASE heat_project;
-\q
+==========================
+4. Running FastAPI
+==========================
 
-----------------------------------------
-
-Add Initial Barangays Data:
-
-python -m app.scripts.add_barangays
-
-----------------------------------------
-
-Run the FastAPI Server:
-
-uvicorn app.main:app --reload
+Run the FastAPI server:
+    uvicorn app.main:app --reload
 
 API Docs:
+    http://localhost:8000/docs
 
-Visit http://localhost:8000/docs
-
-
-----------------------------------------
-
-Run in SQLlite to make sure that recorded_at is TEXT:
-
-ALTER TABLE heatlog RENAME TO heatlog_old;
-
-CREATE TABLE heatlog (
-    id INTEGER PRIMARY KEY,
-    barangay_id INTEGER,
-    temperature_c REAL,
-    humidity REAL,
-    wind_speed REAL,
-    precipitation REAL,
-    heat_index_c REAL,
-    risk_level TEXT,
-    recorded_at TEXT
-);
-
-INSERT INTO heatlog (id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at)
-SELECT id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at
-FROM heatlog_old;
-
-DROP TABLE heatlog_old;
+==========================
