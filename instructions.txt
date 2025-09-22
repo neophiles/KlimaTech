@@ -40,13 +40,12 @@ Look inside the database:
         temperature_c REAL,
         humidity REAL,
         wind_speed REAL,
-        precipitation REAL,
         heat_index_c REAL,
         risk_level TEXT,
         recorded_at TEXT
     );
-    INSERT INTO heatlog (id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at)
-    SELECT id, barangay_id, temperature_c, humidity, wind_speed, precipitation, heat_index_c, risk_level, recorded_at
+    INSERT INTO heatlog (id, barangay_id, temperature_c, humidity, wind_speed, heat_index_c, risk_level, recorded_at)
+    SELECT id, barangay_id, temperature_c, humidity, wind_speed, heat_index_c, risk_level, recorded_at
     FROM heatlog_old;
     DROP TABLE heatlog_old;
 

@@ -30,7 +30,6 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
             "latitude": barangay.lat,
             "longitude": barangay.lon,
             "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m"],
-            "hourly": ["precipitation"],
             "timezone": "Asia/Manila"  # Ensures times match PH time
         }
         r = await client.get(OPEN_METEO_URL, params=params)
@@ -39,12 +38,6 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         humidity = data["current"]["relative_humidity_2m"]
         wind_speed = data["current"]["wind_speed_10m"]
 
-        # Get the latest hourly precipitation value
-        precip_times = data["hourly"]["time"]
-        precip_values = data["hourly"]["precipitation"]
-        # Find the latest hour (last in the list)
-        precipitation = precip_values[-1] if precip_values else 0.0
-
         hi, risk = calculate_heat_index(temp_c, humidity)
 
     heatlog = HeatLog(
@@ -52,7 +45,6 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         temperature_c=temp_c,
         humidity=humidity,
         wind_speed=wind_speed,
-        precipitation=precipitation,
         heat_index_c=hi,
         risk_level=risk,
         recorded_at=datetime.now(PH_TZ).replace(tzinfo=None)
@@ -140,7 +132,6 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
             "temperature": log.temperature_c,
             "humidity": log.humidity,
             "wind_speed": log.wind_speed,
-            "precipitation": log.precipitation,
             "heat_index": log.heat_index_c,
             "risk_level": log.risk_level,
             "updated_at": log.recorded_at
