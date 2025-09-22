@@ -1,4 +1,6 @@
 ==========================
+******** BACKEND *********
+==========================
 1. Environment Setup
 ==========================
 
@@ -68,5 +70,31 @@ Run the FastAPI server:
 
 API Docs:
     http://localhost:8000/docs
+
+==========================
+FRONTEND
+==========================
+1. Naviagate to the frontend folder
+==========================
+
+cd frontend
+
+==========================
+2. Install dependencies
+==========================
+
+npm install
+
+==========================
+3. Run development server
+==========================
+
+npm run dev
+
+==========================
+4. Access the app (React)
+==========================
+
+URL: http://localhost:5173/
 
 ==========================
