@@ -46,6 +46,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         temperature_c=temp_c,
         humidity=humidity,
         wind_speed=wind_speed,
+        uv_index=uv_index,
         heat_index_c=hi,
         risk_level=risk,
         recorded_at=datetime.now(PH_TZ).replace(tzinfo=None)
@@ -53,7 +54,6 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
     session.add(heatlog)
     session.commit()
     session.refresh(heatlog)
-    session.close()
     return heatlog
 
 
