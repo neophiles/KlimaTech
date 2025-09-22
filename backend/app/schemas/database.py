@@ -17,5 +17,6 @@ class HeatLogRead(BaseModel):
     humidity: float
     wind_speed: float
     heat_index_c: float
+    uv_index: Optional[float] = None
     risk_level: str
     recorded_at: datetime

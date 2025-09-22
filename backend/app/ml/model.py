@@ -20,13 +20,14 @@ def train_model():
         "hour": log.recorded_at.hour,
         "humidity": log.humidity,
         "wind": log.wind_speed,
+        "uv_index": log.uv_index,
         "temperature": log.temperature_c
     } for log in logs])
 
     # Only keep hours between 8 and 18
     df = df[(df["hour"] >= 8) & (df["hour"] <= 18)]
 
-    X = df[["hour", "humidity", "wind"]]
+    X = df[["hour", "humidity", "wind", "uv_index"]]
     y = df["temperature"]
 
     model = LinearRegression()

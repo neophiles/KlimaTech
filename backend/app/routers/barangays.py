@@ -29,7 +29,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         params = {
             "latitude": barangay.lat,
             "longitude": barangay.lon,
-            "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m"],
+            "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "uv_index"],
             "timezone": "Asia/Manila"  # Ensures times match PH time
         }
         r = await client.get(OPEN_METEO_URL, params=params)
@@ -37,6 +37,7 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
         temp_c = data["current"]["temperature_2m"]
         humidity = data["current"]["relative_humidity_2m"]
         wind_speed = data["current"]["wind_speed_10m"]
+        uv_index = data["current"]["uv_index"]
 
         hi, risk = calculate_heat_index(temp_c, humidity)
 
@@ -132,6 +133,7 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
             "temperature": log.temperature_c,
             "humidity": log.humidity,
             "wind_speed": log.wind_speed,
+            "uv_index": log.uv_index,
             "heat_index": log.heat_index_c,
             "risk_level": log.risk_level,
             "updated_at": log.recorded_at

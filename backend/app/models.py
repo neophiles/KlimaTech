@@ -20,6 +20,7 @@ class HeatLog(SQLModel, table=True):
     temperature_c: float
     humidity: float
     wind_speed: float
+    uv_index: Optional[float] = None
     heat_index_c: float
     risk_level: str
     recorded_at: datetime = Field(default_factory=lambda: datetime.now(PH_TZ).replace(tzinfo=None))

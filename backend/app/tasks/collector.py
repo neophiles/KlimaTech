@@ -17,7 +17,7 @@ def collect_heat_data():
                 params = {
                     "latitude": b.lat,
                     "longitude": b.lon,
-                    "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m"],
+                    "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "uv_index"],
                     "timezone": "Asia/Manila"
                 }
                 r = httpx.get(OPEN_METEO_URL, params=params)
@@ -25,6 +25,7 @@ def collect_heat_data():
                 temp_c = data["current"]["temperature_2m"]
                 humidity = data["current"]["relative_humidity_2m"]
                 wind_speed = data["current"]["wind_speed_10m"]
+                uv_index = data["current"]["uv_index"]
 
 
                 hi, risk = calculate_heat_index(temp_c, humidity)
@@ -34,6 +35,7 @@ def collect_heat_data():
                     temperature_c=temp_c,
                     humidity=humidity,
                     wind_speed=wind_speed,
+                    uv_index=uv_index,
                     heat_index_c=hi,
                     risk_level=risk,
                     recorded_at=datetime.now(PH_TZ).replace(tzinfo=None)
