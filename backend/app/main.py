@@ -3,12 +3,23 @@ from app.routers import barangays
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 scheduler = BackgroundScheduler()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(barangays.router)
+
 
 @app.on_event("startup")
 def on_startup():
