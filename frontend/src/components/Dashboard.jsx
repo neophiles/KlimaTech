@@ -3,7 +3,7 @@ import { HeatGauge } from './HeatGauge';
 import { LocationWidget } from './LocationWidget'
 import { AdvisoryWidget } from './AdvisoryWidget'
 import { BriefingsWidget } from './BriefingsWidget'
-import { fetchWeatherData } from "../scripts/fetchTempData"
+import { fetchWeatherData } from "../scripts/fetchWeatherData"
 
 export function Dashboard() {
     const [gaugeData, setGaugeData] = useState(null);
