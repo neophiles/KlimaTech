@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { HeatGauge } from '../components/HeatGauge';
 import { LocationWidget } from '../components/LocationWidget'
@@ -8,6 +9,7 @@ import { fetchWeatherData } from "../scripts/fetchWeatherData"
 export function Dashboard() {
     const [gaugeData, setGaugeData] = useState(null);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getData() {
@@ -47,6 +49,9 @@ export function Dashboard() {
                 wind_speed={wind_speed}
                 uv_index={uv_index}
             />
+            <button onClick={() => navigate('/heatmap')}>
+                Go to Map
+            </button>
         </div>
     );
 }
