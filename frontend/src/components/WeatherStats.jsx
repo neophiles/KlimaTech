@@ -1,10 +1,10 @@
-export function WeatherStats() {
+export function WeatherStats({ icon, name, value, unit }) {
     return (
         <div className="stat">
-            <div className="stat-icon">☀️</div>
+            <div className="stat-icon">{icon}</div>
             <div>
-                <p className="stat-name">Feels like</p>
-                <p className="stat-value">35°C</p>
+                <p className="stat-name">{name}</p>
+                <p className="stat-value">{value}{unit}</p>
             </div>
         </div>
     );

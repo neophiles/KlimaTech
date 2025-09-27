@@ -31,7 +31,7 @@ export function Dashboard() {
         barangay,
         lat,
         lon,
-        current: { temperature, humidity, heat_index, risk_level, updated_at },
+        current: { temperature, humidity, wind_speed, uv_index, heat_index, risk_level, updated_at },
         daily_briefing: { safe_hours, avoid_hours, advice },
         forecast
     } = gaugeData;
@@ -41,7 +41,12 @@ export function Dashboard() {
             <HeatGauge heatIndex={heat_index} timestamp={updated_at} />
             <LocationWidget />
             <AdvisoryWidget heatIndex={heat_index} riskLevel={risk_level} advice={advice} />
-            <BriefingsWidget />
+            <BriefingsWidget
+                temperature={temperature}
+                humidity={humidity}
+                wind_speed={wind_speed}
+                uv_index={uv_index}
+            />
         </div>
     );
 }
