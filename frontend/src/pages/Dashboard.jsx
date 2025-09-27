@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { HeatGauge } from './HeatGauge';
-import { LocationWidget } from './LocationWidget'
-import { AdvisoryWidget } from './AdvisoryWidget'
-import { BriefingsWidget } from './BriefingsWidget'
+import { HeatGauge } from '../components/HeatGauge';
+import { LocationWidget } from '../components/LocationWidget'
+import { AdvisoryWidget } from '../components/AdvisoryWidget'
+import { BriefingsWidget } from '../components/BriefingsWidget'
 import { fetchWeatherData } from "../scripts/fetchWeatherData"
 
 export function Dashboard() {

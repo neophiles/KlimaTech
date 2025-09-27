@@ -1,4 +1,4 @@
-import { Dashboard } from './Dashboard'
+import { Dashboard } from '../pages/Dashboard'
 
 export function Main() {
     return (
