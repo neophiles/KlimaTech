@@ -28,7 +28,7 @@ export function Dashboard() {
 
     // Destructure the fields
     const {
-        name,
+        barangay,
         lat,
         lon,
         current: { temperature, humidity, heat_index, risk_level, updated_at },
