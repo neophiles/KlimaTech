@@ -108,8 +108,8 @@ main {
 }
 
 .base-widget {
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 18rem;
+  max-width: 18rem;
   height: auto;
   padding: 1rem;
   border: 0;
@@ -124,16 +124,17 @@ main {
   filter: drop-shadow(0 2px 2px black);
 }
 
-.canvas-container{
+.canvas-container {
   position: relative;
-  min-width: 250px;
-  max-width: 250px;
-  height: auto;
+  width: 18rem;
+  aspect-ratio: 2 / 1;
   margin: auto;
 }
 
 .gauge-canvas {
-  margin: auto;
+  height: 100%;
+  width: 100%;
+  display: block;
 }
 
 .location-widget {
@@ -146,6 +147,10 @@ main {
 
 .barangay {
   font-size: var(--medium-font);
+}
+
+.locality {
+  font-size: var(--small-font);
 }
 
 .top-half, .bottom-half {
