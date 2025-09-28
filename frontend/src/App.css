@@ -8,7 +8,6 @@
 header, footer {
   height: var(--header-footer-height);
   padding: 0.5rem;
-  border: 1px solid black;
   background-color: #ffffff;
   position: sticky;
   z-index: 10;
@@ -71,6 +70,7 @@ footer {
 main {
   flex: 1;
   padding: 1rem;
+  background-color: #f6f6f6;
 }
 
 .map-page {
