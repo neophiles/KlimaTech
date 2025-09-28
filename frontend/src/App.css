@@ -1,5 +1,6 @@
 #root {
-  min-height: 100vh;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -32,19 +33,16 @@ main {
 }
 
 .map-container {
+  flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-  width: 100vw;
+  align-items: stretch;
+  justify-content: stretch;
   z-index: 0;
 }
 
 .map {
-  height: 500px;
-  width: 90vw;
-  max-width: 400px;
-  border-radius: 0px;
+  flex: 1;
+  border-radius: 0;
 }
 
 .dashboard {
