@@ -31,6 +31,22 @@ main {
   padding: 1rem;
 }
 
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100vw;
+  z-index: 0;
+}
+
+.map {
+  height: 500px;
+  width: 90vw;
+  max-width: 400px;
+  border-radius: 0px;
+}
+
 .dashboard {
   display: flex;
   flex-direction: column;
