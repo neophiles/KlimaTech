@@ -3,17 +3,15 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 
 // Custom icon for user location (blue marker)
 const userIcon = new L.Icon({
-  iconUrl:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
+  iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
   shadowSize: [41, 41],
 });
 
-export default function HeatMap() {
+export function HeatMap() {
   // Static barangay data for demo
   const barangays = [
     { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
@@ -71,51 +69,15 @@ export default function HeatMap() {
   }, []);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f8f8f8"
-      }}
-    >
-      {/* Button to enable add mode */}
-      <button
-        onClick={() => setAddMode(true)}
-        style={{
-          margin: "10px",
-          padding: "8px 16px",
-          background: addMode ? "#4caf50" : "#2196f3",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer"
-        }}
-      >
-        {addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"}
-      </button>
-
+    <div className="map-page">
       {/* Centered map container */}
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100vw"  
-      }}>
+      <div className="map-container">
         <MapContainer
+          className="map"
           center={[13.41, 122.56]} // Center of the Philippines
           zoom={6}
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
-          style={{
-            height: "500px",
-            width: "90vw",
-            maxWidth: "400px",
-            borderRadius: "16px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
-          }}
         >
           {/* User location marker with custom icon */}
           {userLocation && (
@@ -155,6 +117,21 @@ export default function HeatMap() {
           ))}
         </MapContainer>
       </div>
+
+      {/* Button to enable add mode */}
+      <button
+        onClick={() => setAddMode(true)}
+        style={{
+          padding: "8px 16px",
+          background: addMode ? "#4caf50" : "#2196f3",
+          color: "#fff",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer"
+        }}
+      >
+        {addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"}
+      </button>
     </div>
   );
 }
