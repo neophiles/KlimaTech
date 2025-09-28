@@ -30,7 +30,10 @@ export function Dashboard() {
 
     // Destructure the fields
     const {
+        id,
         barangay,
+        locality,
+        province,
         lat,
         lon,
         current: { temperature, humidity, wind_speed, uv_index, heat_index, risk_level, updated_at },
@@ -41,7 +44,7 @@ export function Dashboard() {
     return (
         <div className='dashboard'>
             <HeatGauge heatIndex={heat_index} timestamp={updated_at} />
-            <LocationWidget />
+            <LocationWidget barangay={barangay} locality={locality} province={province} />
             <AdvisoryWidget heatIndex={heat_index} riskLevel={risk_level} advice={advice} />
             <BriefingsWidget
                 temperature={temperature}
