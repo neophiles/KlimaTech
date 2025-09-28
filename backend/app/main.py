@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import barangays
+from app.routers import barangays, ml
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -19,6 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(barangays.router)
+app.include_router(ml.router)
 
 
 @app.on_event("startup")
