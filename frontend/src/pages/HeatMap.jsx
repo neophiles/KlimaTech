@@ -13,25 +13,9 @@ export default function HeatMap() {
   ];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "60vh",
-        width: "100vw"
-      }}
-    >
-      <MapContainer
-        center={[13.9417, 121.6233]}
-        zoom={13}
-        style={{
-          height: "500px",
-          width: "90vw",
-          maxWidth: "400px",
-          borderRadius: "0px",
-        }}
-      >
+    <div className="map-container">
+      <MapContainer className="map" center={[13.9417, 121.6233]} zoom={13}>
+        
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {barangays.map(b => (
