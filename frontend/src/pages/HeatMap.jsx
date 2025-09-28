@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 
 export default function HeatMap() {
@@ -31,6 +31,26 @@ export default function HeatMap() {
     });
     return null;
   }
+
+
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.warn("Geolocation error:", error);
+        }
+      );
+    }
+  }, []);
+
 
   return (
     <div
@@ -77,6 +97,14 @@ export default function HeatMap() {
             boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
           }}
         >
+          {userLocation && (
+            <Marker position={[userLocation.lat, userLocation.lon]}>
+              <Popup>
+                <strong>Your Location</strong>
+              </Popup>
+            </Marker>
+          )}
+          
           <AddSpotOnClick />
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
