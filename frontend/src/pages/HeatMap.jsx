@@ -1,6 +1,20 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 
+
+// Custom icon for user location
+const userIcon = new L.Icon({
+  iconUrl:
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+  shadowSize: [41, 41],
+});
+
+
 export default function HeatMap() {
   const barangays = [
     { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
@@ -97,10 +111,11 @@ export default function HeatMap() {
             boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
           }}
         >
+          {/* User location marker with custom icon */}
           {userLocation && (
-            <Marker position={[userLocation.lat, userLocation.lon]}>
+            <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon}>
               <Popup>
-                <strong>Your Location</strong>
+                <strong>📍 Your Location</strong>
               </Popup>
             </Marker>
           )}
