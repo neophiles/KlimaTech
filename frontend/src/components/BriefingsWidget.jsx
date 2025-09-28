@@ -2,7 +2,7 @@ import { WeatherStats } from './WeatherStats'
 
 export function BriefingsWidget({ temperature, humidity, wind_speed, uv_index, heat_index }) {
     return (
-        <div className="base-widget flat-widget briefings-widget">
+        <div className="base-widget briefings-widget">
             <p className="summary">Hotter than yesterday!</p>
             <div className="status-grid">
                 <WeatherStats icon="🌡️" name="Temperature" value={temperature} unit="°C" />
