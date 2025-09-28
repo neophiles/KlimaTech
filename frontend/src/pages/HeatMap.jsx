@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 
-
-// Custom icon for user location
+// Custom icon for user location (blue marker)
 const userIcon = new L.Icon({
   iconUrl:
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
@@ -14,24 +13,29 @@ const userIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-
 export default function HeatMap() {
+  // Static barangay data for demo
   const barangays = [
     { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
     { id: 2, name: "Barangay Ibabang Dupay", lat: 13.9341, lon: 121.6175 }
   ];
 
+  // Initial dummy cool spots
   const dummyCoolSpots = [
     { id: 1, name: "Cool Spot 1", lat: 13.9425, lon: 121.6200 },
     { id: 2, name: "Cool Spot 2", lat: 13.9380, lon: 121.6250 }
   ];
+
+  // State for cool spots and add mode
   const [coolSpots, setCoolSpots] = useState(dummyCoolSpots);
   const [addMode, setAddMode] = useState(false);
 
+  // Component to handle adding a cool spot on map click
   function AddSpotOnClick() {
     useMapEvents({
       click(e) {
         if (addMode) {
+          // Add new cool spot at clicked location
           const newSpot = {
             id: coolSpots.length + 1,
             name: `Cool Spot ${coolSpots.length + 1}`,
@@ -39,16 +43,17 @@ export default function HeatMap() {
             lon: e.latlng.lng
           };
           setCoolSpots([...coolSpots, newSpot]);
-          setAddMode(false);
+          setAddMode(false); // Exit add mode after adding
         }
       }
     });
     return null;
   }
 
-
+  // State for user location
   const [userLocation, setUserLocation] = useState(null);
 
+  // Get user's current location on mount
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -65,7 +70,6 @@ export default function HeatMap() {
     }
   }, []);
 
-
   return (
     <div
       style={{
@@ -77,7 +81,6 @@ export default function HeatMap() {
         background: "#f8f8f8"
       }}
     >
-
       {/* Button to enable add mode */}
       <button
         onClick={() => setAddMode(true)}
@@ -94,6 +97,7 @@ export default function HeatMap() {
         {addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"}
       </button>
 
+      {/* Centered map container */}
       <div style={{
         display: "flex",
         justifyContent: "center",
@@ -119,10 +123,14 @@ export default function HeatMap() {
               </Popup>
             </Marker>
           )}
-          
+
+          {/* Handles adding cool spot on map click */}
           <AddSpotOnClick />
+
+          {/* Map tiles */}
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
+          {/* Barangay markers */}
           {barangays.map(b => (
             <Marker key={b.id} position={[b.lat, b.lon]}>
               <Popup>
@@ -133,6 +141,7 @@ export default function HeatMap() {
             </Marker>
           ))}
 
+          {/* Cool spot markers */}
           {coolSpots.map(spot => (
             <Marker key={spot.id} position={[spot.lat, spot.lon]}>
               <Popup>
