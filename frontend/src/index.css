@@ -1,20 +1,20 @@
 @font-face {
   font-family: "PT Sans";
-  src: url("/ptsans-regular.ttf") format("truetype");
+  src: url("/fonts/ptsans-regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "PT Sans";
-  src: url("/ptsans-bold.ttf") format("truetype");
+  src: url("/fonts/ptsans-bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/nunito-sans-regular.ttf") format("truetype");
+  src: url("/fonts/nunito-sans-regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -22,6 +22,11 @@
 :root {
   --main-font: "PT Sans", sans-serif;
   --header-footer-height: 3rem;
+  --small-font: 0.75rem;
+  --medium-font: 1.25rem;
+  --large-font: 1.75rem;
+  --grey-color: #7b7b7b;
+  --dark-grey-color: #424242;
 }
 
 * {
