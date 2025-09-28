@@ -8,6 +8,19 @@ import os
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "hourly_temp_model.pkl")
 
+
+def predict_temperature(hour, humidity, wind, uv_index):
+    model = joblib.load(MODEL_PATH)
+    X = pd.DataFrame([{
+        "hour": hour,
+        "humidity": humidity,
+        "wind": wind,
+        "uv_index": uv_index
+    }])
+    temp = model.predict(X)[0]
+    return float(temp)
+
+
 def train_model():
     with Session(engine) as session:
         logs = session.exec(select(HeatLog)).all()
