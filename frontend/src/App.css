@@ -72,10 +72,6 @@ main {
   filter: drop-shadow(0 2px 2px black);
 }
 
-.flat-widget {
-
-}
-
 .canvas-container{
   position: relative;
   min-width: 250px;
