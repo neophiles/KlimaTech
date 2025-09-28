@@ -102,11 +102,13 @@ export default function HeatMap() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100vw"
+        width: "100vw"  
       }}>
         <MapContainer
-          center={[13.9417, 121.6233]}
-          zoom={13}
+          center={[13.41, 122.56]} // Center of the Philippines
+          zoom={6}
+          minZoom={5.4}
+          maxBounds={[[4, 116], [21, 127]]}
           style={{
             height: "500px",
             width: "90vw",
