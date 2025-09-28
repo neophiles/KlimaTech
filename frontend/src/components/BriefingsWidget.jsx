@@ -1,6 +1,6 @@
 import { WeatherStats } from './WeatherStats'
 
-export function BriefingsWidget({ temperature, humidity, wind_speed, uv_index, heat_index }) {
+export function BriefingsWidget({ temperature, humidity, wind_speed, uv_index }) {
     return (
         <div className="base-widget briefings-widget">
             <p className="summary">Hotter than yesterday!</p>
