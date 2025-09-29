@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from app.routers import barangays, ml
+from app.routers import barangays, ml, future_forecast
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.middleware.cors import CORSMiddleware
+
 
 
 app = FastAPI()
@@ -20,6 +21,7 @@ app.add_middleware(
 
 app.include_router(barangays.router)
 app.include_router(ml.router)
+app.include_router(future_forecast.router)
 
 
 @app.on_event("startup")
