@@ -5,6 +5,7 @@ class ReportRead(BaseModel):
     user_id: Optional[int]
     note: str
     date: str
+    time: str
 
 class CoolSpotRead(BaseModel):
     id: int
