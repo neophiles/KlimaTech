@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
+from datetime import datetime
 
 PH_TZ = timezone(timedelta(hours=8))
 
@@ -32,7 +33,8 @@ class Report(SQLModel, table=True):
     coolspot_id: int = Field(foreign_key="coolspot.id")
     user_id: int
     note: str
-    date: str
+    date: str = Field(default_factory=lambda: datetime.now().date().isoformat())
+    time: str = Field(default_factory=lambda: datetime.now().time().isoformat(timespec="seconds"))
     coolspot: Optional["CoolSpot"] = Relationship(back_populates="reports")
 
 
