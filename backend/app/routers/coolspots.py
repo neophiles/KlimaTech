@@ -6,6 +6,13 @@ from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
+
+@router.get("/all", response_model=list[CoolSpotRead])
+async def get_all_coolspots(session: Session = Depends(get_session)):
+    coolspots = session.exec(select(CoolSpot)).all()
+    return coolspots
+
+
 @router.post("/add", response_model=CoolSpotRead)
 async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
     new_spot = CoolSpot(**coolspot.model_dump())
@@ -39,3 +46,5 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
         "lon": coolspot.lon,
         "reports": reports
     }
+
+
