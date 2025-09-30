@@ -25,3 +25,22 @@ class HeatLog(SQLModel, table=True):
     risk_level: str
     recorded_at: datetime = Field(default_factory=lambda: datetime.now(PH_TZ).replace(tzinfo=None))
     barangay: Optional["Barangay"] = Relationship(back_populates="heat_logs")
+
+
+class Report(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    coolspot_id: int = Field(foreign_key="coolspot.id")
+    user_id: int
+    note: str
+    date: str
+
+class CoolSpot(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    barangay_id: int
+    name: str
+    type: str
+    lat: float
+    lon: float
+    reports: List[Report] = Relationship(back_populates="coolspot")
+
+Report.coolspot = Relationship(back_populates="reports")
