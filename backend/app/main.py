@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from app.routers import (
     barangays,
-    ml,
     future_forecast,
     coolspots
 )
@@ -25,7 +24,6 @@ app.add_middleware(
 )
 
 app.include_router(barangays.router)
-app.include_router(ml.router)
 app.include_router(future_forecast.router)
 app.include_router(coolspots.router)
 
