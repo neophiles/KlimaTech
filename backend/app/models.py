@@ -33,6 +33,8 @@ class Report(SQLModel, table=True):
     user_id: int
     note: str
     date: str
+    coolspot: Optional["CoolSpot"] = Relationship(back_populates="reports")
+
 
 class CoolSpot(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -42,5 +44,3 @@ class CoolSpot(SQLModel, table=True):
     lat: float
     lon: float
     reports: List[Report] = Relationship(back_populates="coolspot")
-
-Report.coolspot = Relationship(back_populates="reports")
