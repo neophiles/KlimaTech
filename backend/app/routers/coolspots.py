@@ -6,6 +6,23 @@ from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
+@router.post("/add", response_model=CoolSpotRead)
+async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
+    new_spot = CoolSpot(**coolspot.model_dump())
+    session.add(new_spot)
+    session.commit()
+    session.refresh(new_spot)
+    return new_spot
+
+
+@router.post("/{coolspot_id}/report")
+async def add_report(coolspot_id: int, report: ReportRead, session: Session = Depends(get_session)):
+    new_report = Report(coolspot_id=coolspot_id, **report.model_dump())
+    session.add(new_report)
+    session.commit()
+    session.refresh(new_report)
+
+
 @router.get("/{coolspot_id}", response_model=CoolSpotRead)
 async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)):
     coolspot = session.get(CoolSpot, coolspot_id)
@@ -21,20 +38,3 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
         "lon": coolspot.lon,
         "reports": reports
     }
-
-@router.post("/{coolspot_id}/report")
-async def add_report(coolspot_id: int, report: ReportRead, session: Session = Depends(get_session)):
-    new_report = Report(coolspot_id=coolspot_id, **report.model_dump())
-    session.add(new_report)
-    session.commit()
-    session.refresh(new_report)
-    return new_report
-
-
-@router.post("/add", response_model=CoolSpotRead)
-async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
-    new_spot = CoolSpot(**coolspot.model_dump())
-    session.add(new_spot)
-    session.commit()
-    session.refresh(new_spot)
-    return new_spot
