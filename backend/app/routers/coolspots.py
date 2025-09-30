@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from app.db import get_session
 from app.models import CoolSpot, Report
-from app.schemas.coolspots import ReportRead, CoolSpotRead
+from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
@@ -29,3 +29,12 @@ async def add_report(coolspot_id: int, report: ReportRead, session: Session = De
     session.commit()
     session.refresh(new_report)
     return new_report
+
+
+@router.post("/add", response_model=CoolSpotRead)
+async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
+    new_spot = CoolSpot(**coolspot.model_dump())
+    session.add(new_spot)
+    session.commit()
+    session.refresh(new_spot)
+    return new_spot
