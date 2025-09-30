@@ -4,8 +4,8 @@ from typing import List, Optional
 class ReportRead(BaseModel):
     user_id: Optional[int]
     note: str
-    date: str
-    time: str
+    date: Optional[str] = None
+    time: Optional[str] = None
 
 class CoolSpotRead(BaseModel):
     id: int

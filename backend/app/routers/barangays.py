@@ -6,7 +6,7 @@ from app.schemas.barangay import (
     BarangaySummary,
     BarangayDetail
 )
-from app.schemas.database import HeatLogRead, HeatLogCreate
+from app.schemas.heatlogs import HeatLogRead, HeatLogCreate
 
 import httpx
 from app.utils.heat_index import calculate_heat_index

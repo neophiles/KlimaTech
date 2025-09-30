@@ -21,6 +21,7 @@ async def add_report(coolspot_id: int, report: ReportRead, session: Session = De
     session.add(new_report)
     session.commit()
     session.refresh(new_report)
+    return {"message": "Report added successfully", "report_id": new_report.id}
 
 
 @router.get("/{coolspot_id}", response_model=CoolSpotRead)
