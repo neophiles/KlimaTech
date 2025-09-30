@@ -20,3 +20,4 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
         "lon": coolspot.lon,
         "reports": reports
     }
+
