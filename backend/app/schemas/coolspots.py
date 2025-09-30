@@ -14,3 +14,11 @@ class CoolSpotRead(BaseModel):
     lat: float
     lon: float
     reports: List[ReportRead]
+
+
+class CoolSpotCreate(BaseModel):
+    barangay_id: int
+    name: str
+    type: str
+    lat: float
+    lon: float
