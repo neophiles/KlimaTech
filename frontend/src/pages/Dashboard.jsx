@@ -4,6 +4,7 @@ import { LocationWidget } from '../components/LocationWidget'
 import { AdvisoryWidget } from '../components/AdvisoryWidget'
 import { BriefingsWidget } from '../components/BriefingsWidget'
 import { fetchWeatherData } from "../scripts/fetchWeatherData"
+import { HeatClockWidget } from '../components/HeatClockWidget';
 
 export function Dashboard() {
     const [gaugeData, setGaugeData] = useState(null);
@@ -38,7 +39,25 @@ export function Dashboard() {
         daily_briefing: { safe_hours, avoid_hours, advice },
         forecast
     } = gaugeData;
-    
+
+    const safeHours = [
+        { hour: 8, hi: 28 },
+        { hour: 9, hi: 29 },
+        { hour: 10, hi: 30 },
+        { hour: 16, hi: 31 },
+        { hour: 17, hi: 30 },
+        { hour: 18, hi: 29 },
+        { hour: 19, hi: 28 }
+    ];
+
+    const hotHours = [
+        { hour: 11, hi: 33 },
+        { hour: 12, hi: 35 },
+        { hour: 13, hi: 36 },
+        { hour: 14, hi: 36 },
+        { hour: 15, hi: 35 }
+    ];
+
     return (
         <div className='dashboard'>
             <HeatGauge heatIndex={heat_index} timestamp={updated_at} />
@@ -50,6 +69,7 @@ export function Dashboard() {
                 wind_speed={wind_speed}
                 uv_index={uv_index}
             />
+            <HeatClockWidget safeHours={safeHours} hotHours={hotHours} />
         </div>
     );
 }
