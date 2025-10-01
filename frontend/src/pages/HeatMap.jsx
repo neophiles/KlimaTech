@@ -30,6 +30,9 @@ export function HeatMap() {
   const [reportNote, setReportNote] = useState("");
   const [reportSubmitting, setReportSubmitting] = useState(false);
 
+  // State for new cool spot type selection
+  const [newSpotType, setNewSpotType] = useState("Shaded Area");
+
   // Fetch cool spots from backend on mount
   useEffect(() => {
     fetch("/api/coolspots/all")
@@ -45,9 +48,9 @@ export function HeatMap() {
         if (addMode) {
           // Prepare new cool spot data
           const newSpot = {
-            barangay_id: 1, // You may want to select this dynamically
+            barangay_id: 1,
             name: `Cool Spot`,
-            type: "Shaded Area",
+            type: newSpotType,
             lat: e.latlng.lat,
             lon: e.latlng.lng
           };
@@ -98,7 +101,21 @@ export function HeatMap() {
   }, []);
 
   return (
+    
     <div className="map-page">
+      <label>
+        Type:&nbsp;
+        <select
+          value={newSpotType}
+          onChange={e => setNewSpotType(e.target.value)}
+          style={{ marginBottom: "10px" }}
+        >
+          <option value="Shaded Area">Shaded Area</option>
+          <option value="Open Area">Open Area</option>
+          <option value="Water Source">Water Source</option>
+          {/* Add more types as needed */}
+        </select>
+      </label>
       {/* Centered map container */}
       <div className="map-container">
         <MapContainer
