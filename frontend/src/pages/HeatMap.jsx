@@ -18,14 +18,8 @@ export function HeatMap() {
     { id: 2, name: "Barangay Ibabang Dupay", lat: 13.9341, lon: 121.6175 }
   ];
 
-  // Initial dummy cool spots (not used after fetching from backend)
-  const dummyCoolSpots = [
-    { id: 1, name: "Cool Spot 1", lat: 13.9425, lon: 121.6200 },
-    { id: 2, name: "Cool Spot 2", lat: 13.9380, lon: 121.6250 }
-  ];
-
   // State for cool spots and add mode
-  const [coolSpots, setCoolSpots] = useState(dummyCoolSpots);
+  const [coolSpots, setCoolSpots] = useState([]);
   const [addMode, setAddMode] = useState(false);
 
   // Fetch cool spots from backend on mount
