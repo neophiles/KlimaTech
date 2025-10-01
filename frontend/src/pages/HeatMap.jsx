@@ -22,6 +22,10 @@ export function HeatMap() {
   const [coolSpots, setCoolSpots] = useState([]);
   const [addMode, setAddMode] = useState(false);
 
+  // State for selected spot details modal
+  const [selectedSpot, setSelectedSpot] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   // Fetch cool spots from backend on mount
   useEffect(() => {
     fetch("/api/coolspots/all")
@@ -57,6 +61,16 @@ export function HeatMap() {
       }
     });
     return null;
+  }
+
+  function handleViewDetails(id) {
+    fetch(`/api/coolspots/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setSelectedSpot(data);
+        setShowModal(true);
+      })
+      .catch(err => alert("Failed to fetch details"));
   }
 
   // State for user location
@@ -129,11 +143,35 @@ export function HeatMap() {
                     </ul>
                   </div>
                 )}
+              <button onClick={() => handleViewDetails(spot.id)}>
+                View Details
+              </button>
               </Popup>
             </Marker>
           ))}
         </MapContainer>
       </div>
+
+      {/* Modal for selected cool spot details */}  
+      {showModal && selectedSpot && (
+      <div className="modal">
+        <h2>{selectedSpot.name}</h2>
+        <p>Type: {selectedSpot.type}</p>
+        <p>Barangay ID: {selectedSpot.barangay_id}</p>
+        <p>Latitude: {selectedSpot.lat}</p>
+        <p>Longitude: {selectedSpot.lon}</p>
+        <h3>Reports:</h3>
+        <ul>
+          {selectedSpot.reports.map((r, idx) => (
+            <li key={idx}>
+              {r.note} <br />
+              <small>{r.date} {r.time}</small>
+            </li>
+          ))}
+        </ul>
+        <button onClick={() => setShowModal(false)}>Close</button>
+      </div>
+    )}
 
       {/* Button to enable add mode */}
       <button
