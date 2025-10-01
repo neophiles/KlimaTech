@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 
-// Custom icon for user location (blue marker)
+// Custom icon for user location
 const userIcon = new L.Icon({
   iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
   iconSize: [25, 41],
@@ -12,13 +12,13 @@ const userIcon = new L.Icon({
 });
 
 export function HeatMap() {
-  // Static barangay data for demo
+  // Static barangay data for demo purposes
   const barangays = [
     { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
     { id: 2, name: "Barangay Ibabang Dupay", lat: 13.9341, lon: 121.6175 }
   ];
 
-  // Initial dummy cool spots
+  // Initial dummy cool spots (not used after fetching from backend)
   const dummyCoolSpots = [
     { id: 1, name: "Cool Spot 1", lat: 13.9425, lon: 121.6200 },
     { id: 2, name: "Cool Spot 2", lat: 13.9380, lon: 121.6250 }
@@ -28,19 +28,36 @@ export function HeatMap() {
   const [coolSpots, setCoolSpots] = useState(dummyCoolSpots);
   const [addMode, setAddMode] = useState(false);
 
+  // Fetch cool spots from backend on mount
+  useEffect(() => {
+    fetch("/api/coolspots/all")
+      .then(res => res.json())
+      .then(data => setCoolSpots(data))
+      .catch(err => console.error("Failed to fetch cool spots:", err));
+  }, []);
+
   // Component to handle adding a cool spot on map click
   function AddSpotOnClick() {
     useMapEvents({
       click(e) {
         if (addMode) {
-          // Add new cool spot at clicked location
+          // Prepare new cool spot data
           const newSpot = {
-            id: coolSpots.length + 1,
-            name: `Cool Spot ${coolSpots.length + 1}`,
+            barangay_id: 1, // You may want to select this dynamically
+            name: `Cool Spot`,
+            type: "Shaded Area",
             lat: e.latlng.lat,
             lon: e.latlng.lng
           };
-          setCoolSpots([...coolSpots, newSpot]);
+          // POST new cool spot to backend
+          fetch("/api/coolspots/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newSpot)
+          })
+            .then(res => res.json())
+            .then(spot => setCoolSpots(prev => [...prev, spot]))
+            .catch(err => alert("Failed to add cool spot"));
           setAddMode(false); // Exit add mode after adding
         }
       }
@@ -74,7 +91,7 @@ export function HeatMap() {
       <div className="map-container">
         <MapContainer
           className="map"
-          center={[13.41, 122.56]} // Center of the Philippines
+          center={[13.41, 122.56]}
           zoom={6}
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
@@ -94,24 +111,30 @@ export function HeatMap() {
           {/* Map tiles */}
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          {/* Barangay markers */}
-          {barangays.map(b => (
-            <Marker key={b.id} position={[b.lat, b.lon]}>
-              <Popup>
-                <strong>{b.name}</strong>
-                <br />
-                Example popup content
-              </Popup>
-            </Marker>
-          ))}
 
-          {/* Cool spot markers */}
+          {/* Cool spot markers from backend */}
           {coolSpots.map(spot => (
             <Marker key={spot.id} position={[spot.lat, spot.lon]}>
               <Popup>
                 <strong>{spot.name}</strong>
                 <br />
-                Example cool spot info
+                Type: {spot.type}
+                <br />
+                {/* Show reports if available */}
+                {spot.reports && spot.reports.length > 0 && (
+                  <div>
+                    <hr />
+                    <strong>Reports:</strong>
+                    <ul>
+                      {spot.reports.map((r, idx) => (
+                        <li key={idx}>
+                          {r.note} <br />
+                          <small>{r.date} {r.time}</small>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </Popup>
             </Marker>
           ))}
