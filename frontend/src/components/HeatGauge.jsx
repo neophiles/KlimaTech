@@ -58,7 +58,7 @@ export function HeatGauge({ heatIndex, timestamp }) {
             position: {
                 y: 'center'
             },
-            font: [{ size: 50, weight: 'bold' }, { size: 40 }],
+            font: [{ size: 60, weight: 'bold' }, { size: 50 }],
             color: ({ chart }) => [COLORS[getIndexByHeat(chart.data.datasets[0].data[0])], 'grey']
         };
 
@@ -69,6 +69,7 @@ export function HeatGauge({ heatIndex, timestamp }) {
                 aspectRatio: 2,
                 circumference: 220,
                 rotation: -110,
+                cutout: '60%',
                 plugins: {
                     tooltip: {
                         enabled: false
