@@ -26,6 +26,10 @@ export function HeatMap() {
   const [selectedSpot, setSelectedSpot] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  // State for reporting issues
+  const [reportNote, setReportNote] = useState("");
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+
   // Fetch cool spots from backend on mount
   useEffect(() => {
     fetch("/api/coolspots/all")
@@ -169,6 +173,46 @@ export function HeatMap() {
             </li>
           ))}
         </ul>
+        {/* Form to add a new report */}
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            setReportSubmitting(true);
+            fetch(`/api/coolspots/${selectedSpot.id}/report`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: 0, // Replace with actual user id if available
+                note: reportNote
+                // date and time can be omitted to use backend defaults
+              })
+            })
+              .then(res => res.json())
+              .then(() => {
+                // Refresh details after adding report
+                return fetch(`/api/coolspots/${selectedSpot.id}`);
+              })
+              .then(res => res.json())
+              .then(data => {
+                setSelectedSpot(data);
+                setReportNote("");
+              })
+              .catch(() => alert("Failed to add report"))
+              .finally(() => setReportSubmitting(false));
+          }}
+        >
+          <input
+            type="text"
+            value={reportNote}
+            onChange={e => setReportNote(e.target.value)}
+            placeholder="Add a report..."
+            required
+            style={{ width: "80%" }}
+          />
+          <button type="submit" disabled={reportSubmitting}>
+            {reportSubmitting ? "Submitting..." : "Add Report"}
+          </button>
+        </form>
         <button onClick={() => setShowModal(false)}>Close</button>
       </div>
     )}
