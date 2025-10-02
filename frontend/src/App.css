@@ -127,7 +127,7 @@ main {
 }
 
 .raised-widget {
-  filter: drop-shadow(0 2px 2px black);
+  filter: drop-shadow(0 1px 1px black);
 }
 
 .canvas-container {
