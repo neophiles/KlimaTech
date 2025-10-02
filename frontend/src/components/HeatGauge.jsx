@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { getIndexByHeat, getColorByIndex, formatTime } from "../scripts/utils";
+import { getIndexByHeat, getColorByIndex, formatFullTime } from "../scripts/utils";
 
 Chart.register(annotationPlugin);
 
@@ -17,7 +17,7 @@ export function HeatGauge({ heatIndex, timestamp }) {
     const chartInstance = useRef(null);
 
     useEffect(() => {
-        const time = formatTime(timestamp);
+        const time = formatFullTime(timestamp);
 
         // const value = rand(MIN, MAX);
 
