@@ -1,14 +1,13 @@
 from fastapi import FastAPI
 from app.routers import (
     barangays,
-    coolspots
+    coolspots,
+    forecast
 )
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.middleware.cors import CORSMiddleware
-
-from backend.app.routers import forecast
 
 
 
