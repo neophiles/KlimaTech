@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import CoolSpotMarker from "../components/CoolSpotMarker";
+
 
 // Custom icon for user location
 const userIcon = new L.Icon({
@@ -143,33 +145,9 @@ export function HeatMap() {
 
           {/* Cool spot markers from backend */}
           {coolSpots.map(spot => (
-            <Marker key={spot.id} position={[spot.lat, spot.lon]}>
-              <Popup>
-                <strong>{spot.name}</strong>
-                <br />
-                Type: {spot.type}
-                <br />
-                {/* Show reports if available */}
-                {spot.reports && spot.reports.length > 0 && (
-                  <div>
-                    <hr />
-                    <strong>Reports:</strong>
-                    <ul>
-                      {spot.reports.map((r, idx) => (
-                        <li key={idx}>
-                          {r.note} <br />
-                          <small>{r.date} {r.time}</small>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              <button onClick={() => handleViewDetails(spot.id)}>
-                View Details
-              </button>
-              </Popup>
-            </Marker>
+            <CoolSpotMarker key={spot.id} spot={spot} onViewDetails={handleViewDetails} />
           ))}
+          
         </MapContainer>
       </div>
 
