@@ -7,14 +7,14 @@ import { fetchWeatherData } from "../scripts/fetchWeatherData"
 import { HeatClockWidget } from '../components/HeatClockWidget';
 
 export function Dashboard() {
-    const [gaugeData, setGaugeData] = useState(null);
+    const [weatherData, setWeatherData] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         async function getData() {
             try {
                 const data = await fetchWeatherData();
-                setGaugeData(data);
+                setWeatherData(data);
             } catch (err) {
                 console.error(err);
                 setError(err);
@@ -25,7 +25,7 @@ export function Dashboard() {
     }, []);
 
     if (error) return <div>Error loading data</div>;
-    if (!gaugeData) return <div>Loading...</div>;
+    if (!weatherData) return <div>Loading...</div>;
 
     // Destructure the fields
     const {
@@ -38,7 +38,7 @@ export function Dashboard() {
         current: { temperature, humidity, wind_speed, uv_index, heat_index, risk_level, updated_at },
         daily_briefing: { safe_hours, avoid_hours, advice },
         forecast
-    } = gaugeData;
+    } = weatherData;
 
     const safeHours = [
         { hour: 8, hi: 28 },
