@@ -10,3 +10,13 @@ export function getColorByIndex(index) {
     const COLORS = ["#4caf50", "#cddc39", "#ffeb3b", "#ff9800", "#f44336"];
     return COLORS[index];
 }
+
+export function formatTime(timestamp) {
+    return timestamp 
+        ? new Date(timestamp).toLocaleTimeString([], { 
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        })
+        : "--:--";
+}
