@@ -7,7 +7,7 @@ export function getIndexByHeat(heatIndex) {
 }
 
 export function getColorByIndex(index) {
-    const COLORS = ["#28AD9B", "#5ADD56", "#F8C630", "#FF7439", "#E23F3F"];
+    const COLORS = ["#409aafff", "#49b446ff", "#f0c031ff", "#f17743ff", "#E23F3F"];
     return COLORS[index];
 }
 
