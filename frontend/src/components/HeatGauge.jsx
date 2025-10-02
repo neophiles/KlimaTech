@@ -1,11 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { getIndexByHeat } from "../scripts/utils";
+import { getIndexByHeat, getColorByIndex } from "../scripts/utils";
 
 Chart.register(annotationPlugin);
 
-const COLORS = ["#4caf50", "#cddc39", "#ffeb3b", "#ff9800", "#f44336"];
 const MIN = 0;
 const MAX = 60;
 
@@ -42,7 +41,7 @@ export function HeatGauge({ heatIndex, timestamp }) {
                     if (ctx.dataIndex === 1) {
                         return '#eaeaeaff';
                     }
-                    return COLORS[getIndexByHeat(ctx.raw)];
+                    return getColorByIndex(getIndexByHeat(ctx.raw));
                 },
                 borderWidth: 0,
                 borderRadius: 5
@@ -58,8 +57,8 @@ export function HeatGauge({ heatIndex, timestamp }) {
             position: {
                 y: 'center'
             },
-            font: [{ size: 50, weight: 'bold' }, { size: 40 }],
-            color: ({ chart }) => [COLORS[getIndexByHeat(chart.data.datasets[0].data[0])], 'grey']
+            font: [{ size: 60, weight: 'bold' }, { size: 50 }],
+            color: ({ chart }) => [getColorByIndex(getIndexByHeat(chart.data.datasets[0].data[0])), 'grey']
         };
 
         const config = {
@@ -69,6 +68,7 @@ export function HeatGauge({ heatIndex, timestamp }) {
                 aspectRatio: 2,
                 circumference: 220,
                 rotation: -110,
+                cutout: '60%',
                 plugins: {
                     tooltip: {
                         enabled: false
