@@ -12,16 +12,6 @@ function rand(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function formatTime(timestamp) {
-    return timestamp 
-        ? new Date(timestamp).toLocaleTimeString([], { 
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        })
-        : "--:--";
-}
-
 export function HeatGauge({ heatIndex, timestamp }) {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
