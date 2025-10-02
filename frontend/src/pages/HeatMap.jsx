@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
-import CoolSpotMarker from "../components/CoolSpotMarker";
-import CoolSpotModal from "../components/CoolSpotModal";
-import AddSpotOnClick from "../components/AddSpotOnClick";
+import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
+import CoolSpotModal from "../components/coolspots/CoolSpotModal";
+import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
 
 
 // Custom icon for user location
