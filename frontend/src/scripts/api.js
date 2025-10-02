@@ -4,7 +4,7 @@ export async function fetchWeatherData(barangayId) {
   return await res.json();
 }
 
-export async function fetchForecastData() {
+export async function fetchForecastData(barangayId) {
   const res = await fetch(`/api/barangays/${barangayId}/forecast`);
   if (!res.ok) throw new Error('Failed to fetch forecast data');
   return await res.json();
