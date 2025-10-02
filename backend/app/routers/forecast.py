@@ -35,15 +35,15 @@ async def get_barangay_forecast(barangay_id: int, session: Session = Depends(get
     winds = data["hourly"]["wind_speed_10m"]
     uvs = data["hourly"]["uv_index"]
 
-    # Get tomorrow's date in Asia/Manila timezone
+    # Get today's date in Asia/Manila timezone
     now = datetime.now(PH_TZ)
-    tomorrow = (now + timedelta(days=1)).date()
+    today = now.date()
 
-    # Compute heat index for each hour, but only for tomorrow
+    # Compute heat index for each hour, but only for today
     forecast = []
     for i in range(len(times)):
         dt = datetime.fromisoformat(times[i])
-        if dt.date() == tomorrow:
+        if dt.date() == today:
             hi, risk = calculate_heat_index(temps[i], hums[i])
             forecast.append({
                 "time": times[i],

@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Choose environment: "dev" for development, "prod" for production
-ENV = os.getenv("ENV", "dev")  # Set ENV=prod in your .env for production
+# "dev" for development, "prod" for production
+ENV = os.getenv("ENV", "dev") 
 
 if ENV == "dev":
     # SQLite for development
