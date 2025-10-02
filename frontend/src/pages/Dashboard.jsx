@@ -3,7 +3,7 @@ import { HeatGauge } from '../components/HeatGauge';
 import { LocationWidget } from '../components/LocationWidget'
 import { AdvisoryWidget } from '../components/AdvisoryWidget'
 import { BriefingsWidget } from '../components/BriefingsWidget'
-import { fetchWeatherData } from "../scripts/fetchWeatherData"
+import { fetchWeatherData } from "../scripts/api"
 import { HeatClockWidget } from '../components/HeatClockWidget';
 
 export function Dashboard() {
@@ -13,7 +13,7 @@ export function Dashboard() {
     useEffect(() => {
         async function getData() {
             try {
-                const data = await fetchWeatherData();
+                const data = await fetchWeatherData(1); // barangayId = 1 for testing
                 setWeatherData(data);
             } catch (err) {
                 console.error(err);
