@@ -289,7 +289,7 @@ main {
 }
 
 .slot-capsule span  {
-  font-size: var(--small-font);
+  font-size: calc(var(--small-font) - 0.15rem);
 }
 
 .slot-capsule.safe {
