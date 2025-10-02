@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import CoolSpotMarker from "../components/CoolSpotMarker";
+import CoolSpotModal from "../components/CoolSpotModal";
 
 
 // Custom icon for user location
@@ -147,30 +148,18 @@ export function HeatMap() {
           {coolSpots.map(spot => (
             <CoolSpotMarker key={spot.id} spot={spot} onViewDetails={handleViewDetails} />
           ))}
-          
+
         </MapContainer>
       </div>
 
       {/* Modal for selected cool spot details */}  
       {showModal && selectedSpot && (
-      <div className="modal">
-        <h2>{selectedSpot.name}</h2>
-        <p>Type: {selectedSpot.type}</p>
-        <p>Barangay ID: {selectedSpot.barangay_id}</p>
-        <p>Latitude: {selectedSpot.lat}</p>
-        <p>Longitude: {selectedSpot.lon}</p>
-        <h3>Reports:</h3>
-        <ul>
-          {selectedSpot.reports.map((r, idx) => (
-            <li key={idx}>
-              {r.note} <br />
-              <small>{r.date} {r.time}</small>
-            </li>
-          ))}
-        </ul>
-        {/* Form to add a new report */}
-        <form
-          onSubmit={e => {
+        <CoolSpotModal
+          spot={selectedSpot}
+          reportNote={reportNote}
+          setReportNote={setReportNote}
+          reportSubmitting={reportSubmitting}
+          onSubmitReport={e => {
             e.preventDefault();
             setReportSubmitting(true);
             fetch(`/api/coolspots/${selectedSpot.id}/report`, {
@@ -179,14 +168,10 @@ export function HeatMap() {
               body: JSON.stringify({
                 user_id: 0, // Replace with actual user id if available
                 note: reportNote
-                // date and time can be omitted to use backend defaults
               })
             })
               .then(res => res.json())
-              .then(() => {
-                // Refresh details after adding report
-                return fetch(`/api/coolspots/${selectedSpot.id}`);
-              })
+              .then(() => fetch(`/api/coolspots/${selectedSpot.id}`))
               .then(res => res.json())
               .then(data => {
                 setSelectedSpot(data);
@@ -195,22 +180,9 @@ export function HeatMap() {
               .catch(() => alert("Failed to add report"))
               .finally(() => setReportSubmitting(false));
           }}
-        >
-          <input
-            type="text"
-            value={reportNote}
-            onChange={e => setReportNote(e.target.value)}
-            placeholder="Add a report..."
-            required
-            style={{ width: "80%" }}
-          />
-          <button type="submit" disabled={reportSubmitting}>
-            {reportSubmitting ? "Submitting..." : "Add Report"}
-          </button>
-        </form>
-        <button onClick={() => setShowModal(false)}>Close</button>
-      </div>
-    )}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
       {/* Button to enable add mode */}
       <button
