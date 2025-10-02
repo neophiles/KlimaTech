@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import CoolSpotMarker from "../components/CoolSpotMarker";
 import CoolSpotModal from "../components/CoolSpotModal";
+import AddSpotOnClick from "../components/AddSpotOnClick";
 
 
 // Custom icon for user location
@@ -44,33 +45,17 @@ export function HeatMap() {
       .catch(err => console.error("Failed to fetch cool spots:", err));
   }, []);
 
-  // Component to handle adding a cool spot on map click
-  function AddSpotOnClick() {
-    useMapEvents({
-      click(e) {
-        if (addMode) {
-          // Prepare new cool spot data
-          const newSpot = {
-            barangay_id: 1,
-            name: `Cool Spot`,
-            type: newSpotType,
-            lat: e.latlng.lat,
-            lon: e.latlng.lng
-          };
-          // POST new cool spot to backend
-          fetch("/api/coolspots/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newSpot)
-          })
-            .then(res => res.json())
-            .then(spot => setCoolSpots(prev => [...prev, spot]))
-            .catch(err => alert("Failed to add cool spot"));
-          setAddMode(false); // Exit add mode after adding
-        }
-      }
-    });
-    return null;
+  // Handler to add a new cool spot (called from AddSpotOnClick)
+  function handleAddSpot(newSpot) {
+    fetch("/api/coolspots/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newSpot)
+    })
+      .then(res => res.json())
+      .then(spot => setCoolSpots(prev => [...prev, spot]))
+      .catch(err => alert("Failed to add cool spot"));
+    setAddMode(false);
   }
 
   function handleViewDetails(id) {
@@ -138,7 +123,11 @@ export function HeatMap() {
           )}
 
           {/* Handles adding cool spot on map click */}
-          <AddSpotOnClick />
+          <AddSpotOnClick
+            addMode={addMode}
+            newSpotType={newSpotType}
+            onAddSpot={handleAddSpot}
+          />
 
           {/* Map tiles */}
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
