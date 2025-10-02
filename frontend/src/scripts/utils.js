@@ -11,7 +11,7 @@ export function getColorByIndex(index) {
     return COLORS[index];
 }
 
-export function formatTime(timestamp) {
+export function formatFullTime(timestamp) {
     return timestamp 
         ? new Date(timestamp).toLocaleTimeString([], { 
             hour: '2-digit',
@@ -19,4 +19,13 @@ export function formatTime(timestamp) {
             hour12: true
         })
         : "--:--";
+}
+
+export function formatHourLabel(timestamp) {
+    return timestamp
+        ? new Date(timestamp).toLocaleTimeString([], {
+            hour: "numeric",
+            hour12: true
+        })
+        : "--";
 }
