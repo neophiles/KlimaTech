@@ -12,7 +12,7 @@ function rand(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-export function HeatGauge({ heatIndex, timestamp }) {
+function HeatGauge({ heatIndex, timestamp }) {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
@@ -96,3 +96,5 @@ export function HeatGauge({ heatIndex, timestamp }) {
         </div>
     )
 }
+
+export default HeatGauge;

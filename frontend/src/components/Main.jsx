@@ -1,8 +1,8 @@
-import { Dashboard } from '../pages/Dashboard'
-import { HeatMap } from "../pages/HeatMap";
+import Dashboard from '../pages/Dashboard'
+import HeatMap from "../pages/HeatMap";
 import { Routes, Route } from "react-router-dom";
 
-export function Main() {
+function Main() {
     return (
         <main>
             <Routes>
@@ -14,3 +14,5 @@ export function Main() {
         </main>
     );
 }
+
+export default Main;

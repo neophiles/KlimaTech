@@ -1,6 +1,6 @@
-import { TimeSlot } from "./TimeSlot";
+import TimeSlot from "./TimeSlot";
 
-export function TimeSlotContainer({ hours }) {
+function TimeSlotContainer({ hours }) {
     if (!hours) return null;
     return (
         <div className="slot-container">
@@ -10,3 +10,5 @@ export function TimeSlotContainer({ hours }) {
         </div>
     );
 }
+
+export default TimeSlotContainer;

@@ -1,6 +1,6 @@
 import { getColorByIndex } from "../scripts/utils";
 
-export function TimeSlot({ time, heatIndex, index }) {
+function TimeSlot({ time, heatIndex, index }) {
     const yOffsets = [20, 10, 0, -10, 20];
 
     return (
@@ -19,3 +19,5 @@ export function TimeSlot({ time, heatIndex, index }) {
         </div>
     );
 }
+
+export default TimeSlot;

@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
-export function NavigationButton({ route, label }) {
+function NavigationButton({ route, label }) {
     const navigate = useNavigate();
     const location = useLocation();
     const isActive = location.pathname === route;
@@ -68,3 +68,5 @@ export function NavigationButton({ route, label }) {
         </button>
     );
 }
+
+export default NavigationButton;

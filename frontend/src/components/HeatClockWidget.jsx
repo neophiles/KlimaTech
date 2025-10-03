@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { TimeSlotContainer } from "./TimeSlotContainer";
+import TimeSlotContainer from "./TimeSlotContainer";
 import { fetchForecastData } from "../scripts/api";
 import { getIndexByHeat, formatHourLabel } from "../scripts/utils";
 
-export function HeatClockWidget() {
+function HeatClockWidget() {
 
     const [forecast, setForecastData] = useState([]);
     const [error, setError] = useState(null);
@@ -41,3 +41,5 @@ export function HeatClockWidget() {
         </div>
     );
 }
+
+export default HeatClockWidget;
