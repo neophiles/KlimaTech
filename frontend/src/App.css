@@ -75,7 +75,6 @@ footer {
 
 main {
   flex: 1;
-  padding: 1rem;
   background-color: #f6f6f6;
 }
 
@@ -101,8 +100,6 @@ main {
 .map {
   height: 100%;
   width: 100%;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .dashboard {
@@ -241,9 +238,12 @@ main {
 .slot-container {
   display: flex;
   justify-content: start;
-  gap: 0.25rem;
+  gap: 0.2rem;
   position: relative;
-  overflow-x: scroll;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .slot-column {
@@ -254,6 +254,7 @@ main {
   margin-bottom: 1rem;
   position: relative;
   z-index: 0;
+  scroll-snap-align: start;
 }
 
 .slot-column::after {
