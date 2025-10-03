@@ -5,7 +5,7 @@ export function TimeSlotContainer({ hours }) {
     return (
         <div className="slot-container">
             {hours.map((h) => (
-                <TimeSlot key={h.hour} time={h.hour} heatIndex={h.heat_index} color={h.color} />
+                <TimeSlot key={h.hour} time={h.hour} heatIndex={h.heat_index} index={h.index} />
             ))}
         </div>
     );
