@@ -250,8 +250,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 0;
   scroll-snap-align: start;
@@ -261,7 +261,7 @@ main {
   content: "";
   position: absolute;
   top: 1.25rem;  
-  bottom: -1rem; 
+  bottom: -1.5rem; 
   border-left: .10rem dashed var(--grey-color);
   z-index: -1;
 }
@@ -282,12 +282,12 @@ main {
   align-items: center;
   justify-content: center;
   color: white;
-  transition: transform 0.25s ease-in-out;
+  /* transition: transform 0.25s ease-in-out; */
 }
 
-.slot-capsule:hover {
+/* .slot-capsule:hover {
   transform: translateY(-10px);
-}
+} */
 
 .slot-capsule > span:last-child  {
   font-size: var(--medium-font);
