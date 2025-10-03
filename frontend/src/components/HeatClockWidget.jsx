@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TimeSlotContainer } from "./TimeSlotContainer";
 import { fetchForecastData } from "../scripts/api";
-import { getIndexByHeat, getColorByIndex, formatHourLabel } from "../scripts/utils";
+import { getIndexByHeat, formatHourLabel } from "../scripts/utils";
 
 export function HeatClockWidget() {
 
@@ -30,7 +30,7 @@ export function HeatClockWidget() {
         .map(({ time, heat_index }) => ({
             hour: formatHourLabel(time, 6, 18),
             heat_index: heat_index,
-            color: getColorByIndex(getIndexByHeat(heat_index)),
+            index: getIndexByHeat(heat_index),
         }))
         .filter(({ hour }) => hour); // keep only defined hours;
 
