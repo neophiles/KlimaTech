@@ -302,3 +302,15 @@ main {
   background-color: #C72F2F;
   border-color: #7a1c1c; 
 }
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.settings h1 {
+  font-size: var(--medium-font);
+}
