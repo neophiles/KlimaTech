@@ -15,6 +15,7 @@ function Footer() {
                 label={'Analysis'}
             />
             <NavigationButton
+                route={'/settings'}
                 label={'Settings'}
             />
         </footer>
