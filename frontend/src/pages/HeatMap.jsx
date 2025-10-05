@@ -58,6 +58,7 @@ export function HeatMap() {
     setAddMode(false);
   }
 
+  // Handler to view details of a cool spot
   function handleViewDetails(id) {
     fetch(`/api/coolspots/${id}`)
       .then(res => res.json())
@@ -117,7 +118,7 @@ export function HeatMap() {
           {userLocation && (
             <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon}>
               <Popup>
-                <strong>📍 Your Location</strong>
+                <strong>Your Location</strong>
               </Popup>
             </Marker>
           )}
