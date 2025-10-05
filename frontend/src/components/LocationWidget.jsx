@@ -1,4 +1,4 @@
-export function LocationWidget({ barangay, locality, province }) {
+function LocationWidget({ barangay, locality, province }) {
     return (
         <div className="widget location-widget">
             <h3 className="barangay">{barangay}</h3>
@@ -6,3 +6,5 @@ export function LocationWidget({ barangay, locality, province }) {
         </div>
     );
 }
+
+export default LocationWidget;

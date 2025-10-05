@@ -7,7 +7,7 @@ export function getIndexByHeat(heatIndex) {
 }
 
 export function getColorByIndex(index) {
-    const COLORS = ["#28AD9B", "#5ADD56", "#F8C630", "#FF7439", "#E23F3F"];
+    const COLORS = ["#2ECC71", "#F1C40F", "#E67E22", "#E74C3C", "#C0392B"];
     return COLORS[index];
 }
 
@@ -27,7 +27,6 @@ export function formatHourLabel(timestamp, start, end) {
     const date = new Date(timestamp);
     const hour = date.getHours(); // 0–23
 
-    // Only allow 5 AM (5) through 7 PM (19)
     if (hour < start || hour > end) return;
 
     return date.toLocaleTimeString([], {

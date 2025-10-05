@@ -1,6 +1,6 @@
-import { NavigationButton } from './NavigationButton';
+import NavigationButton from './NavigationButton';
 
-export function Footer() {
+function Footer() {
     return (
         <footer>
             <NavigationButton
@@ -15,8 +15,11 @@ export function Footer() {
                 label={'Analysis'}
             />
             <NavigationButton
+                route={'/settings'}
                 label={'Settings'}
             />
         </footer>
     );
 }
+
+export default Footer;

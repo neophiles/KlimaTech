@@ -1,8 +1,9 @@
-import { Dashboard } from '../pages/Dashboard'
-import { HeatMap } from "../pages/HeatMap";
+import Dashboard from '../pages/Dashboard'
+import HeatMap from "../pages/HeatMap";
 import { Routes, Route } from "react-router-dom";
+import Settings from '../pages/Settings';
 
-export function Main() {
+function Main() {
     return (
         <main>
             <Routes>
@@ -10,7 +11,10 @@ export function Main() {
                 <Route path="/" element={<Dashboard />} />
                 {/* Heatmap page */}
                 <Route path="/heatmap" element={<HeatMap />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
         </main>
     );
 }
+
+export default Main;

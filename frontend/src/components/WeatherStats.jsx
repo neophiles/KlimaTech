@@ -1,4 +1,4 @@
-export function WeatherStats({ icon, name, value, unit }) {
+function WeatherStats({ icon, name, value, unit }) {
     return (
         <div className="stat">
             <div className="stat-icon">{icon}</div>
@@ -9,3 +9,5 @@ export function WeatherStats({ icon, name, value, unit }) {
         </div>
     );
 }
+
+export default WeatherStats;

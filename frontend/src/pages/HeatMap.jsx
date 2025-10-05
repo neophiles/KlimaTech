@@ -15,7 +15,7 @@ const userIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-export function HeatMap() {
+function HeatMap() {
   // Static barangay data for demo purposes
   const barangays = [
     { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
@@ -191,3 +191,5 @@ export function HeatMap() {
     </div>
   );
 }
+
+export default HeatMap;

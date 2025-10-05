@@ -12,7 +12,7 @@ function rand(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-export function HeatGauge({ heatIndex, timestamp }) {
+function HeatGauge({ heatIndex, timestamp }) {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
@@ -41,13 +41,13 @@ export function HeatGauge({ heatIndex, timestamp }) {
         const annotation = {
             type: 'doughnutLabel',
             content: ({ chart }) => [
-                chart.data.datasets[0].data[0].toFixed(2) + '°C',
+                chart.data.datasets[0].data[0].toFixed(1) + '°C',
                 `${ time }`,
             ],
             position: {
                 y: 'center'
             },
-            font: [{ size: 60, weight: 'bold' }, { size: 50 }],
+            font: [{ size: 90, weight: 'bold' }, { size: 50 }],
             color: ({ chart }) => [getColorByIndex(getIndexByHeat(chart.data.datasets[0].data[0])), 'grey']
         };
 
@@ -96,3 +96,5 @@ export function HeatGauge({ heatIndex, timestamp }) {
         </div>
     )
 }
+
+export default HeatGauge;

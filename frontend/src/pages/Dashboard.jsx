@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { HeatGauge } from '../components/HeatGauge';
-import { LocationWidget } from '../components/LocationWidget'
-import { AdvisoryWidget } from '../components/AdvisoryWidget'
-import { BriefingsWidget } from '../components/BriefingsWidget'
+import HeatGauge from '../components/HeatGauge';
+import LocationWidget from '../components/LocationWidget'
+import AdvisoryWidget from '../components/AdvisoryWidget'
+import BriefingsWidget from '../components/BriefingsWidget'
 import { fetchWeatherData } from "../scripts/api"
-import { HeatClockWidget } from '../components/HeatClockWidget';
+import HeatClockWidget from '../components/HeatClockWidget';
 
-export function Dashboard() {
+function Dashboard() {
     const [weatherData, setWeatherData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -55,3 +55,5 @@ export function Dashboard() {
         </div>
     );
 }
+
+export default Dashboard;

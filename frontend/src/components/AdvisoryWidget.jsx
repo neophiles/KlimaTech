@@ -1,6 +1,6 @@
 import { getIndexByHeat, getColorByIndex } from "../scripts/utils";
 
-export function AdvisoryWidget({ heatIndex, riskLevel, advice }) {
+function AdvisoryWidget({ heatIndex, riskLevel, advice }) {
     const index = getIndexByHeat(heatIndex);
     const bgColor = getColorByIndex(index);
 
@@ -27,3 +27,5 @@ export function AdvisoryWidget({ heatIndex, riskLevel, advice }) {
         </div>
     );
 }
+
+export default AdvisoryWidget;
