@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, UploadFile, Form
+import os
 from sqlmodel import Session, select
 from app.db import get_session
 from app.models import CoolSpot, Report
@@ -13,13 +14,34 @@ async def get_all_coolspots(session: Session = Depends(get_session)):
     return coolspots
 
 
-@router.post("/add", response_model=CoolSpotRead)
-async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
-    new_spot = CoolSpot(**coolspot.model_dump())
-    session.add(new_spot)
+@router.post("/{coolspot_id}/report")
+async def add_report(
+    coolspot_id: int,
+    user_id: int = Form(...),
+    note: str = Form(...),
+    file: UploadFile = File(None),
+    session: Session = Depends(get_session)
+):
+    # Handle file upload if provided
+    photo_url = None
+    if file:
+        os.makedirs("static/uploads", exist_ok=True) 
+        file_location = f"static/uploads/{file.filename}"
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+        photo_url = f"/static/uploads/{file.filename}"
+
+
+    new_report = Report(
+        coolspot_id=coolspot_id,
+        user_id=user_id,
+        note=note,
+        photo_url=photo_url
+    )
+    session.add(new_report)
     session.commit()
-    session.refresh(new_spot)
-    return new_spot
+    session.refresh(new_report)
+    return {"message": "Report added successfully", "report_id": new_report.id}
 
 
 @router.post("/{coolspot_id}/report")

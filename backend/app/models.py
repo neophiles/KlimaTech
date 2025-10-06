@@ -35,6 +35,7 @@ class Report(SQLModel, table=True):
     note: str
     date: str = Field(default_factory=lambda: datetime.now().date().isoformat())
     time: str = Field(default_factory=lambda: datetime.now().time().isoformat(timespec="seconds"))
+    photo_url: Optional[str] = None 
     coolspot: Optional["CoolSpot"] = Relationship(back_populates="reports")
 
 

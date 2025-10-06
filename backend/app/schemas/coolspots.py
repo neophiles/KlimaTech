@@ -6,6 +6,7 @@ class ReportRead(BaseModel):
     note: str
     date: Optional[str] = None
     time: Optional[str] = None
+    photo_url: Optional[str] = None 
 
 class CoolSpotRead(BaseModel):
     id: int
