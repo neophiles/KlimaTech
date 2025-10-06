@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
 import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
-
+import Button from "../components/Button";
 
 // Custom icon for user location
 const userIcon = new L.Icon({
@@ -92,19 +92,7 @@ function HeatMap() {
   return (
     
     <div className="map-page">
-      <label>
-        Type:&nbsp;
-        <select
-          value={newSpotType}
-          onChange={e => setNewSpotType(e.target.value)}
-          style={{ marginBottom: "10px" }}
-        >
-          <option value="Shaded Area">Shaded Area</option>
-          <option value="Open Area">Open Area</option>
-          <option value="Water Source">Water Source</option>
-          {/* Add more types as needed */}
-        </select>
-      </label>
+      
       {/* Centered map container */}
       <div className="map-container">
         <MapContainer
@@ -175,19 +163,7 @@ function HeatMap() {
       )}
 
       {/* Button to enable add mode */}
-      <button
-        onClick={() => setAddMode(true)}
-        style={{
-          padding: "8px 16px",
-          background: addMode ? "#4caf50" : "#2196f3",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer"
-        }}
-      >
-        {addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"}
-      </button>
+      <Button children={addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"} onClick={setAddMode} />
     </div>
   );
 }
