@@ -1,4 +1,4 @@
-import GuideWidget from "../components/GuideWidget";
+import GuideWidget from "../components/widgets/GuideWidget";
 
 function Settings() {
     return (
