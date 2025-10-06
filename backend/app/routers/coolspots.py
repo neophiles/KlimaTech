@@ -44,13 +44,13 @@ async def add_report(
     return {"message": "Report added successfully", "report_id": new_report.id}
 
 
-@router.post("/{coolspot_id}/report")
-async def add_report(coolspot_id: int, report: ReportRead, session: Session = Depends(get_session)):
-    new_report = Report(coolspot_id=coolspot_id, **report.model_dump())
-    session.add(new_report)
+@router.post("/add", response_model=CoolSpotRead)
+async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
+    new_coolspot = CoolSpot.model_validate(coolspot)
+    session.add(new_coolspot)
     session.commit()
-    session.refresh(new_report)
-    return {"message": "Report added successfully", "report_id": new_report.id}
+    session.refresh(new_coolspot)
+    return new_coolspot
 
 
 @router.get("/{coolspot_id}", response_model=CoolSpotRead)
