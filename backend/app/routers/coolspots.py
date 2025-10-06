@@ -45,8 +45,31 @@ async def add_report(
 
 
 @router.post("/add", response_model=CoolSpotRead)
-async def create_coolspot(coolspot: CoolSpotCreate, session: Session = Depends(get_session)):
-    new_coolspot = CoolSpot.model_validate(coolspot)
+async def create_coolspot(
+    barangay_id: int = Form(...),
+    name: str = Form(...),
+    type: str = Form(...),
+    lat: float = Form(...),
+    lon: float = Form(...),
+    file: UploadFile = File(None),
+    session: Session = Depends(get_session)
+):
+    photo_url = None
+    if file:
+        os.makedirs("static/uploads", exist_ok=True)
+        file_location = f"static/uploads/{file.filename}"
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+        photo_url = f"/static/uploads/{file.filename}"
+
+    new_coolspot = CoolSpot(
+        barangay_id=barangay_id,
+        name=name,
+        type=type,
+        lat=lat,
+        lon=lon,
+        photo_url=photo_url
+    )
     session.add(new_coolspot)
     session.commit()
     session.refresh(new_coolspot)
