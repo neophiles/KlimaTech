@@ -1,4 +1,4 @@
-import { getColorByIndex } from "../../../scripts/utils";
+import { getColorByIndex } from "../../../utils/heatUtils";
 
 function TimeSlot({ time, heatIndex, index }) {
     const yOffsets = [20, 10, 0, -10, 20];

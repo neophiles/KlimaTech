@@ -1,4 +1,4 @@
-import { getIndexByHeat, getColorByIndex } from "../../scripts/utils"
+import { getIndexByHeat, getColorByIndex } from "../../utils/heatUtils"
 
 function AdvisoryWidget({ heatIndex, riskLevel, advice }) {
     const index = getIndexByHeat(heatIndex);

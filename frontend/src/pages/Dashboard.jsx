@@ -3,7 +3,7 @@ import HeatGauge from '../components/widgets/HeatGauge';
 import LocationWidget from '../components/widgets/LocationWidget'
 import AdvisoryWidget from '../components/widgets/AdvisoryWidget'
 import BriefingsWidget from '../components/widgets/BriefingsWidget/BriefingsWidget'
-import { fetchWeatherData } from "../scripts/api"
+import { fetchWeatherData } from "../api/heatGauge"
 import HeatClockWidget from '../components/widgets/HeatClockWidget/HeatClockWidget'
 
 function Dashboard() {
