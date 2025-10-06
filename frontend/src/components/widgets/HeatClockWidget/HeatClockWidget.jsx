@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TimeSlotContainer from "./TimeSlotContainer";
-import { fetchForecastData } from "../scripts/api";
-import { getIndexByHeat, formatHourLabel } from "../scripts/utils";
+import { fetchForecastData } from "../../../scripts/api";
+import { getIndexByHeat, formatHourLabel } from "../../../scripts/utils";
 
 function HeatClockWidget() {
 
