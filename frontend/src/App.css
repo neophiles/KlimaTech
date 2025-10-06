@@ -98,6 +98,7 @@ main {
 }
 
 .map {
+  position: relative;
   height: 100%;
   width: 100%;
 }
@@ -313,4 +314,16 @@ main {
 
 .settings h1 {
   font-size: var(--medium-font);
+}
+
+.button {
+  position: absolute;
+  bottom: 4.5rem;
+  right: 1.5rem;
+  padding: 8px 16px;
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
