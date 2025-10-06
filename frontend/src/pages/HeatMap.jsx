@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
 import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
+import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
 
 // Custom icon for user location
@@ -39,6 +40,10 @@ function HeatMap() {
 
   // State for report photo upload
   const [reportPhoto, setReportPhoto] = useState(null);
+
+  // State for adding new cool spot modal
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [pendingSpot, setPendingSpot] = useState(null);
 
   // Fetch cool spots from backend on mount
   useEffect(() => {
@@ -189,7 +194,20 @@ function HeatMap() {
       
 
       {/* Button to enable add mode */}
-      <Button children={addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"} onClick={setAddMode} />
+      <Button onClick={() => setShowAddModal(true)}>
+        {addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"}
+      </Button>
+
+      {/* Modal for adding new cool spot */}
+      <AddCoolSpotModal
+        show={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={spotInfo => {
+          setPendingSpot(spotInfo);
+          setShowAddModal(false);
+          setAddMode(true)
+        }}
+      />
     </div>
   );
 }
