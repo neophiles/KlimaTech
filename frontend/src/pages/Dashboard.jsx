@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import HeatGauge from '../components/HeatGauge';
+import HeatGauge from '../components/widgets/HeatGauge';
 import LocationWidget from '../components/LocationWidget'
 import AdvisoryWidget from '../components/AdvisoryWidget'
 import BriefingsWidget from '../components/BriefingsWidget'
