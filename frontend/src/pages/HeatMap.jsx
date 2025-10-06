@@ -92,6 +92,44 @@ function HeatMap() {
     }
   }, []);
 
+  // Submit report handler
+  function onSubmitReport(e) {
+    e.preventDefault();
+    setReportSubmitting(true);
+    const formData = new FormData();
+    formData.append("user_id", 0); // Replace with actual user id if available
+    formData.append("note", reportNote);
+    if (reportPhoto) formData.append("file", reportPhoto);
+
+    fetch(`/api/coolspots/${selectedSpot.id}/report`, {
+      method: "POST",
+      body: formData
+    })
+      .then(async res => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text);
+        }
+        return res.json();
+      })
+      .then(() => fetch(`/api/coolspots/${selectedSpot.id}`))
+      .then(res => res.json())
+      .then(data => {
+        setSelectedSpot(data);
+        setReportNote("");
+        setReportPhoto(null);
+        setCoolSpots(prev =>
+          prev.map(spot =>
+            spot.id === data.id ? data : spot
+          )
+        );
+      })
+      .catch(err => {
+        alert("Failed to add report: " + err.message);
+      })
+      .finally(() => setReportSubmitting(false));
+  }
+
   return (
     
     <div className="map-page">
@@ -142,30 +180,13 @@ function HeatMap() {
           reportPhoto={reportPhoto}
           setReportPhoto={setReportPhoto}
           reportSubmitting={reportSubmitting}
-          onSubmitReport={e => {
-            e.preventDefault();
-            setReportSubmitting(true);
-            fetch(`/api/coolspots/${selectedSpot.id}/report`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                user_id: 0, // Replace with actual user id if available
-                note: reportNote
-              })
-            })
-              .then(res => res.json())
-              .then(() => fetch(`/api/coolspots/${selectedSpot.id}`))
-              .then(res => res.json())
-              .then(data => {
-                setSelectedSpot(data);
-                setReportNote("");
-              })
-              .catch(() => alert("Failed to add report"))
-              .finally(() => setReportSubmitting(false));
-          }}
+          setReportSubmitting={setReportSubmitting}
+          onSubmitReport={onSubmitReport}
           onClose={() => setShowModal(false)}
         />
       )}
+
+      
 
       {/* Button to enable add mode */}
       <Button children={addMode ? "Click on the map to add a cool spot..." : "Add Cool Spot"} onClick={setAddMode} />
