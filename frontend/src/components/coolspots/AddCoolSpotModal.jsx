@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-function AddCoolSpotModal({ show, onClose, onSubmit }) {
+function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("Park");
   const [photo, setPhoto] = useState(null);
+  const [barangayId, setBarangayId] = useState(""); 
 
   if (!show) return null;
 
@@ -13,7 +14,7 @@ function AddCoolSpotModal({ show, onClose, onSubmit }) {
       <h2>Add a Cool Spot!</h2>
       <form onSubmit={e => {
         e.preventDefault();
-        onSubmit({ name, description, type, photo });
+        onSubmit({ barangay_id: barangayId, name, description, type, photo });
       }}>
         <input
           type="text"
@@ -29,6 +30,16 @@ function AddCoolSpotModal({ show, onClose, onSubmit }) {
           onChange={e => setDescription(e.target.value)}
           required
         />
+        <select
+          value={barangayId}
+          onChange={e => setBarangayId(e.target.value)}
+          required
+        >
+          <option value="">Select Barangay</option>
+          {barangays.map(b => (
+            <option key={b.id} value={b.id}>{b.name}</option>
+          ))}
+        </select>
         <select value={type} onChange={e => setType(e.target.value)}>
           <option value="Park">Park</option>
           <option value="Shaded Area">Shaded Area</option>
