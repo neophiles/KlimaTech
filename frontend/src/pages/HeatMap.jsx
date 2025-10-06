@@ -37,6 +37,9 @@ function HeatMap() {
   // State for new cool spot type selection
   const [newSpotType, setNewSpotType] = useState("Shaded Area");
 
+  // State for report photo upload
+  const [reportPhoto, setReportPhoto] = useState(null);
+
   // Fetch cool spots from backend on mount
   useEffect(() => {
     fetch("/api/coolspots/all")
@@ -136,6 +139,8 @@ function HeatMap() {
           spot={selectedSpot}
           reportNote={reportNote}
           setReportNote={setReportNote}
+          reportPhoto={reportPhoto}
+          setReportPhoto={setReportPhoto}
           reportSubmitting={reportSubmitting}
           onSubmitReport={e => {
             e.preventDefault();
