@@ -320,10 +320,21 @@ main {
   position: absolute;
   bottom: 4.5rem;
   right: 1.5rem;
-  padding: 8px 16px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #2196f3;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.button:hover{
+  background-color: #1667a9;
+}
+
+.button:active {
+  transform: translateY(2px);
 }
