@@ -54,16 +54,16 @@ function HeatMap() {
   }, []);
 
   // Handler to add a new cool spot (called from AddSpotOnClick)
-  function handleAddSpot(newSpot) {
+  function handleAddSpot(formData) {
     fetch("/api/coolspots/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newSpot)
+      body: formData
     })
       .then(res => res.json())
       .then(spot => setCoolSpots(prev => [...prev, spot]))
       .catch(err => alert("Failed to add cool spot"));
     setAddMode(false);
+    setPendingSpot(null);
   }
 
   // Handler to view details of a cool spot
@@ -160,7 +160,7 @@ function HeatMap() {
           {/* Handles adding cool spot on map click */}
           <AddSpotOnClick
             addMode={addMode}
-            newSpotType={newSpotType}
+            pendingSpot={pendingSpot}
             onAddSpot={handleAddSpot}
           />
 
@@ -169,9 +169,11 @@ function HeatMap() {
 
 
           {/* Cool spot markers from backend */}
-          {coolSpots.map(spot => (
-            <CoolSpotMarker key={spot.id} spot={spot} onViewDetails={handleViewDetails} />
-          ))}
+          {coolSpots.map(spot =>
+            spot.lat !== undefined && spot.lon !== undefined ? (
+              <CoolSpotMarker key={spot.id} spot={spot} onViewDetails={handleViewDetails} />
+            ) : null
+          )}
 
         </MapContainer>
       </div>
@@ -207,6 +209,7 @@ function HeatMap() {
           setShowAddModal(false);
           setAddMode(true)
         }}
+        barangays={barangays}
       />
     </div>
   );
