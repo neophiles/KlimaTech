@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, UploadFile, Form
+from fastapi import APIRouter, Depends, File, UploadFile, Form, HTTPException
 import os
 from sqlmodel import Session, select
 from app.db import get_session
@@ -93,3 +93,25 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
     }
 
 
+@router.post("/{coolspot_id}/like")
+def like_coolspot(coolspot_id: int, session: Session = Depends(get_session)):
+    spot = session.get(CoolSpot, coolspot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Cool spot not found")
+    spot.likes += 1
+    session.add(spot)
+    session.commit()
+    session.refresh(spot)
+    return {"likes": spot.likes}
+
+
+@router.post("/{coolspot_id}/dislike")
+def dislike_coolspot(coolspot_id: int, session: Session = Depends(get_session)):
+    spot = session.get(CoolSpot, coolspot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Cool spot not found")
+    spot.dislikes += 1
+    session.add(spot)
+    session.commit()
+    session.refresh(spot)
+    return {"dislikes": spot.dislikes}
