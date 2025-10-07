@@ -35,6 +35,8 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
           onChange={e => setBarangayId(e.target.value)}
           required
         >
+
+          {/*TODO: instead of options, we need to automatically populate this based on user's location*/}
           <option value="">Select Barangay</option>
           {barangays.map(b => (
             <option key={b.id} value={b.id}>{b.name}</option>
