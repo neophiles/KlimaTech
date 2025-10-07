@@ -171,7 +171,13 @@ function HeatMap() {
           {/* Cool spot markers from backend */}
           {coolSpots.map(spot =>
             spot.lat !== undefined && spot.lon !== undefined ? (
-              <CoolSpotMarker key={spot.id} spot={spot} onViewDetails={handleViewDetails} />
+              <CoolSpotMarker
+                key={spot.id}
+                spot={spot}
+                onViewDetails={handleViewDetails}
+                setSelectedSpot={setSelectedSpot}   
+                setCoolSpots={setCoolSpots}         
+              />
             ) : null
           )}
 

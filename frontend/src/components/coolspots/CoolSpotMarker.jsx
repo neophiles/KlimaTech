@@ -1,6 +1,6 @@
 import { Marker, Popup } from "react-leaflet";
 
-function CoolSpotMarker({ spot, onViewDetails }) {
+function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) {
 
   function handleLike(id) {
     fetch(`/api/coolspots/${id}/like`, { method: "POST" })
@@ -49,9 +49,9 @@ function CoolSpotMarker({ spot, onViewDetails }) {
           View Details
         </button>
         <button onClick={() => handleLike(spot.id)}>▲</button>
-        <span>{spot.likes}</span>
+        <span style={{ margin: "0 8px" }}>{spot.likes || 0}</span>
         <button onClick={() => handleDislike(spot.id)}>▼</button>
-        <span>{spot.dislikes}</span>
+        <span style={{ margin: "0 8px" }}>{spot.dislikes || 0}</span>
       </Popup>
     </Marker>
   );
