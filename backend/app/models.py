@@ -48,4 +48,5 @@ class CoolSpot(SQLModel, table=True):
     lon: float
     likes: int = Field(default=0)
     dislikes: int = Field(default=0)
+    photo_url: Optional[str] = None
     reports: List[Report] = Relationship(back_populates="coolspot")

@@ -15,6 +15,7 @@ class CoolSpotRead(BaseModel):
     type: str
     lat: float
     lon: float
+    photo_url: Optional[str] = None
     reports: List[ReportRead]
 
 
