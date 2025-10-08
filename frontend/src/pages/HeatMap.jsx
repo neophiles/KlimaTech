@@ -45,13 +45,20 @@ function HeatMap() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [pendingSpot, setPendingSpot] = useState(null);
 
+  // State for user location
+  const [userLocation, setUserLocation] = useState(null);
+
   // Fetch cool spots from backend on mount
   useEffect(() => {
-    fetch("/api/coolspots/all")
+    if (!userLocation) return; 
+
+    const { lat, lon } = userLocation;
+    fetch(`/api/barangays/all?lat=${lat}&lon=${lon}`)
       .then(res => res.json())
-      .then(data => setCoolSpots(data))
-      .catch(err => console.error("Failed to fetch cool spots:", err));
-  }, []);
+      .then(data => setBarangays(data))
+      .catch(err => console.error("Failed to fetch barangays:", err));
+  }, [userLocation]);
+
 
   // Handler to add a new cool spot (called from AddSpotOnClick)
   function handleAddSpot(formData) {
@@ -77,8 +84,6 @@ function HeatMap() {
       .catch(err => alert("Failed to fetch details"));
   }
 
-  // State for user location
-  const [userLocation, setUserLocation] = useState(null);
 
   // Get user's current location on mount
   useEffect(() => {

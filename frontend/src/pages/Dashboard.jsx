@@ -9,6 +9,8 @@ import HeatClockWidget from '../components/HeatClockWidget';
 function Dashboard() {
     const [weatherData, setWeatherData] = useState(null);
     const [error, setError] = useState(null);
+    const [userLocation, setUserLocation] = useState(null);
+    const [barangayId, setBarangayId] = useState(null); // dynamic barangay
 
     useEffect(() => {
         async function getData() {
