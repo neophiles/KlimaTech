@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
 from datetime import datetime
 from app.schemas.barangay import (
@@ -60,7 +60,11 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
 
 
 @router.get("/all", response_model=list[BarangaySummary])
-async def get_barangays(session: Session = Depends(get_session)):
+async def get_barangays(session: 
+    Session = Depends(get_session),
+    lat: float | None = Query(None, description="User's current latitude"),
+    lon: float | None = Query(None, description="User's current longitude")
+):
     barangays_data = session.exec(select(Barangay)).all()
     results = []
     now = datetime.now(PH_TZ).replace(tzinfo=None)
@@ -88,6 +92,35 @@ async def get_barangays(session: Session = Depends(get_session)):
             "heat_index": log.heat_index_c,
             "risk_level": log.risk_level,
             "updated_at": log.recorded_at
+        })
+
+            # Add user's current location as a "virtual barangay"
+    if lat is not None and lon is not None:
+        async with httpx.AsyncClient() as client:
+            params = {
+                "latitude": lat,
+                "longitude": lon,
+                "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "uv_index"],
+                "timezone": "Asia/Manila"
+            }
+            r = await client.get(OPEN_METEO_URL, params=params)
+            data = r.json()
+            temp_c = data["current"]["temperature_2m"]
+            humidity = data["current"]["relative_humidity_2m"]
+            wind_speed = data["current"]["wind_speed_10m"]
+            uv_index = data["current"]["uv_index"]
+            hi, risk = calculate_heat_index(temp_c, humidity)
+
+        results.append({
+            "id": 0,
+            "barangay": "Your Location",
+            "locality": "User Provided",
+            "province": "-",
+            "lat": lat,
+            "lon": lon,
+            "heat_index": hi,
+            "risk_level": risk,
+            "updated_at": datetime.now(PH_TZ).replace(tzinfo=None)
         })
 
     return results
