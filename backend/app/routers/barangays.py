@@ -16,6 +16,7 @@ from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
 from datetime import datetime, timedelta, timezone
+from math import radians, sin, cos, sqrt, atan2
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
@@ -170,4 +171,36 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
             "advice": "Hydrate frequently and avoid prolonged outdoor work."
         },
         "forecast": []
+    }
+
+
+
+@router.get("/nearest")
+async def get_nearest_barangay(
+    lat: float = Query(..., description="User's current latitude"),
+    lon: float = Query(..., description="User's current longitude"),
+    session: Session = Depends(get_session)
+):
+    barangays = session.exec(select(Barangay)).all()
+    if not barangays:
+        raise HTTPException(status_code=404, detail="No barangays found")
+
+    # Use haversine formula for accurate geographic distance
+    def haversine(lat1, lon1, lat2, lon2):
+        R = 6371  # Earth radius in km
+        dlat = radians(lat2 - lat1)
+        dlon = radians(lon2 - lon1)
+        a = sin(dlat / 2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return R * c  # Distance in kilometers
+
+    nearest = min(barangays, key=lambda b: haversine(lat, lon, b.lat, b.lon))
+
+    return {
+        "id": nearest.id,
+        "barangay": nearest.barangay,
+        "locality": nearest.locality,
+        "province": nearest.province,
+        "lat": nearest.lat,
+        "lon": nearest.lon,
     }
