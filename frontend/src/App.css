@@ -63,8 +63,8 @@ footer {
   color: inherit;
   fill: none;
   stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  strokeLinecap: round;
+  strokeLinejoin: round;
   stroke: currentColor;
 }
 
