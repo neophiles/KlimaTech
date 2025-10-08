@@ -1,4 +1,5 @@
 import React from "react";
+import Carousel from "./Carousel";
 
 const CoolSpotModal = ({
   spot,
@@ -7,11 +8,13 @@ const CoolSpotModal = ({
   reportPhoto,
   setReportPhoto,
   reportSubmitting,
-  setReportSubmitting, 
   onSubmitReport,
   onClose
 }) => {
   if (!spot) return null;
+
+  // Backend base URL (no proxy)
+  const API_BASE = "http://127.0.0.1:8000";
 
   return (
     <div className="modal">
@@ -20,6 +23,7 @@ const CoolSpotModal = ({
       <p>Barangay ID: {spot.barangay_id}</p>
       <p>Latitude: {spot.lat}</p>
       <p>Longitude: {spot.lon}</p>
+
       <h3>Reports:</h3>
       <ul>
         {spot.reports.map((r, idx) => (
@@ -29,6 +33,7 @@ const CoolSpotModal = ({
           </li>
         ))}
       </ul>
+
       {/* Report form */}
       <form onSubmit={onSubmitReport}>
         <input
@@ -43,10 +48,29 @@ const CoolSpotModal = ({
           accept="image/*"
           onChange={e => setReportPhoto(e.target.files[0])}
         />
+
+        {/* Show uploaded report images */}
+        {spot.reports.map((r, idx) =>
+          r.photo_url ? (
+            <img
+              key={idx}
+              src={`${API_BASE}${r.photo_url}`} 
+              alt="Report"
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                marginTop: "8px",
+                borderRadius: "8px"
+              }}
+            />
+          ) : null
+        )}
+
         <button type="submit" disabled={reportSubmitting}>
           {reportSubmitting ? "Submitting..." : "Add Report"}
         </button>
       </form>
+
       <button onClick={onClose}>Close</button>
     </div>
   );

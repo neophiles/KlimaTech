@@ -1,4 +1,5 @@
 import { Marker, Popup } from "react-leaflet";
+import Carousel from "./Carousel";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) {
 
@@ -31,6 +32,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) 
         <br />
         Type: {spot.type}
         <br />
+        <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
         {spot.reports && spot.reports.length > 0 && (
           <div>
             <hr />

@@ -8,6 +8,7 @@ from app.db import init_db
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 
@@ -26,6 +27,9 @@ app.add_middleware(
 app.include_router(barangays.router)
 app.include_router(forecast.router)
 app.include_router(coolspots.router)
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.on_event("startup")
