@@ -31,8 +31,11 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) 
         <strong>{spot.name}</strong>
         <br />
         Type: {spot.type}
-        <br />
-        <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
+        <br />  
+        {/* Only show carousel if photo exists */}
+        {spot.photo_url && spot.photo_url.trim() !== "" && (
+          <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
+        )}
         {spot.reports && spot.reports.length > 0 && (
           <div>
             <hr />
