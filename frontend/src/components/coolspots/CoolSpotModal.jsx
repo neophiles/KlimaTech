@@ -58,10 +58,12 @@ const CoolSpotModal = ({
               src={`http://127.0.0.1:8000${r.photo_url}`}
               alt="Report"
               style={{
-                width: "100%",
-                maxWidth: "400px",
-                marginTop: "8px",
+                width: "100%",       
+                maxWidth: "200px",   
+                height: "100px",      
+                objectFit: "cover",   
                 borderRadius: "8px",
+                marginTop: "8px"
               }}
             />
           );
