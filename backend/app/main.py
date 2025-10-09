@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from app.routers import (
     barangays,
     coolspots,
-    forecast
+    forecast,
+    profile
 )
 from app.db import init_db
 from app.tasks.collector import collect_heat_data
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(barangays.router)
 app.include_router(forecast.router)
 app.include_router(coolspots.router)
+app.include_router(profile.router)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
