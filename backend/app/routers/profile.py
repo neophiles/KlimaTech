@@ -31,3 +31,14 @@ async def add_user(user: UserCreate, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(new_user)
     return new_user
+
+
+@router.get("/{user_id}", response_model=UserProfile)
+async def get_user(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    return user
