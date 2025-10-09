@@ -148,6 +148,25 @@ async def get_nearest_barangay(
 
     nearest = min(barangays, key=lambda b: haversine(lat, lon, b.lat, b.lon))
 
+    # Get latest heat log
+    latest_log = session.exec(
+        select(HeatLog)
+        .where(HeatLog.barangay_id == nearest.id)
+        .order_by(HeatLog.recorded_at.desc())
+    ).first()
+
+    current_data = None
+    if latest_log:
+        current_data = {
+            "temperature": latest_log.temperature_c,
+            "humidity": latest_log.humidity,
+            "wind_speed": latest_log.wind_speed,
+            "uv_index": latest_log.uv_index,
+            "heat_index": latest_log.heat_index_c,
+            "risk_level": latest_log.risk_level,
+            "updated_at": latest_log.recorded_at,
+        }
+
     return {
         "id": nearest.id,
         "barangay": nearest.barangay,
@@ -155,7 +174,13 @@ async def get_nearest_barangay(
         "province": nearest.province,
         "lat": nearest.lat,
         "lon": nearest.lon,
-    }
+        "current": current_data,
+        "daily_briefing": {
+            "safe_hours": "Before 10AM, After 4PM",
+            "avoid_hours": "11AM–3PM",
+            "advice": "Hydrate frequently and avoid prolonged outdoor work."
+        },
+}
 
 
 @router.get("/{barangay_id}", response_model=BarangayDetail)
