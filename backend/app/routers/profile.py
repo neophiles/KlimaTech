@@ -4,7 +4,7 @@ from typing import Optional
 from app.db import get_session
 from app.models import UserProfile
 from pydantic import BaseModel
-from schemas.profile import UserCreate
+from app.schemas.profile import UserCreate
 
 router = APIRouter(prefix="/user", tags=["Users"])
 
