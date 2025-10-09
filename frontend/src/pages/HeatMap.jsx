@@ -17,11 +17,6 @@ const userIcon = new L.Icon({
 });
 
 function HeatMap() {
-  // Static barangay data for demo purposes
-  const barangays = [
-    { id: 1, name: "Barangay Gulang-Gulang", lat: 13.9417, lon: 121.6233 },
-    { id: 2, name: "Barangay Ibabang Dupay", lat: 13.9341, lon: 121.6175 }
-  ];
 
   // State for cool spots and add mode
   const [coolSpots, setCoolSpots] = useState([]);
@@ -47,6 +42,10 @@ function HeatMap() {
 
   // State for user location
   const [userLocation, setUserLocation] = useState(null);
+
+  const [barangays, setBarangays] = useState([]);
+
+
 
   // Fetch cool spots from backend on mount
   useEffect(() => {
