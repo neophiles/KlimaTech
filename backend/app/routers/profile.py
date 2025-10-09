@@ -9,6 +9,12 @@ from app.schemas.profile import UserCreate
 router = APIRouter(prefix="/user", tags=["Users"])
 
 
+@router.get("/all", response_model=list[UserProfile])
+async def get_all_users(session: Session = Depends(get_session)):
+    users = session.exec(select(UserProfile)).all()
+    return users
+
+
 @router.post("/add", response_model=UserProfile)
 async def add_user(user: UserCreate, session: Session = Depends(get_session)):
     # Check if username already exists
@@ -42,3 +48,4 @@ async def get_user(user_id: int, session: Session = Depends(get_session)):
             detail="User not found"
         )
     return user
+
