@@ -50,21 +50,23 @@ const CoolSpotModal = ({
         />
 
         {/* Show uploaded report images */}
-        {spot.reports.map((r, idx) =>
-          r.photo_url ? (
+        {spot.reports.map((r, idx) => {
+          if (!r.photo_url || r.photo_url.trim() === "") return null; // skip empty URLs
+          return (
             <img
               key={idx}
-              src={`${API_BASE}${r.photo_url}`} 
+              src={`http://127.0.0.1:8000${r.photo_url}`}
               alt="Report"
               style={{
                 width: "100%",
                 maxWidth: "400px",
                 marginTop: "8px",
-                borderRadius: "8px"
+                borderRadius: "8px",
               }}
             />
-          ) : null
-        )}
+          );
+        })}
+
 
         <button type="submit" disabled={reportSubmitting}>
           {reportSubmitting ? "Submitting..." : "Add Report"}
