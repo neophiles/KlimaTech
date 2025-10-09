@@ -139,12 +139,29 @@ function HeatMap() {
       .finally(() => setReportSubmitting(false));
   }
 
+  {/* Fetch cool spots on mount */}
+  useEffect(() => {
+    async function fetchCoolSpots() {
+      try {
+        const res = await fetch("/api/coolspots/all");
+        const data = await res.json();
+        setCoolSpots(data);
+      } catch (err) {
+        console.error("Failed to fetch cool spots:", err);
+      }
+    }
+
+    fetchCoolSpots();
+  }, []);
+
+
   return (
     
     <div className="map-page">
       
       {/* Centered map container */}
       <div className="map-container">
+        {userLocation && (
         <MapContainer
           className="map"
           center={[13.41, 122.56]}
@@ -186,6 +203,7 @@ function HeatMap() {
           )}
 
         </MapContainer>
+        )}
       </div>
 
       {/* Modal for selected cool spot details */}  
