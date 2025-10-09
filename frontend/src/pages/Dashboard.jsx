@@ -5,19 +5,6 @@ import AdvisoryWidget from "../components/AdvisoryWidget";
 import BriefingsWidget from "../components/BriefingsWidget";
 import HeatClockWidget from "../components/HeatClockWidget";
 
-// computes distance between two lat/lon points (in km)
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth radius in km
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
 
 function Dashboard() {
   const [weatherData, setWeatherData] = useState(null);
@@ -29,10 +16,12 @@ function Dashboard() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setUserLocation({
+          const location = {
             lat: pos.coords.latitude,
             lon: pos.coords.longitude,
-          });
+          };
+          setUserLocation(location);
+          console.log("User location:", location); 
         },
         (err) => {
           console.warn("Geolocation error:", err);
@@ -42,44 +31,22 @@ function Dashboard() {
     }
   }, []);
 
+
   // Find nearest barangay and fetch detailed data
   useEffect(() => {
     async function fetchNearestBarangayData() {
       try {
         if (!userLocation) return;
 
-        // Fetch all barangays first
-        const res = await fetch("/api/barangays/all");
-        const barangays = await res.json();
-
-        // Find the nearest one
-        let nearest = barangays[0];
-        let minDist = getDistance(
-          userLocation.lat,
-          userLocation.lon,
-          nearest.lat,
-          nearest.lon
+        // Fetch nearest barangay using user location
+        const res = await fetch(
+          `/api/barangays/nearest?lat=${userLocation.lat}&lon=${userLocation.lon}`
         );
 
-        for (let b of barangays) {
-          const dist = getDistance(
-            userLocation.lat,
-            userLocation.lon,
-            b.lat,
-            b.lon
-          );
-          if (dist < minDist) {
-            minDist = dist;
-            nearest = b;
-          }
-        }
+        if (!res.ok) throw new Error("Failed to fetch nearest barangay");
 
-        console.log("Nearest barangay:", nearest.barangay, `${minDist.toFixed(2)} km`);
-
-        // Fetch the full detail for that barangay
-        const detailRes = await fetch(`/api/barangays/${nearest.id}`);
-        const detailData = await detailRes.json();
-        setWeatherData(detailData);
+        const nearestData = await res.json();
+        setWeatherData(nearestData);
       } catch (err) {
         console.error(err);
         setError(err.message);
