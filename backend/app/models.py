@@ -50,3 +50,11 @@ class CoolSpot(SQLModel, table=True):
     dislikes: int = Field(default=0)
     photo_url: Optional[str] = None
     reports: List[Report] = Relationship(back_populates="coolspot")
+
+
+class UserProfile(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    username: str = Field(default=None, index=True, unique=True)
+    phone_number: Optional[str] = Field(default=None, index=True, unique=True)
+    lat: Optional[float] = Field(default=None)
+    lon: Optional[float] = Field(default=None)
