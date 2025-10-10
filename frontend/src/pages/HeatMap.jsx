@@ -156,9 +156,7 @@ function HeatMap() {
 
 
   return (
-    
     <div className="map-page">
-      
       {/* Centered map container */}
       <div className="map-container">
         {userLocation && (
@@ -206,22 +204,23 @@ function HeatMap() {
         )}
       </div>
 
-      {/* Modal for selected cool spot details */}  
+      {/* Modal for selected cool spot details */}
       {showModal && selectedSpot && (
-        <CoolSpotModal
-          spot={selectedSpot}
-          reportNote={reportNote}
-          setReportNote={setReportNote}
-          reportPhoto={reportPhoto}
-          setReportPhoto={setReportPhoto}
-          reportSubmitting={reportSubmitting}
-          setReportSubmitting={setReportSubmitting}
-          onSubmitReport={onSubmitReport}
-          onClose={() => setShowModal(false)}
-        />
+        <>
+          <div className="modal-overlay" />
+          <CoolSpotModal
+            spot={selectedSpot}
+            reportNote={reportNote}
+            setReportNote={setReportNote}
+            reportPhoto={reportPhoto}
+            setReportPhoto={setReportPhoto}
+            reportSubmitting={reportSubmitting}
+            setReportSubmitting={setReportSubmitting}
+            onSubmitReport={onSubmitReport}
+            onClose={() => setShowModal(false)}
+          />
+        </>
       )}
-
-      
 
       {/* Button to enable add mode */}
       <Button onClick={() => setShowAddModal(true)}>
@@ -229,16 +228,21 @@ function HeatMap() {
       </Button>
 
       {/* Modal for adding new cool spot */}
-      <AddCoolSpotModal
-        show={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onSubmit={spotInfo => {
-          setPendingSpot(spotInfo);
-          setShowAddModal(false);
-          setAddMode(true)
-        }}
-        barangays={barangays}
-      />
+      {showAddModal && (
+        <>
+          <div className="modal-overlay" />
+          <AddCoolSpotModal
+            show={showAddModal}
+            onClose={() => setShowAddModal(false)}
+            onSubmit={spotInfo => {
+              setPendingSpot(spotInfo);
+              setShowAddModal(false);
+              setAddMode(true)
+            }}
+            barangays={barangays}
+          />
+        </>
+      )}
     </div>
   );
 }
