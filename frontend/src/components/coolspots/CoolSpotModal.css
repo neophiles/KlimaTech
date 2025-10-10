@@ -1,0 +1,118 @@
+.coolspot-modal {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  max-width: 400px;
+  margin: auto;
+  padding: 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  position: fixed;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+.modal-section {
+  padding: 18px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.modal-desc {
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.modal-votes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.vote-btn {
+  background: none;
+  border: none;
+  font-size: 1.3em;
+  cursor: pointer;
+}
+
+.vote-btn.up { color: #00c853; }
+.vote-btn.down { color: #d50000; }
+
+.vote-count {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.vote-bar {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  margin-left: 8px;
+  display: flex;
+  overflow: hidden;
+}
+
+.vote-bar-up {
+  background: #00c853;
+  height: 100%;
+}
+
+.vote-bar-down {
+  background: #d50000;
+  height: 100%;
+}
+
+.report-card {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95em;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.report-user {
+  font-weight: bold;
+}
+
+.report-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.report-note {
+  font-size: 1em;
+  color: #333;
+}
+
+.report-form {
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 12px;
+  background: #eee;
+  border: none;
+  border-radius: 0 0 18px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}

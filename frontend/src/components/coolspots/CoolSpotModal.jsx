@@ -1,5 +1,6 @@
 import React from "react";
 import Carousel from "./Carousel";
+import "./CoolSpotModal.css";
 
 const CoolSpotModal = ({
   spot,
@@ -13,29 +14,67 @@ const CoolSpotModal = ({
 }) => {
   if (!spot) return null;
 
-  // Backend base URL (no proxy)
   const API_BASE = "http://127.0.0.1:8000";
 
   return (
-    <div className="modal">
-      <h2>{spot.name}</h2>
-      <p>Type: {spot.type}</p>
-      <p>Barangay ID: {spot.barangay_id}</p>
-      <p>Latitude: {spot.lat}</p>
-      <p>Longitude: {spot.lon}</p>
+    <div className="modal coolspot-modal">
+      {/* Carousel at top */}
+      {spot.photo_url && (
+        <Carousel images={[`${API_BASE}${spot.photo_url}`]} />
+      )}
 
-      <h3>Reports:</h3>
-      <ul>
+      {/* Title and description */}
+      <div className="modal-section">
+        <h2 className="modal-title">{spot.name}</h2>
+        <div className="modal-desc">{spot.description}</div>
+        {/* Like/Dislike bar */}
+        <div className="modal-votes">
+          <button className="vote-btn up">▲</button>
+          <span className="vote-count">{spot.likes || 0}</span>
+          <button className="vote-btn down">▼</button>
+          <span className="vote-count">{spot.dislikes || 0}</span>
+          {/* Progress bar */}
+          <div className="vote-bar">
+            <div
+              className="vote-bar-up"
+              style={{
+                width: `${(spot.likes / ((spot.likes || 0) + (spot.dislikes || 0) || 1)) * 100}%`
+              }}
+            />
+            <div
+              className="vote-bar-down"
+              style={{
+                width: `${(spot.dislikes / ((spot.likes || 0) + (spot.dislikes || 0) || 1)) * 100}%`
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Ratings/Reports */}
+      <div className="modal-section">
+        <h3>Ratings</h3>
         {spot.reports.map((r, idx) => (
-          <li key={idx}>
-            {r.note} <br />
-            <small>{r.date} {r.time}</small>
-          </li>
+          <div className="report-card" key={idx}>
+            <div className="report-header">
+              <span className="report-user">User{r.user_id}</span>
+              <span className="report-date">{r.date} {r.time}</span>
+            </div>
+            {/* Thumbnails */}
+            {r.photo_url && (
+              <img
+                src={`${API_BASE}${r.photo_url}`}
+                alt="Report"
+                className="report-thumb"
+              />
+            )}
+            <div className="report-note">{r.note}</div>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      {/* Report form */}
-      <form onSubmit={onSubmitReport}>
+      {/* Add report form */}
+      <form className="report-form" onSubmit={onSubmitReport}>
         <input
           type="text"
           value={reportNote}
@@ -48,34 +87,12 @@ const CoolSpotModal = ({
           accept="image/*"
           onChange={e => setReportPhoto(e.target.files[0])}
         />
-
-        {/* Show uploaded report images */}
-        {spot.reports.map((r, idx) => {
-          if (!r.photo_url || r.photo_url.trim() === "") return null; // skip empty URLs
-          return (
-            <img
-              key={idx}
-              src={`http://127.0.0.1:8000${r.photo_url}`}
-              alt="Report"
-              style={{
-                width: "100%",       
-                maxWidth: "200px",   
-                height: "100px",      
-                objectFit: "cover",   
-                borderRadius: "8px",
-                marginTop: "8px"
-              }}
-            />
-          );
-        })}
-
-
         <button type="submit" disabled={reportSubmitting}>
           {reportSubmitting ? "Submitting..." : "Add Report"}
         </button>
       </form>
 
-      <button onClick={onClose}>Close</button>
+      <button className="modal-close" onClick={onClose}>Close</button>
     </div>
   );
 };
