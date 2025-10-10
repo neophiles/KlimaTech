@@ -1,5 +1,6 @@
 import { Marker, Popup } from "react-leaflet";
 import Carousel from "./Carousel";
+import "./CoolSpotMarker.css";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) {
 
@@ -27,36 +28,26 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots }) 
 
   return (
     <Marker position={[spot.lat, spot.lon]}>
-      <Popup>
-        <strong>{spot.name}</strong>
-        <br />
-        Type: {spot.type}
-        <br />  
-        {/* Only show carousel if photo exists */}
-        {spot.photo_url && spot.photo_url.trim() !== "" && (
-          <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
-        )}
-        {spot.reports && spot.reports.length > 0 && (
-          <div>
-            <hr />
-            <strong>Reports:</strong>
-            <ul>
-              {spot.reports.map((r, idx) => (
-                <li key={idx}>
-                  {r.note} <br />
-                  <small>{r.date} {r.time}</small>
-                </li>
-              ))}
-            </ul>
+      <Popup className="coolspot-popup">
+        <div className="coolspot-card">
+          <div className="coolspot-header">
+            <div className="coolspot-title">Cool Spot</div>
+            <button className="coolspot-details-btn" onClick={() => onViewDetails(spot.id)}>
+              <span role="img" aria-label="details">📝</span>
+            </button>
           </div>
-        )}
-        <button onClick={() => onViewDetails(spot.id)}>
-          View Details
-        </button>
-        <button onClick={() => handleLike(spot.id)}>▲</button>
-        <span style={{ margin: "0 8px" }}>{spot.likes || 0}</span>
-        <button onClick={() => handleDislike(spot.id)}>▼</button>
-        <span style={{ margin: "0 8px" }}>{spot.dislikes || 0}</span>
+          <div className="coolspot-subtitle">{spot.name}</div>
+          <div className="coolspot-desc">{spot.description}</div>
+          {spot.photo_url && spot.photo_url.trim() !== "" && (
+            <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
+          )}
+          <div className="coolspot-votes">
+            <button className="vote-btn up" onClick={() => handleLike(spot.id)}>▲</button>
+            <div className="vote-count">{spot.likes || 0}</div>
+            <button className="vote-btn down" onClick={() => handleDislike(spot.id)}>▼</button>
+            <div className="vote-count">{spot.dislikes || 0}</div>
+          </div>
+        </div>
       </Popup>
     </Marker>
   );

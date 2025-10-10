@@ -1,0 +1,71 @@
+.coolspot-popup .coolspot-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 18px 16px 8px 16px;
+  min-width: 260px;
+  max-width: 320px;
+  position: relative;
+  text-align: center;
+}
+
+.coolspot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coolspot-title {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.coolspot-details-btn {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.coolspot-subtitle {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.coolspot-desc {
+  font-size: 0.95em;
+  color: #333;
+  margin: 8px 0 12px 0;
+}
+
+.coolspot-votes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  right: -40px;
+  top: 40px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 8px 6px;
+}
+
+.vote-btn {
+  background: none;
+  border: none;
+  font-size: 1.3em;
+  cursor: pointer;
+  margin: 2px 0;
+}
+
+.vote-btn.up { color: #00c853; }
+.vote-btn.down { color: #d50000; }
+
+.vote-count {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 2px 0;
+}
