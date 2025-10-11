@@ -232,7 +232,9 @@ function HeatMap() {
         <>
           <div className="modal-overlay" />
           <CoolSpotModal
+           key={selectedSpot.id + '-' + selectedSpot.likes + '-' + selectedSpot.dislikes}
             spot={selectedSpot}
+            setSelectedSpot={setSelectedSpot}
             reportNote={reportNote}
             setReportNote={setReportNote}
             reportPhoto={reportPhoto}
@@ -240,7 +242,8 @@ function HeatMap() {
             reportSubmitting={reportSubmitting}
             setReportSubmitting={setReportSubmitting}
             onSubmitReport={onSubmitReport}
-            onClose={() => setShowModal(false)}
+            onClose={() => setShowModal(false)}  
+            setCoolSpots={setCoolSpots} 
           />
         </>
       )}

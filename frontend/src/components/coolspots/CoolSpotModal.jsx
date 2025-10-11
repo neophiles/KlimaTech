@@ -2,6 +2,8 @@ import React from "react";
 import Carousel from "./Carousel";
 import "./CoolSpotModal.css";
 
+const API_BASE = "http://127.0.0.1:8000";
+
 const CoolSpotModal = ({
   spot,
   reportNote,
@@ -10,18 +12,41 @@ const CoolSpotModal = ({
   setReportPhoto,
   reportSubmitting,
   onSubmitReport,
-  onClose
+  onClose,
+  setSelectedSpot,
+  setCoolSpots
 }) => {
   if (!spot) return null;
 
-  const API_BASE = "http://127.0.0.1:8000";
+  // Like handler (same as CoolSpotMarker)
+  function handleLike(id) {
+    fetch(`/api/coolspots/${id}/like`, { method: "POST" })
+      .then(res => res.json())
+      .then(data => {
+        setSelectedSpot(prev => ({ ...prev, likes: data.likes }));
+        setCoolSpots(prev =>
+          prev.map(s => s.id === id ? { ...s, likes: data.likes } : s)
+        );
+      });
+  }
+
+  // Dislike handler (same as CoolSpotMarker)
+  function handleDislike(id) {
+    fetch(`/api/coolspots/${id}/dislike`, { method: "POST" })
+      .then(res => res.json())
+      .then(data => {
+        setSelectedSpot(prev => ({ ...prev, dislikes: data.dislikes }));
+        setCoolSpots(prev =>
+          prev.map(s => s.id === id ? { ...s, dislikes: data.dislikes } : s)
+        );
+      });
+  }
 
   return (
     <div className="coolspot-modal-fullscreen">
       <button className="modal-back-arrow" onClick={onClose}>
-        &#8592; {/* Unicode left arrow */}
+        &#8592;
       </button>
-      {/* Carousel at top */}
       {spot.photo_url && (
         <Carousel images={[`${API_BASE}${spot.photo_url}`]} />
       )}
@@ -30,9 +55,9 @@ const CoolSpotModal = ({
         <h2 className="modal-title">{spot.name}</h2>
         <div className="modal-desc">{spot.description}</div>
         <div className="modal-votes">
-          <button className="vote-btn up">▲</button>
+          <button className="vote-btn up" onClick={() => handleLike(spot.id)}>▲</button>
           <span className="vote-count">{spot.likes || 0}</span>
-          <button className="vote-btn down">▼</button>
+          <button className="vote-btn down" onClick={() => handleDislike(spot.id)}>▼</button>
           <span className="vote-count">{spot.dislikes || 0}</span>
           <div className="vote-bar">
             <div
