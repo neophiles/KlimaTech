@@ -127,7 +127,6 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
           >
             <img
               src="/camera-icon.png"
-              alt="Add an image"
               style={{ width: 40, marginBottom: 8 }}
             />
             <div style={{ color: "#888" }}>+ Add an image</div>
@@ -137,22 +136,13 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
         <button
           type="submit"
           disabled={!barangay}
-          style={{
-            background: "#007bff",
-            color: "#fff",
-            borderRadius: "24px",
-            padding: "12px 24px",
-            border: "none",
-            fontWeight: "bold",
-            marginTop: "16px",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          className="pin-to-map-btn"
         >
-          <span role="img" aria-label="pin" style={{ marginRight: 8 }}>
-            📍
+          <span className="pin-to-map-icon" aria-label="pin">
+            {/* SVG location icon for crisp look */}
+            <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+            </svg>
           </span>
           Pin to Map
         </button>

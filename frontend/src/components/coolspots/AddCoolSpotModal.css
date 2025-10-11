@@ -23,3 +23,33 @@
   width: 90vw;
   z-index: 1001;
 }
+
+.pin-to-map-btn {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #2196f3 0%, #0d47a1 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.18);
+  margin-top: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.pin-to-map-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pin-to-map-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  display: inline-block;
+}
