@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet.heat";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
 import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
 import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
+
+// HeatLayer component to add heatmap layer to the map
+function HeatLayer({ points }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!map || !points.length) return;
+    const heatLayer = window.L.heatLayer(points, { radius: 25 }).addTo(map);
+    return () => {
+      map.removeLayer(heatLayer);
+    };
+  }, [map, points]);
+  return null;
+}
 
 // Custom icon for user location
 const userIcon = new L.Icon({
@@ -17,40 +33,46 @@ const userIcon = new L.Icon({
 });
 
 function HeatMap() {
-
-  // State for cool spots and add mode
   const [coolSpots, setCoolSpots] = useState([]);
   const [addMode, setAddMode] = useState(false);
-
-  // State for selected spot details modal
   const [selectedSpot, setSelectedSpot] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-  // State for reporting issues
   const [reportNote, setReportNote] = useState("");
   const [reportSubmitting, setReportSubmitting] = useState(false);
-
-  // State for new cool spot type selection
   const [newSpotType, setNewSpotType] = useState("Shaded Area");
-
-  // State for report photo upload
   const [reportPhoto, setReportPhoto] = useState(null);
-
-  // State for adding new cool spot modal
   const [showAddModal, setShowAddModal] = useState(false);
   const [pendingSpot, setPendingSpot] = useState(null);
-
-  // State for user location
   const [userLocation, setUserLocation] = useState(null);
-
   const [barangays, setBarangays] = useState([]);
+  const [heatmapMode, setHeatmapMode] = useState(false);
 
-
+  // Prepare heatmap points from cool spots
+  const heatPoints = coolSpots
+    .filter(spot =>
+      spot.lat !== undefined &&
+      spot.lon !== undefined &&
+      spot.heat_index != null
+    )
+    .map(spot => [spot.lat, spot.lon, spot.heat_index]); // heat_index: 0-1
 
   // Fetch cool spots from backend on mount
   useEffect(() => {
-    if (!userLocation) return; 
+    async function fetchCoolSpots() {
+      try {
+        const res = await fetch("/api/coolspots/all");
+        const data = await res.json();
+        setCoolSpots(data);
+      } catch (err) {
+        console.error("Failed to fetch cool spots:", err);
+      }
+    }
+    fetchCoolSpots();
+  }, []);
 
+  // Fetch barangays when userLocation is available
+  useEffect(() => {
+    if (!userLocation) return;
     const { lat, lon } = userLocation;
     fetch(`/api/barangays/all?lat=${lat}&lon=${lon}`)
       .then(res => res.json())
@@ -58,6 +80,26 @@ function HeatMap() {
       .catch(err => console.error("Failed to fetch barangays:", err));
   }, [userLocation]);
 
+  // Get user's current location on mount, fallback to center if denied
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.warn("Geolocation error:", error);
+          // Fallback to center
+          setUserLocation({ lat: 13.41, lon: 122.56 });
+        }
+      );
+    } else {
+      setUserLocation({ lat: 13.41, lon: 122.56 });
+    }
+  }, []);
 
   // Handler to add a new cool spot (called from AddSpotOnClick)
   function handleAddSpot(formData) {
@@ -82,24 +124,6 @@ function HeatMap() {
       })
       .catch(err => alert("Failed to fetch details"));
   }
-
-
-  // Get user's current location on mount
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.warn("Geolocation error:", error);
-        }
-      );
-    }
-  }, []);
 
   // Submit report handler
   function onSubmitReport(e) {
@@ -139,27 +163,15 @@ function HeatMap() {
       .finally(() => setReportSubmitting(false));
   }
 
-  {/* Fetch cool spots on mount */}
-  useEffect(() => {
-    async function fetchCoolSpots() {
-      try {
-        const res = await fetch("/api/coolspots/all");
-        const data = await res.json();
-        setCoolSpots(data);
-      } catch (err) {
-        console.error("Failed to fetch cool spots:", err);
-      }
-    }
-
-    fetchCoolSpots();
-  }, []);
-
-
   return (
     <div className="map-page">
+      {/* Toggle button for heatmap mode */}
+      <button onClick={() => setHeatmapMode(m => !m)}>
+        {heatmapMode ? "Show Markers" : "Show Heatmap"}
+      </button>
+
       {/* Centered map container */}
       <div className="map-container">
-        {userLocation && (
         <MapContainer
           className="map"
           center={[13.41, 122.56]}
@@ -167,8 +179,13 @@ function HeatMap() {
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
         >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+
           {/* User location marker with custom icon */}
-          {userLocation && (
+          {!heatmapMode && userLocation && (
             <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon}>
               <Popup>
                 <strong>Your Location</strong>
@@ -176,32 +193,31 @@ function HeatMap() {
             </Marker>
           )}
 
-          {/* Handles adding cool spot on map click */}
-          <AddSpotOnClick
-            addMode={addMode}
-            pendingSpot={pendingSpot}
-            onAddSpot={handleAddSpot}
-          />
+          {/* Heatmap overlay */}
+          {heatmapMode && <HeatLayer points={heatPoints} />}
 
-          {/* Map tiles */}
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-
-          {/* Cool spot markers from backend */}
-          {coolSpots.map(spot =>
+          {/* Cool spot markers */}
+          {!heatmapMode && coolSpots.map(spot =>
             spot.lat !== undefined && spot.lon !== undefined ? (
               <CoolSpotMarker
                 key={spot.id}
                 spot={spot}
                 onViewDetails={handleViewDetails}
-                setSelectedSpot={setSelectedSpot}   
-                setCoolSpots={setCoolSpots}         
+                setSelectedSpot={setSelectedSpot}
+                setCoolSpots={setCoolSpots}
               />
             ) : null
           )}
 
+          {/* Add spot on click */}
+          {!heatmapMode && (
+            <AddSpotOnClick
+              addMode={addMode}
+              pendingSpot={pendingSpot}
+              onAddSpot={handleAddSpot}
+            />
+          )}
         </MapContainer>
-        )}
       </div>
 
       {/* Modal for selected cool spot details */}
