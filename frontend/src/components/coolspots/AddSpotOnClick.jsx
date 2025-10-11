@@ -8,6 +8,7 @@ function AddSpotOnClick({ addMode, pendingSpot, onAddSpot }) {
         const formData = new FormData();
         formData.append("barangay_id", pendingSpot.barangay_id); 
         formData.append("name", pendingSpot.name);
+        formData.append("description", pendingSpot.description); 
         formData.append("type", pendingSpot.type);
         formData.append("lat", e.latlng.lat);
         formData.append("lon", e.latlng.lng);
