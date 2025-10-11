@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "./HeatMap.css";
 import "leaflet.heat";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
@@ -184,6 +185,15 @@ function HeatMap() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
 
+          {/* Show heat index overlay when toggled */}
+          {heatmapMode && (
+            <TileLayer
+              url="https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=b6dc76044f7d0c20d49fb8dcc00c03d7"
+              attribution='Weather data © OpenWeatherMap'
+              opacity={0.5}
+            />
+          )}
+
           {/* User location marker with custom icon */}
           {!heatmapMode && userLocation && (
             <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon}>
@@ -192,9 +202,6 @@ function HeatMap() {
               </Popup>
             </Marker>
           )}
-
-          {/* Heatmap overlay */}
-          {heatmapMode && <HeatLayer points={heatPoints} />}
 
           {/* Cool spot markers */}
           {!heatmapMode && coolSpots.map(spot =>
