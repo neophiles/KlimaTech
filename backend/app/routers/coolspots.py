@@ -48,6 +48,7 @@ async def add_report(
 async def create_coolspot(
     barangay_id: int = Form(...),
     name: str = Form(...),
+    description: str = Form(...),
     type: str = Form(...),
     lat: float = Form(...),
     lon: float = Form(...),
@@ -65,6 +66,7 @@ async def create_coolspot(
     new_coolspot = CoolSpot(
         barangay_id=barangay_id,
         name=name,
+        description=description,
         type=type,
         lat=lat,
         lon=lon,

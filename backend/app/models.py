@@ -43,6 +43,7 @@ class CoolSpot(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     barangay_id: int
     name: str
+    description: str
     type: str
     lat: float
     lon: float

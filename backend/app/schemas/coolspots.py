@@ -12,6 +12,7 @@ class CoolSpotRead(BaseModel):
     id: int
     barangay_id: int
     name: str
+    description: str
     type: str
     lat: float
     lon: float
