@@ -62,7 +62,7 @@ function HeatMap() {
         </MapContainer>
       </div>
 
-      {showModal && selectedSpot && (
+      {selectedSpot && (
         <CoolSpotModal
           spot={selectedSpot}
           reportNote={reportNote}
@@ -70,6 +70,7 @@ function HeatMap() {
           reportSubmitting={reportSubmitting}
           onSubmitReport={handleSubmitReport}
           onClose={() => setShowModal(false)}
+          isActive={showModal}
         />
       )}
 

@@ -6,12 +6,13 @@ const CoolSpotModal = ({
   setReportNote,
   reportSubmitting,
   onSubmitReport,
-  onClose
+  onClose,
+  isActive
 }) => {
   if (!spot) return null;
 
   return (
-    <div className="modal">
+    <div className={`coolspot-panel ${isActive ? "active" : ""}`}>
       <h2>{spot.name}</h2>
       <p>Type: {spot.type}</p>
       <p>Barangay ID: {spot.barangay_id}</p>
