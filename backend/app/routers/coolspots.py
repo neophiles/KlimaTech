@@ -8,6 +8,50 @@ from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
 
+def vote_spot(coolspot_id: int, user_id: int, vote_type: str, session: Session):
+    if vote_type not in ("like", "dislike"):
+        raise HTTPException(status_code=400, detail="Invalid vote type")
+
+    spot = session.get(CoolSpot, coolspot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Spot not found")
+
+    # Check if user already voted
+    vote = session.exec(
+        select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
+    ).first()
+
+    if vote:
+        if vote.vote_type == vote_type:
+            # Toggle off
+            session.delete(vote)
+            if vote_type == "like":
+                spot.likes -= 1
+            else:
+                spot.dislikes -= 1
+        else:
+            # Switch vote type
+            if vote_type == "like":
+                spot.likes += 1
+                spot.dislikes -= 1
+            else:
+                spot.dislikes += 1
+                spot.likes -= 1
+            vote.vote_type = vote_type
+    else:
+        # New vote
+        vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type=vote_type)
+        session.add(vote)
+        if vote_type == "like":
+            spot.likes += 1
+        else:
+            spot.dislikes += 1
+
+    session.commit()
+    session.refresh(spot)
+    return {"likes": spot.likes, "dislikes": spot.dislikes}
+
+
 @router.get("/all", response_model=list[CoolSpotRead])
 async def get_all_coolspots(session: Session = Depends(get_session)):
     coolspots = session.exec(select(CoolSpot)).all()
@@ -99,63 +143,9 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
 
 @router.post("/{coolspot_id}/like")
 def like_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
-    spot = session.get(CoolSpot, coolspot_id)
-    if not spot:
-        raise HTTPException(status_code=404, detail="Spot not found")
-
-    # Check if user already voted
-    vote = session.exec(
-        select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
-    ).first()
-
-    if vote:
-        if vote.vote_type == "like":
-            # Toggle off like
-            session.delete(vote)
-            spot.likes -= 1
-        else:
-            # Change dislike → like
-            vote.vote_type = "like"
-            spot.likes += 1
-            spot.dislikes -= 1
-    else:
-        # New like
-        vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type="like")
-        session.add(vote)
-        spot.likes += 1
-
-    session.commit()
-    session.refresh(spot)
-    return {"likes": spot.likes, "dislikes": spot.dislikes}
+    return vote_spot(coolspot_id, user_id, "like", session)
 
 
 @router.post("/{coolspot_id}/dislike")
 def dislike_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
-    spot = session.get(CoolSpot, coolspot_id)
-    if not spot:
-        raise HTTPException(status_code=404, detail="Spot not found")
-
-    # Check if user already voted
-    vote = session.exec(
-        select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
-    ).first()
-
-    if vote:
-        if vote.vote_type == "dislike":
-            # Toggle off dislike
-            session.delete(vote)
-            spot.dislikes -= 1
-        else:
-            # Change like → dislike
-            vote.vote_type = "dislike"
-            spot.dislikes += 1
-            spot.likes -= 1
-    else:
-        # New dislike
-        vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type="dislike")
-        session.add(vote)
-        spot.dislikes += 1
-
-    session.commit()
-    session.refresh(spot)
-    return {"likes": spot.likes, "dislikes": spot.dislikes}
+    return vote_spot(coolspot_id, user_id, "dislike", session)
