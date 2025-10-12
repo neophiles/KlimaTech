@@ -111,6 +111,14 @@ main {
   gap: 1rem;
 }
 
+.error-dashboard {
+  height: 100%;
+}
+
+.error-text {
+  text-align: center;
+}
+
 .base-widget {
   min-width: 18rem;
   max-width: 18rem;
@@ -120,11 +128,11 @@ main {
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
   overflow: hidden;
 }
 
 .raised-widget {
+  background-color: #ffffff;
   filter: drop-shadow(0 1px 1px black);
 }
 
