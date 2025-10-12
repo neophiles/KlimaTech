@@ -12,6 +12,7 @@ function Footer() {
                 label={'Map'}
             />
             <NavigationButton
+                route={'/planner'}
                 label={'Analysis'}
             />
             <NavigationButton

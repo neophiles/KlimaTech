@@ -1,5 +1,6 @@
 import Dashboard from '../pages/Dashboard'
 import HeatMap from "../pages/HeatMap";
+import Planner from "../pages/Planner";
 import { Routes, Route } from "react-router-dom";
 import Settings from '../pages/Settings';
 
@@ -11,6 +12,7 @@ function Main() {
                 <Route path="/" element={<Dashboard />} />
                 {/* Heatmap page */}
                 <Route path="/heatmap" element={<HeatMap />} />
+                <Route path="/planner" element={<Planner />} />
                 <Route path="/settings" element={<Settings />} />
             </Routes>
         </main>
