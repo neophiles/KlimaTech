@@ -59,3 +59,13 @@ class UserProfile(SQLModel, table=True):
     phone_number: Optional[str] = Field(default=None, index=True, unique=True)
     lat: Optional[float] = Field(default=None)
     lon: Optional[float] = Field(default=None)
+
+
+class Vote(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="userprofile.id")
+    coolspot_id: int = Field(foreign_key="coolspot.id")
+    vote_type: str  # "like" or "dislike"
+
+    user: Optional["UserProfile"] = Relationship()
+    coolspot: Optional["CoolSpot"] = Relationship()
