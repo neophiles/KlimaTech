@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import TimeSlotContainer from "./TimeSlotContainer";
 import { fetchForecastData } from "../../../api/heatGauge";
 import { getIndexByHeat, formatHourLabel } from "../../../utils/heatUtils";
+import ErrorWidget from "../ErrorWidget";
 
 function HeatClockWidget() {
 
@@ -22,8 +23,29 @@ function HeatClockWidget() {
         getData();
     }, []);
 
-    if (error) return <div className="base-widget">Error loading data</div>;
-    if (!forecast) return <div className="base-widget">Loading...</div>;
+    if (error) return (
+        <ErrorWidget
+            otherClass={"heat-clock-widget"}
+            children={
+                <>
+                    <h1>Today's Forecast</h1>
+                    <span className="error-text">Error loading forecast data</span>
+                </>
+            }
+        />
+    );
+
+    if (forecast.length === 0) return (
+        <ErrorWidget
+            otherClass={"heat-clock-widget"}
+            children={
+                <>
+                    <h1>Today's Forecast</h1>
+                    <span className="error-text">Loading...</span>
+                </>
+            }
+        />
+    );
 
     // Split forecast into Safe vs Hot
     const classifiedHours = forecast
