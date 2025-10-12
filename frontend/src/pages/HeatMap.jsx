@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "./HeatMap.css";
 import "leaflet.heat";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
