@@ -4,7 +4,7 @@ import LocationWidget from "../components/widgets/LocationWidget";
 import AdvisoryWidget from "../components/widgets/AdvisoryWidget";
 import BriefingsWidget from "../components/widgets/BriefingsWidget/BriefingsWidget";
 import HeatClockWidget from "../components/widgets/HeatClockWidget/HeatClockWidget";
-
+import ErrorWidget from "../components/widgets/ErrorWidget";
 
 function Dashboard() {
   const [weatherData, setWeatherData] = useState(null);
@@ -58,17 +58,21 @@ function Dashboard() {
 
   if (error) return (
     <div className="dashboard error-dashboard">
-      <div className="base-widget">
-        <span className="error-text">Error: {error}</span>
-      </div>
+      <ErrorWidget
+        children={
+          <span className="error-text">Error: {error}</span>
+        }
+      />
     </div>
   );
 
   if (!weatherData) return (
     <div className="dashboard error-dashboard">
-      <div className="base-widget">
-        <span className="error-text">Loading dashboard...</span>
-      </div>
+      <ErrorWidget
+        children={
+          <span className="error-text">Loading dashboard...</span>
+        }
+      />
     </div>
   );
 
