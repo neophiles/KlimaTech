@@ -180,10 +180,13 @@ function HeatMap() {
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
+
+        {/* Base map layer (can and should be changed) */}
+        <TileLayer
+          url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
+          attribution='Map tiles by <a href="http://stamen.com/">Stamen Design</a>, &copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+        />
+
 
           {/* Show heat index overlay when toggled */}
           {heatmapMode && (
