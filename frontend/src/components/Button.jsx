@@ -1,11 +1,8 @@
 function Button({ children, onClick }) {
     return (     
         <button
-            onClick={() => onClick(true)}
+            onClick={onClick}
             className="button"
-            style={{
-                
-            }}
         >
             {children}
         </button>
