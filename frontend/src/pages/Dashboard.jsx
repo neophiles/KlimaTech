@@ -56,8 +56,21 @@ function Dashboard() {
     fetchNearestBarangayData();
   }, [userLocation]);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!weatherData) return <div>Loading dashboard...</div>;
+  if (error) return (
+    <div className="dashboard error-dashboard">
+      <div className="base-widget">
+        <span className="error-text">Error: {error}</span>
+      </div>
+    </div>
+  );
+
+  if (!weatherData) return (
+    <div className="dashboard error-dashboard">
+      <div className="base-widget">
+        <span className="error-text">Loading dashboard...</span>
+      </div>
+    </div>
+  );
 
   const {
     barangay,
