@@ -152,7 +152,7 @@ def dislike_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_
             spot.likes -= 1
     else:
         # New dislike
-        vote = Vote(user_id=user_id, spot_id=coolspot_id, vote_type="dislike")
+        vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type="dislike")
         session.add(vote)
         spot.dislikes += 1
 
