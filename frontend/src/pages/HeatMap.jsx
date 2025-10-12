@@ -167,9 +167,9 @@ function HeatMap() {
   return (
     <div className="map-page">
       {/* Toggle button for heatmap mode */}
-      <button onClick={() => setHeatmapMode(m => !m)}>
+      {/* <button onClick={() => setHeatmapMode(m => !m)}>
         {heatmapMode ? "Show Markers" : "Show Heatmap"}
-      </button>
+      </button> */}
 
       {/* Centered map container */}
       <div className="map-container">
