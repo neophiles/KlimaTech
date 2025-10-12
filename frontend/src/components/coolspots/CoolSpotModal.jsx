@@ -104,11 +104,43 @@ const CoolSpotModal = ({
           placeholder="Add a report..."
           required
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={e => setReportPhoto(e.target.files[0])}
-        />
+        <div
+          className="report-upload-box"
+          onClick={() => document.getElementById("report-photo-input").click()}
+        >
+          <input
+            id="report-photo-input"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            style={{ display: "none" }}
+            onChange={(e) => setReportPhoto(e.target.files[0])}
+          />
+
+          {!reportPhoto ? (
+            <>
+              <img
+                src="/camera-icon.png"
+                alt="Camera Icon"
+                className="report-upload-icon"
+              />
+              <div className="report-upload-text">📸 Take or Upload a Photo</div>
+              <div className="report-upload-subtext">
+                Tap to open camera or choose from gallery
+              </div>
+            </>
+          ) : (
+            <div className="report-preview-wrapper">
+              <img
+                src={URL.createObjectURL(reportPhoto)}
+                alt="Preview"
+                className="report-preview"
+              />
+              <div className="report-filename">{reportPhoto.name}</div>
+            </div>
+          )}
+        </div>
+
         <button type="submit" disabled={reportSubmitting}>
           {reportSubmitting ? "Submitting..." : "Add Report"}
         </button>

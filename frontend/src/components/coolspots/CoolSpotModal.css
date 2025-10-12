@@ -199,3 +199,56 @@
     padding-bottom: 12px;
   }
 }
+
+
+
+/* Report Photo Upload Box */
+.report-upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin: 12px 0;
+}
+
+.report-upload-box:hover {
+  background-color: #f8f8f8;
+}
+
+.report-upload-icon {
+  width: 48px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.report-upload-text {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.report-upload-subtext {
+  color: #888;
+  font-size: 14px;
+}
+
+.report-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-preview {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  object-fit: cover;
+}
+
+.report-filename {
+  margin-top: 6px;
+  color: #666;
+  font-size: 14px;
+}
