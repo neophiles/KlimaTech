@@ -317,6 +317,7 @@ function HeatMap() {
 
       {/* Button to enable add mode */}
       <Button
+        otherClass={"add"}
         onClick={() => setShowAddModal(true)}
         children={
           <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
