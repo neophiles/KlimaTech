@@ -111,6 +111,10 @@ main {
   gap: 1rem;
 }
 
+.error-dashboard {
+  height: 100%;
+}
+
 .base-widget {
   min-width: 18rem;
   max-width: 18rem;
