@@ -183,8 +183,8 @@ function HeatMap() {
 
         {/* Base map layer (can and should be changed) */}
         <TileLayer
-          url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
-          attribution='Map tiles by <a href="http://stamen.com/">Stamen Design</a>, &copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
 
