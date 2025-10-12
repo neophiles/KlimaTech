@@ -112,27 +112,29 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
             id="photo-input"
             type="file"
             accept="image/*"
+            capture="environment"
             style={{ display: "none" }}
             onChange={(e) => setPhoto(e.target.files[0])}
           />
-          <div
-            style={{
-              border: "2px dashed #bbb",
-              borderRadius: "12px",
-              padding: "24px",
-              textAlign: "center",
-              cursor: "pointer",
-              marginBottom: "16px",
-            }}
-          >
+
+          {!photo ? (
+            <>
+              <img src="/camera-icon.png" alt="Camera Icon" className="image-upload-icon" />
+              <div className="image-upload-text">📸 Take or Upload a Photo</div>
+              <div className="image-upload-subtext">
+                Tap to open camera or choose from gallery
+              </div>
+            </>
+          ) : (
             <img
-              src="/camera-icon.png"
-              style={{ width: 40, marginBottom: 8 }}
+              src={URL.createObjectURL(photo)}
+              alt="Preview"
+              className="image-preview"
             />
-            <div style={{ color: "#888" }}>+ Add an image</div>
-            {photo && <div style={{ marginTop: 8 }}>{photo.name}</div>}
-          </div>
+          )}
         </div>
+
+
         <button
           type="submit"
           disabled={!barangay}
