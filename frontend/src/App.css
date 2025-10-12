@@ -327,25 +327,39 @@ main {
 
 .button {
   position: absolute;
-  bottom: 4.5rem;
-  right: 1.5rem;
   padding: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2196f3;
-  color: #fff;
+  background-color: transparent;
+  color: #ffffff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.button:hover{
+.button.add {
+  bottom: 4.5rem;
+  right: 1.5rem;
+  background-color: #2196f3;
+}
+
+.button.cancel {
+  top: 0.5rem;
+  right: 0.5rem;
+  color: #2196f3;
+}
+
+.button.add:hover {
   background-color: #1667a9;
 }
 
-.button:active {
+.button.add:active {
   transform: translateY(2px);
+}
+
+.button.cancel:hover {
+  background-color: #e2e2e2;
 }
 
 .coolspot-panel {
