@@ -160,4 +160,3 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
 }
 
 export default AddCoolSpotModal;
-// filepath: c:\Users\PC\Desktop\COOL'to!\frontend\src\components\coolspots\AddCoolSpotModal.jsx
