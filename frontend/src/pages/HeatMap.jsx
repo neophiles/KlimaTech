@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
@@ -46,6 +46,9 @@ function HeatMap() {
   const [userLocation, setUserLocation] = useState(null);
   const [barangays, setBarangays] = useState([]);
   const [heatmapMode, setHeatmapMode] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [centerMarker, setCenterMarker] = useState(null);
+
 
   // Prepare heatmap points from cool spots
   const heatPoints = coolSpots
@@ -163,6 +166,23 @@ function HeatMap() {
       .finally(() => setReportSubmitting(false));
   }
 
+  // Component to show a marker at the center when adding a new spot  
+  function CenterMarker({ isAdding, setCenterMarker }) {
+    const map = useMapEvents({
+      move() {
+        if (isAdding) {
+          const center = map.getCenter();
+          setCenterMarker([center.lat, center.lng]);
+        }
+      },
+    });
+
+    return isAdding && centerMarker ? (
+      <Marker position={centerMarker} />
+    ) : null;
+  }
+
+
   return (
     <div className="map-page">
       {/* Toggle button for heatmap mode */}
@@ -226,8 +246,53 @@ function HeatMap() {
               onAddSpot={handleAddSpot}
             />
           )}
+
+          <CenterMarker isAdding={isAdding} setCenterMarker={setCenterMarker} />
+
         </MapContainer>
       </div>
+
+      {/*  Confirmation overlay when adding */}
+      {isAdding && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "80px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 1000,
+            background: "white",
+            padding: "10px 16px",
+            borderRadius: "12px",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.3)"
+          }}
+        >
+          <button
+            onClick={() => {
+              if (!pendingSpot || !centerMarker) {
+                alert("Please wait until the map is ready.");
+                return;
+              }
+
+              const formData = new FormData();
+              formData.append("barangay_id", pendingSpot.barangay_id);
+              formData.append("name", pendingSpot.name);
+              formData.append("description", pendingSpot.description);
+              formData.append("type", pendingSpot.type);
+              formData.append("lat", centerMarker[0]);
+              formData.append("lon", centerMarker[1]);
+              if (pendingSpot.photo) formData.append("file", pendingSpot.photo);
+
+              handleAddSpot(formData);
+              setIsAdding(false);
+              setCenterMarker(null);
+            }}
+          >
+            Confirm Location
+          </button>
+        </div>
+      )}
+
 
       {/* Modal for selected cool spot details */}
       {showModal && selectedSpot && (
@@ -251,14 +316,20 @@ function HeatMap() {
       )}
 
       {/* Button to enable add mode */}
-      <Button 
+      <Button
         onClick={() => setShowAddModal(true)}
         children={
           <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+              clipRule="evenodd"
+            />
           </svg>
         }
       />
+
+
 
       {/* Modal for adding new cool spot */}
       {showAddModal && (
@@ -268,9 +339,12 @@ function HeatMap() {
             show={showAddModal}
             onClose={() => setShowAddModal(false)}
             onSubmit={spotInfo => {
+              // Save form data from modal
               setPendingSpot(spotInfo);
+
+              // Hide modal, start pinning mode
               setShowAddModal(false);
-              setAddMode(true)
+              setIsAdding(true);
             }}
             barangays={barangays}
           />
