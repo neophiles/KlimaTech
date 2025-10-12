@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AddCoolSpotModal.css"; // Import the CSS file
+import Button from "../Button";
 
 function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   const [name, setName] = useState("");
@@ -149,12 +150,16 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
           Pin to Map
         </button>
       </form>
-      <button
+      
+      <Button
+        otherClass={"cancel"}
         onClick={onClose}
-        style={{ marginTop: 12, width: "100%" }}
-      >
-        Cancel
-      </button>
+        children={
+          <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+          </svg>
+        }
+      />
     </div>
   );
 }
