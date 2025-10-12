@@ -124,11 +124,11 @@ main {
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
   overflow: hidden;
 }
 
 .raised-widget {
+  background-color: #ffffff;
   filter: drop-shadow(0 1px 1px black);
 }
 
