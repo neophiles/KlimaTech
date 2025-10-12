@@ -6,14 +6,17 @@ class ReportRead(BaseModel):
     note: str
     date: Optional[str] = None
     time: Optional[str] = None
+    photo_url: Optional[str] = None 
 
 class CoolSpotRead(BaseModel):
     id: int
     barangay_id: int
     name: str
+    description: str
     type: str
     lat: float
     lon: float
+    photo_url: Optional[str] = None
     reports: List[ReportRead]
 
 

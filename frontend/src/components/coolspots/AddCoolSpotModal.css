@@ -1,0 +1,94 @@
+/* Overlay for modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.2); /* semi-transparent black */
+  z-index: 1000;
+}
+
+/* Center modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  max-width: 350px;
+  width: 90vw;
+  z-index: 1001;
+}
+
+.pin-to-map-btn {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #2196f3 0%, #0d47a1 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.18);
+  margin-top: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.pin-to-map-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pin-to-map-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+
+/* Add Image or Take Picture Style */
+.image-upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.image-upload-box:hover {
+  background-color: #f8f8f8;
+}
+
+.image-upload-icon {
+  width: 48px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.image-upload-text {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.image-upload-subtext {
+  color: #888;
+  font-size: 14px;
+}
+
+.image-preview {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 12px;
+}

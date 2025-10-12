@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
 from datetime import datetime
 from app.schemas.barangay import (
@@ -16,6 +16,7 @@ from app.db import get_session
 from fastapi import HTTPException
 from fastapi import status
 from datetime import datetime, timedelta, timezone
+from math import radians, sin, cos, sqrt, atan2
 
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
@@ -57,17 +58,14 @@ async def fetch_and_save_heatlog(barangay: Barangay, session: Session) -> HeatLo
     return heatlog
 
 
-# @router.post("/{barangay_id}/heatlog", response_model=HeatLogRead)
-# async def save_heatlog_endpoint(barangay_id: int, session: Session = Depends(get_session)):
-#     barangay = session.get(Barangay, barangay_id)
-#     if not barangay:
-#         raise HTTPException(status_code=404, detail="Barangay not found")
-#     return await fetch_and_save_heatlog(barangay, session)
-
 
 
 @router.get("/all", response_model=list[BarangaySummary])
-async def get_barangays(session: Session = Depends(get_session)):
+async def get_barangays(session: 
+    Session = Depends(get_session),
+    lat: float | None = Query(None, description="User's current latitude"),
+    lon: float | None = Query(None, description="User's current longitude")
+):
     barangays_data = session.exec(select(Barangay)).all()
     results = []
     now = datetime.now(PH_TZ).replace(tzinfo=None)
@@ -97,8 +95,92 @@ async def get_barangays(session: Session = Depends(get_session)):
             "updated_at": log.recorded_at
         })
 
+            # Add user's current location as a "virtual barangay"
+    if lat is not None and lon is not None:
+        async with httpx.AsyncClient() as client:
+            params = {
+                "latitude": lat,
+                "longitude": lon,
+                "current": ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "uv_index"],
+                "timezone": "Asia/Manila"
+            }
+            r = await client.get(OPEN_METEO_URL, params=params)
+            data = r.json()
+            temp_c = data["current"]["temperature_2m"]
+            humidity = data["current"]["relative_humidity_2m"]
+            wind_speed = data["current"]["wind_speed_10m"]
+            uv_index = data["current"]["uv_index"]
+            hi, risk = calculate_heat_index(temp_c, humidity)
+
+        results.append({
+            "id": 0,
+            "barangay": "Your Location",
+            "locality": "User Provided",
+            "province": "-",
+            "lat": lat,
+            "lon": lon,
+            "heat_index": hi,
+            "risk_level": risk,
+            "updated_at": datetime.now(PH_TZ).replace(tzinfo=None)
+        })
+
     return results
 
+
+@router.get("/nearest")
+async def get_nearest_barangay(
+    lat: float = Query(..., description="User's current latitude"),
+    lon: float = Query(..., description="User's current longitude"),
+    session: Session = Depends(get_session)
+):
+    barangays = session.exec(select(Barangay)).all()
+    if not barangays:
+        raise HTTPException(status_code=404, detail="No barangays found")
+
+    # Use haversine formula for accurate geographic distance
+    def haversine(lat1, lon1, lat2, lon2):
+        R = 6371  # Earth radius in km
+        dlat = radians(lat2 - lat1)
+        dlon = radians(lon2 - lon1)
+        a = sin(dlat / 2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return R * c  # Distance in kilometers
+
+    nearest = min(barangays, key=lambda b: haversine(lat, lon, b.lat, b.lon))
+
+    # Get latest heat log
+    latest_log = session.exec(
+        select(HeatLog)
+        .where(HeatLog.barangay_id == nearest.id)
+        .order_by(HeatLog.recorded_at.desc())
+    ).first()
+
+    current_data = None
+    if latest_log:
+        current_data = {
+            "temperature": latest_log.temperature_c,
+            "humidity": latest_log.humidity,
+            "wind_speed": latest_log.wind_speed,
+            "uv_index": latest_log.uv_index,
+            "heat_index": latest_log.heat_index_c,
+            "risk_level": latest_log.risk_level,
+            "updated_at": latest_log.recorded_at,
+        }
+
+    return {
+        "id": nearest.id,
+        "barangay": nearest.barangay,
+        "locality": nearest.locality,
+        "province": nearest.province,
+        "lat": nearest.lat,
+        "lon": nearest.lon,
+        "current": current_data,
+        "daily_briefing": {
+            "safe_hours": "Before 10AM, After 4PM",
+            "avoid_hours": "11AM–3PM",
+            "advice": "Hydrate frequently and avoid prolonged outdoor work."
+        },
+}
 
 
 @router.get("/{barangay_id}", response_model=BarangayDetail)
@@ -145,3 +227,5 @@ async def get_barangay(barangay_id: int, session: Session = Depends(get_session)
         },
         "forecast": []
     }
+
+
