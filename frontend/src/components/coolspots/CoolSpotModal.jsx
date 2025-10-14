@@ -76,7 +76,7 @@ const CoolSpotModal = ({
 
       <div className="modal-section">
         <h2 className="modal-title">{spot.name}</h2>
-        <div className="modal-desc">{spot.description}</div>
+        <div className="modal-desc">{spot.type}</div>
 
         <div className="modal-votes">
           <button
