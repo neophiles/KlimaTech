@@ -78,6 +78,10 @@
 .vote-btn.up { color: #00c853; }
 .vote-btn.down { color: #d50000; }
 
+.vote-btn.up.active .nav-btn-icon, .vote-btn.down.active .nav-btn-icon {
+  fill: currentColor; 
+}
+
 .vote-count {
   font-size: 1rem;
   font-weight: bold;
