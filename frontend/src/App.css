@@ -23,8 +23,7 @@ header {
 }
 
 .logo {
-  width: 25%;
-  max-width: 150px;
+  width: clamp(6rem, 35%, 8rem);
   height: auto;
 }
 
