@@ -1,12 +1,12 @@
 import L from "leaflet";
+import youIcon from "../../public/icons_png/you-icon.png";
 
 export const userIcon = new L.Icon({
-  iconUrl:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  iconUrl: youIcon,
+  iconSize: [30, 35],
+  iconAnchor: [10, 40],
+  popupAnchor: [1, -35],
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-  shadowSize: [41, 41],
+  shadowSize: [40, 40],
 });
