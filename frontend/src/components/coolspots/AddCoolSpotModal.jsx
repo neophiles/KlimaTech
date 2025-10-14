@@ -159,13 +159,11 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
           disabled={!barangay}
           className="pin-to-map-btn"
         >
-          <span className="pin-to-map-icon" aria-label="pin">
-            {/* SVG location icon for crisp look */}
-            <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
-            </svg>
-          </span>
-          Pin to Map
+          <span>Pin to Map</span>
+          {/* SVG location icon for crisp look */}
+          <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
+          </svg>
         </button>
       </form>
       

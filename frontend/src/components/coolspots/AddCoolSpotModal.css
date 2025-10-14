@@ -36,6 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.25rem;
   box-shadow: 0 2px 8px rgba(33, 150, 243, 0.18);
   cursor: pointer;
   transition: box-shadow 0.2s;
@@ -49,8 +50,6 @@
 .pin-to-map-icon {
   width: 22px;
   height: 22px;
-  margin-right: 10px;
-  display: inline-block;
 }
 
 .coolspot-form {
