@@ -10,14 +10,60 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
 
     if (!isOpen) return null;
 
-    const handleConfirm = () => {
-        const userData = { username, phoneNum, allowLocation }; 
+    const handleConfirm = async () => {
+        try {
+            let lat = null;
+            let lon = null;
 
-        // send user data to backend, kayo na bahala di ako marunong nitey
+            if (allowLocation && navigator.geolocation) {
+                // Get user's location first
+                await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            lat = pos.coords.latitude;
+                            lon = pos.coords.longitude;
+                            resolve();
+                        },
+                        (err) => {
+                            console.warn("Location access denied or failed:", err);
+                            resolve(); // continue without location
+                        }
+                    );
+                });
+            }
 
-        onConfirm?.(userData);
-        onClose();
+            const userData = {
+                username,
+                phone_number: phoneNum,
+                lat,
+                lon,
+            };
+
+            const response = await fetch(`${API_BASE}/user/add`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(errorData.detail || "Failed to create user");
+                return;
+            }
+
+            const createdUser = await response.json();
+            console.log("User created:", createdUser);
+
+            onConfirm?.(createdUser);
+            onClose();
+        } catch (err) {
+            console.error("Error creating user:", err);
+            alert("Something went wrong while creating user.");
+        }
     };
+
 
     return (
         <div className="modal-overlay">
