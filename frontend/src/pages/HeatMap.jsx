@@ -8,6 +8,7 @@ import CoolSpotModal from "../components/coolspots/CoolSpotModal";
 import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
 import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
+import { userIcon } from "../utils/coolSpotsIcons";
 
 // HeatLayer component to add heatmap layer to the map
 function HeatLayer({ points }) {
@@ -21,16 +22,6 @@ function HeatLayer({ points }) {
   }, [map, points]);
   return null;
 }
-
-// Custom icon for user location
-const userIcon = new L.Icon({
-  iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVmzdV37TbN_MEIMn1zZKeDQoCKByIVbWrnw&s",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-  shadowSize: [41, 41],
-});
 
 function HeatMap() {
   const [coolSpots, setCoolSpots] = useState([]);
