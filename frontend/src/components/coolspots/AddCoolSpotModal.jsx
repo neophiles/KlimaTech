@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./AddCoolSpotModal.css"; // Import the CSS file
+import "./AddCoolSpotModal.css";
 import Button from "../Button";
 
 function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Park");
+  const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [photo, setPhoto] = useState(null);
+
   const [barangay, setBarangay] = useState(null);
   const [loadingBarangay, setLoadingBarangay] = useState(true);
 
@@ -50,61 +53,77 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
     <div className="modal">
       <h2 style={{ textAlign: "center", marginBottom: 24 }}>Add a Cool Spot!</h2>
       <form
+        className="coolspot-form"
         onSubmit={(e) => {
           e.preventDefault();
           if (!barangay) return alert("Barangay not detected yet.");
           onSubmit({
             barangay_id: barangay.id,
             name,
-            description,
             type,
+            description,
+            address,
+            landmark,
             photo,
           });
         }}
       >
+
+        {/* Name Field */}
         <input
+          className="input-field"
           type="text"
           placeholder="e.g., Tambayan"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          style={{
-            marginBottom: 12,
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-          }}
         />
+
+        {/* Category Dropdown */}
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="input-field"
+        >
+          <option value="" disabled hidden>-- Select Spot Type --</option>
+          <option value="Park">Park</option>
+          <option value="Shaded Area">Shaded Area</option>
+          <option value="Water Source">Water Source</option>
+          <option value="Air-Conditioned Area">Air-Conditioned Area</option>
+          <option value="Waiting Shed">Waiting Shed</option>
+          <option value="Gazebo / Pavilion">Gazebo / Pavilion</option>
+        </select>
+
+        {/* Description Field */}
         <input
+          className="input-field"
           type="text"
           placeholder="e.g., Malawak, Goods for mag tro-tropa"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          style={{
-            marginBottom: 12,
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-          }}
         />
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          style={{
-            marginBottom: 12,
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="Park">Park</option>
-          <option value="Shaded Area">Shaded Area</option>
-          <option value="Water Source">Water Source</option>
-        </select>
+
+        {/* Address Field */}
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Address (e.g., Quezon Ave., Lucena)"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+
+        {/* Landmark Field */}
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Nearest landmark (e.g., beside 7-Eleven)"
+          value={landmark}
+          onChange={(e) => setLandmark(e.target.value)}
+        />
+        
+        {/* Upload Image */}
         <div
           className="image-upload-box"
           onClick={() => document.getElementById("photo-input").click()}
@@ -134,7 +153,6 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
             />
           )}
         </div>
-
 
         <button
           type="submit"
