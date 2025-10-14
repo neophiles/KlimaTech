@@ -74,14 +74,7 @@ function HeatMap() {
   }, []);
 
   // Fetch barangays when userLocation is available
-  useEffect(() => {
-    if (!userLocation) return;
-    const { lat, lon } = userLocation;
-    fetch(`/api/barangays/all?lat=${lat}&lon=${lon}`)
-      .then(res => res.json())
-      .then(data => setBarangays(data))
-      .catch(err => console.error("Failed to fetch barangays:", err));
-  }, [userLocation]);
+ 
 
   // Get user's current location on mount, fallback to center if denied
   useEffect(() => {
