@@ -14,15 +14,6 @@ function Dashboard() {
   const [showLogin, setShowLogin] = useState(true);
   const [userData, setUserData] = useState(null);
 
-  // Handle login modal confirm
-  const handleLoginConfirm = (data) => {
-    console.log("User Data:", data);
-    setUserData(data);
-    setShowLogin(false);
-
-    // Persist user data locally
-    localStorage.setItem("userData", JSON.stringify(data));
-  };
 
   // Check for existing user data in localStorage on mount
   useEffect(() => {
@@ -32,6 +23,16 @@ function Dashboard() {
       setShowLogin(false);
     }
   }, []);
+
+  // Handle login modal confirm
+  const handleLoginConfirm = (data) => {
+    console.log("User Data:", data);
+    setUserData(data);
+    setShowLogin(false);
+
+    // Persist user data locally
+    localStorage.setItem("userData", JSON.stringify(data));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("userData");
