@@ -19,7 +19,20 @@ function Dashboard() {
     console.log("User Data:", data);
     setUserData(data);
     setShowLogin(false);
+
+    // Persist user data locally
+    localStorage.setItem("userData", JSON.stringify(data));
   };
+
+  // Check for existing user data in localStorage on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userData");
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+      setShowLogin(false);
+    }
+  }, []);
+
 
   // Get user's location
   useEffect(() => {
