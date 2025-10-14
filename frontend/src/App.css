@@ -349,17 +349,17 @@ main {
 .button.add {
   bottom: 4.5rem;
   right: 0.75rem;
-  background-color: #2196f3;
+  background-color: #02ccb4;
 }
 
 .button.cancel {
   top: 0.5rem;
   right: 0.5rem;
-  color: #2196f3;
+  color: #02ccb4;
 }
 
 .button.add:hover {
-  background-color: #1667a9;
+  background-color: #00a693;
 }
 
 .button.add:active {
