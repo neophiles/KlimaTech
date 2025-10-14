@@ -1,7 +1,7 @@
 function Header() {
     return (
         <header>
-            <h1 className="title">COOL'TO</h1>
+            <img className="logo" src="/logo_svg/name_logo.png" alt="PRESKO LOGO" />
         </header>
     );
 }
