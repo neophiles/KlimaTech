@@ -33,6 +33,12 @@ function Dashboard() {
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    setUserData(null);
+    setShowLogin(true);
+  };
+
 
   // Get user's location
   useEffect(() => {
@@ -89,6 +95,21 @@ function Dashboard() {
     </div>
   );
 
+  if (!userData) {
+    return (
+      <div className="dashboard error-dashboard">
+        <LoginModal
+          isOpen={showLogin}
+          onClose={() => setShowLogin(false)}
+          onConfirm={handleLoginConfirm}
+        />
+        <ErrorWidget
+          children={<span className="error-text">Please log in to continue</span>}
+        />
+      </div>
+    );
+  }
+
   if (!weatherData) return (
     <div className="dashboard error-dashboard">
       <ErrorWidget
@@ -127,6 +148,9 @@ function Dashboard() {
         uv_index={uv_index}
       />
       <HeatClockWidget />
+      <button onClick={handleLogout} className="logout-btn">
+        Logout
+      </button>
     </div>
   );
 }
