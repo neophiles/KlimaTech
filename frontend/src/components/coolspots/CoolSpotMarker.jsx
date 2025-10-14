@@ -1,10 +1,11 @@
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, useMap } from "react-leaflet";
 import Carousel from "./Carousel";
 import "./CoolSpotMarker.css";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, currentUser }) {
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
+  const map = useMap();
 
   // Initialize user's vote on mount
   useEffect(() => {
@@ -80,7 +81,17 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   };
 
   return (
-    <Marker position={[spot.lat, spot.lon]}>
+    <Marker 
+      position={[spot.lat, spot.lon]}
+      eventHandlers={{
+        click: () => {
+          const point = map.latLngToContainerPoint([spot.lat, spot.lon]);
+          point.y -= 100; // move map up by 100px so marker appears lower on screen
+          const offsetLatLng = map.containerPointToLatLng(point);
+          map.flyTo(offsetLatLng, map.getZoom(), { animate: true });
+        },
+      }}
+    >
       <Popup className="coolspot-popup" closeButton={false}>
         <div className="coolspot-header">
           <span className="coolspot-title">{spot.name}</span>
