@@ -139,7 +139,6 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
 
           {!photo ? (
             <>
-              <img src="/camera-icon.png" alt="Camera Icon" className="image-upload-icon" />
               <div className="image-upload-text">📸 Take or Upload a Photo</div>
               <div className="image-upload-subtext">
                 Tap to open camera or choose from gallery
