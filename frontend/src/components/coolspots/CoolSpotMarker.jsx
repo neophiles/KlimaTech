@@ -57,12 +57,11 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       <Popup className="coolspot-popup">
         <div className="coolspot-card">
           <div className="coolspot-header">
-            <div className="coolspot-title">Cool Spot</div>
+            <div className="coolspot-title">{spot.name}</div>
             <button className="coolspot-details-btn" onClick={() => onViewDetails(spot.id)}>
               <span role="img" aria-label="details">📝</span>
             </button>
           </div>
-          <div className="coolspot-subtitle">{spot.name}</div>
           <div className="coolspot-desc">{spot.description}</div>
           {spot.photo_url && spot.photo_url.trim() !== "" && (
             <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
