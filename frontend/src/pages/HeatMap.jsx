@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
@@ -166,7 +166,6 @@ function HeatMap() {
     ) : null;
   }
 
-
   return (
     <div className="map-page">
       {/* Toggle button for heatmap mode */}
@@ -182,6 +181,7 @@ function HeatMap() {
           zoom={6}
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
+          zoomControl={false}
         >
 
         {/* Base map layer (can and should be changed) */}
@@ -190,6 +190,7 @@ function HeatMap() {
           attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
+        <ZoomControl position="topright" />
 
           {/* Show heat index overlay when toggled */}
           {heatmapMode && (
@@ -277,7 +278,6 @@ function HeatMap() {
         </div>
       )}
 
-
       {/* Modal for selected cool spot details */}
       {showModal && selectedSpot && (
         <>
@@ -313,8 +313,6 @@ function HeatMap() {
           </svg>
         }
       />
-
-
 
       {/* Modal for adding new cool spot */}
       {showAddModal && (
