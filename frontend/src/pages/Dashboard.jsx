@@ -5,11 +5,21 @@ import AdvisoryWidget from "../components/widgets/AdvisoryWidget";
 import BriefingsWidget from "../components/widgets/BriefingsWidget/BriefingsWidget";
 import HeatClockWidget from "../components/widgets/HeatClockWidget/HeatClockWidget";
 import ErrorWidget from "../components/widgets/ErrorWidget";
+import LoginModal from "../components/login/LoginModal";
 
 function Dashboard() {
   const [weatherData, setWeatherData] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [error, setError] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
+  const [userData, setUserData] = useState(null);
+
+  // Handle login modal confirm
+  const handleLoginConfirm = (data) => {
+    console.log("User Data:", data);
+    setUserData(data);
+    setShowLogin(false);
+  };
 
   // Get user's location
   useEffect(() => {
@@ -70,9 +80,12 @@ function Dashboard() {
     <div className="dashboard error-dashboard">
       <ErrorWidget
         children={
-          <span className="error-text">Loading dashboard...</span>
-        }
-      />
+          <span className="error-text">Loading dashboard...</span>} />
+        <LoginModal
+          isOpen={showLogin}
+          onClose={() => setShowLogin(false)}
+          onConfirm={handleLoginConfirm}
+        />
     </div>
   );
 
@@ -86,6 +99,11 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
+      <LoginModal
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
+        onConfirm={handleLoginConfirm}
+      />
       <HeatGauge heatIndex={heat_index} timestamp={updated_at} />
       <LocationWidget barangay={barangay} locality={locality} province={province} />
       <AdvisoryWidget heatIndex={heat_index} riskLevel={risk_level} advice={advice} />

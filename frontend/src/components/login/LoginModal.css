@@ -1,0 +1,161 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5px;
+    color: #0E2A47
+}
+
+h3 {
+    margin-bottom: 1rem;
+    color: #0E2A47
+}
+
+label {
+    margin-bottom: 0.5rem;
+    color: #17191b;
+    margin: .3rem 0;
+}
+
+.logo {
+    width: 40%;
+    max-width: 120px;
+    height: auto;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1px;
+}
+
+.input-group input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #eff3f5;
+  color: #17191b;
+}
+
+.input-group input:focus {
+  border-color: #a9c4d4;
+  outline: none;
+}
+
+.switch-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: .3rem 0;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 26px;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #1AC6A2;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  background-color: #1AC6A2;
+  color: #17191b;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #13A0D8;
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+button.confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+button.confirm:hover {
+  background-color: #43a047;
+}
+
+button.close-btn {
+  background-color: #E3E8EC;
+}
+
+button.close-btn:hover {
+    background-color: #CBD5DF;
+}
+
