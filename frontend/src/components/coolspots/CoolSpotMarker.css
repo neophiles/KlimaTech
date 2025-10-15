@@ -51,12 +51,12 @@
 
 .coolspot-details-btn {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background-color: transparent;
+  right: -3rem;
+  top: 0;
+  background-color: rgba(255,255,255,0.85);
   border: none;
-  border-radius: 8px;
-  padding: 4px 8px;
+  border-radius: 15px;
+  padding: 0.75rem;
   cursor: pointer;
 }
 
@@ -66,11 +66,12 @@
 
 .coolspot-votes {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: 0;
-  bottom: -3rem;
+  right: -3rem;
+  top: 3.25rem;
   background: rgba(255,255,255,0.85);
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -79,7 +80,7 @@
 
 .vote-btn {
   background: none;
-  font-size: 1.3em;
+  font-size: 1rem;
   cursor: pointer;
 }
 
