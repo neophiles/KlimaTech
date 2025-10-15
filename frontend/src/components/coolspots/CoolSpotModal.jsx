@@ -14,30 +14,38 @@ const CoolSpotModal = ({
   onSubmitReport,
   onClose,
   setSelectedSpot,
-  setCoolSpots,
-  currentUser
+  setCoolSpots
 }) => {
   if (!spot) return null;
 
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
+  const [likes, setLikes] = useState(spot.likes || 0);
+  const [dislikes, setDislikes] = useState(spot.dislikes || 0);
 
-  // Initialize user's vote on mount
+  // Fetch votes from backend on mount
   useEffect(() => {
-    if (currentUser && spot.votes) {
-      const vote = spot.votes.find(v => v.user_id === currentUser.id);
-      setUserVote(vote ? vote.vote_type : null);
+    async function fetchVotes() {
+      try {
+        const res = await fetch(`/api/coolspots/${spot.id}/votes?user_id=1`);
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Failed to fetch votes: ${text}`);
+        }
+        const data = await res.json();
+        setLikes(data.likes);
+        setDislikes(data.dislikes);
+        setUserVote(data.user_vote); // 'like', 'dislike', or null
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }, [currentUser, spot.votes]);
+
+    fetchVotes();
+  }, [spot.id]);
 
   async function vote(type) {
-    const userId = currentUser?.id || 1;
-    if (!userId) {
-      console.error("Missing user ID. Please ensure user is logged in or selected.");
-      return;
-    }
-
     try {
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${userId}`, { method: "POST" });
+      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=1`, { method: "POST" });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(`Server error: ${text}`);
@@ -45,6 +53,12 @@ const CoolSpotModal = ({
 
       const data = await res.json();
 
+      // Update local state
+      setLikes(data.likes);
+      setDislikes(data.dislikes);
+      setUserVote(prev => (prev === type ? null : type));
+
+      // Update parent state
       setSelectedSpot(prev => ({
         ...prev,
         likes: data.likes,
@@ -56,15 +70,12 @@ const CoolSpotModal = ({
           s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s
         )
       );
-
-      // Update local user vote
-      setUserVote(prev => (prev === type ? null : type));
     } catch (err) {
       console.error(`${type} error:`, err);
     }
   }
 
-  const totalVotes = (spot.likes || 0) + (spot.dislikes || 0) || 1;
+  const totalVotes = likes + dislikes || 1;
 
   return (
     <div className="coolspot-modal-fullscreen">
@@ -87,7 +98,7 @@ const CoolSpotModal = ({
           >
             ▲
           </button>
-          <span className="vote-count">{spot.likes || 0}</span>
+          <span className="vote-count">{likes}</span>
 
           <button
             className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
@@ -95,16 +106,16 @@ const CoolSpotModal = ({
           >
             ▼
           </button>
-          <span className="vote-count">{spot.dislikes || 0}</span>
+          <span className="vote-count">{dislikes}</span>
 
           <div className="vote-bar">
             <div
               className="vote-bar-up"
-              style={{ width: `${((spot.likes || 0) / totalVotes) * 100}%` }}
+              style={{ width: `${(likes / totalVotes) * 100}%` }}
             />
             <div
               className="vote-bar-down"
-              style={{ width: `${((spot.dislikes || 0) / totalVotes) * 100}%` }}
+              style={{ width: `${(dislikes / totalVotes) * 100}%` }}
             />
           </div>
         </div>

@@ -34,7 +34,6 @@ function Planner() {
     setTasks(newTasks);
   };
 
-
   const removeTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
