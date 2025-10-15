@@ -10,14 +10,29 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
 
     if (!isOpen) return null;
 
-    const handleConfirm = async () => {
+        const handleConfirm = async () => {
         try {
+            // Validate inputs
+            if (!username.trim()) {
+                alert("Please enter a username.");
+                return;
+            }
+            if (!phoneNum.trim()) {
+                alert("Please enter a phone number.");
+                return;
+            }
+
+            if (!allowLocation) {
+                alert("Please enable location access to continue.");
+                return;
+            }
+
             let lat = null;
             let lon = null;
 
+            // Get location
             if (allowLocation && navigator.geolocation) {
-                // Get user's location first
-                await new Promise((resolve, reject) => {
+                await new Promise((resolve) => {
                     navigator.geolocation.getCurrentPosition(
                         (pos) => {
                             lat = pos.coords.latitude;
@@ -25,8 +40,8 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
                             resolve();
                         },
                         (err) => {
-                            console.warn("Location access denied or failed:", err);
-                            resolve(); // continue without location
+                            console.warn("Location access denied:", err);
+                            resolve();
                         }
                     );
                 });
@@ -41,15 +56,17 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
 
             const response = await fetch(`${API_BASE}/user/add`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                alert(errorData.detail || "Failed to create user");
+                if (errorData.detail === "Username already exists") {
+                    alert("This username is already taken. Please choose another one.");
+                } else {
+                    alert(errorData.detail || "Failed to create user");
+                }
                 return;
             }
 
@@ -87,10 +104,12 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
                 <div className="input-group">
                     <label>Phone Number:</label>
                     <input
-                        type="text"
+                        type="tel"
                         value={phoneNum}
                         onChange={(e) => setPhoneNum(e.target.value)}
                         placeholder="Enter your phone number"
+                        pattern="[0-9]*"
+                        inputMode="numeric"
                     />
                 </div>
 
