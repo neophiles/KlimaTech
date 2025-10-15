@@ -5,53 +5,60 @@ import { useState, useEffect } from "react";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, currentUser }) {
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
+  const [likes, setLikes] = useState(spot.likes || 0);
+  const [dislikes, setDislikes] = useState(spot.dislikes || 0);
   const map = useMap();
+
+   // Fetch current votes on mount
+  useEffect(() => {
+    async function fetchVotes() {
+      try {
+        const res = await fetch(`/api/coolspots/${spot.id}/votes`);
+        if (!res.ok) throw new Error("Failed to fetch votes");
+        const data = await res.json();
+        setLikes(data.likes);
+        setDislikes(data.dislikes);
+      } catch (err) {
+        console.error("Error fetching votes:", err);
+        setLikes(spot.likes || 0);
+        setDislikes(spot.dislikes || 0);
+      }
+    }
+    fetchVotes();
+  }, [spot.id, spot.likes, spot.dislikes]);
+
 
   // Initialize user's vote on mount
   useEffect(() => {
     if (currentUser && spot.votes) {
-      const vote = spot.votes.find(v => v.user_id === currentUser.id);
+      const vote = spot.votes.find((v) => v.user_id === currentUser.id);
       setUserVote(vote ? vote.vote_type : null);
     }
   }, [currentUser, spot.votes]);
 
-  // Handle like/dislike with optimistic UI update
+
   async function vote(type) {
     const userId = currentUser?.id || 1;
-    if (!userId) {
-      console.error("Missing user ID. Please ensure user is logged in or selected.");
-      return;
-    }
+    if (!userId) return;
 
     try {
       const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${userId}`, { method: "POST" });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Server error: ${text}`);
-      }
+      if (!res.ok) throw new Error(await res.text());
 
       const data = await res.json();
+      setLikes(data.likes);
+      setDislikes(data.dislikes);
+      setUserVote((prev) => (prev === type ? null : type));
 
-      // Update the selected spot's likes/dislikes
-      setSelectedSpot(prev => ({
-        ...prev,
-        likes: data.likes,
-        dislikes: data.dislikes
-      }));
-
-      // Update the spot in the list
-      setCoolSpots(prev =>
-        prev.map(s =>
-          s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s
-        )
+      setSelectedSpot((prev) => ({ ...prev, likes: data.likes, dislikes: data.dislikes }));
+      setCoolSpots((prev) =>
+        prev.map((s) => (s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s))
       );
-
-      // Update local user vote
-      setUserVote(prev => (prev === type ? null : type));
     } catch (err) {
       console.error(`${type} error:`, err);
     }
   }
+
 
   const voteIcons = {
     like: {
@@ -108,21 +115,15 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
         )}
 
         <div className="coolspot-votes">
-          <button
-            className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
-            onClick={() => vote("like")}
-          >
+          <button className={`vote-btn up ${userVote === "like" ? "active" : ""}`} onClick={() => vote("like")}>
             {userVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
           </button>
-          <div className="vote-count">{spot.likes || 0}</div>
-          <button
-            className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
-            onClick={() => vote("dislike")}
-          >
+          <div className="vote-count">{likes}</div>
+          <button className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`} onClick={() => vote("dislike")}>
             {userVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
           </button>
-          <div className="vote-count">{spot.dislikes || 0}</div>
-        </div>
+          <div className="vote-count">{dislikes}</div>
+        </div>  
       </Popup>
     </Marker>
   );
