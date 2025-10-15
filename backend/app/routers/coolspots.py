@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from app.db import get_session
 from app.models import CoolSpot, Report, Vote
 from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
+from fastapi import Query
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
@@ -150,9 +151,30 @@ def like_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_ses
 def dislike_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
     return vote_spot(coolspot_id, user_id, "dislike", session)
 
+
 @router.get("/{coolspot_id}/votes")
-def get_votes(coolspot_id: int, session: Session = Depends(get_session)):
+def get_votes(
+    coolspot_id: int, 
+    session: Session = Depends(get_session),
+    user_id: int = Query(..., description="Current user ID")
+):
     spot = session.get(CoolSpot, coolspot_id)
     if not spot:
         raise HTTPException(status_code=404, detail="Spot not found")
-    return {"likes": spot.likes, "dislikes": spot.dislikes}
+
+    # Aggregate likes/dislikes
+    likes = spot.likes
+    dislikes = spot.dislikes
+
+    # Find user's vote
+    vote = session.exec(
+        select(Vote).where(Vote.coolspot_id == coolspot_id, Vote.user_id == user_id)
+    ).first()
+
+    user_vote = vote.vote_type if vote else None  # 'like', 'dislike', or None
+
+    return {
+        "likes": likes,
+        "dislikes": dislikes,
+        "user_vote": vote.vote_type if vote else None
+    }
