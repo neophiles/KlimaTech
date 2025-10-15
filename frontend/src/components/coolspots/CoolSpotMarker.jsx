@@ -36,12 +36,12 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
 
+      // Update likes/dislikes from server
       setLikes(data.likes);
       setDislikes(data.dislikes);
 
-      // Toggle correctly:
-      if (userVote === type) setUserVote(null);
-      else setUserVote(type);
+      // Update userVote based on server: if server returns user voted the same, keep it, else null
+      setUserVote(data.user_vote);
 
       // Update parent
       setSelectedSpot(prev => ({ ...prev, likes: data.likes, dislikes: data.dislikes }));
@@ -52,6 +52,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       console.error(`${type} error:`, err);
     }
   }
+
 
   const voteIcons = {
     like: {
