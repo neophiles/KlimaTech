@@ -89,7 +89,7 @@ function LoginModal({ isOpen, onClose, onConfirm }) {
         <div className="modal-overlay">
             <div className="modal">
                 <div className="title">
-                    <h2>Hey there! Let’s keep you</h2>
+                    <span>Hey there! Let’s keep you</span>
                     <img className="logo" src="/logo/name_logo.png" alt="PRESKO LOGO" />
                 </div>
                 <h3>Login</h3>
