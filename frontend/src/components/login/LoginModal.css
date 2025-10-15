@@ -150,12 +150,3 @@ button.confirm {
 button.confirm:hover {
   background-color: #43a047;
 }
-
-button.close-btn {
-  background-color: #E3E8EC;
-}
-
-button.close-btn:hover {
-    background-color: #CBD5DF;
-}
-

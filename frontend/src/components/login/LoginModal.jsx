@@ -127,7 +127,6 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
 
                 <div className="button-group">
                     <button onClick={handleConfirm}>Confirm</button>
-                    <button className="close-btn" onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>
