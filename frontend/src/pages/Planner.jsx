@@ -34,6 +34,13 @@ function Planner() {
     setTasks(newTasks);
   };
 
+
+  const removeTask = (index) => {
+    const newTasks = tasks.filter((_, i) => i !== index);
+    setTasks(newTasks);
+  };
+
+
   const submitTasks = async () => {
     if (!selectedBarangay) return alert("Select a barangay first!");
     if (tasks.length === 0 || tasks.every((t) => !t.task || !t.time))
@@ -103,6 +110,13 @@ function Planner() {
               style={styles.inputTime}
               disabled={loading}
             />
+            <button
+              onClick={() => removeTask(i)}
+              style={styles.removeButton}
+              disabled={loading}
+            >
+              ❌
+            </button>
           </div>
         ))}
         <button onClick={addTask} style={styles.addButton} disabled={loading}>
