@@ -13,51 +13,46 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   useEffect(() => {
     async function fetchVotes() {
       try {
-        const res = await fetch(`/api/coolspots/${spot.id}/votes`);
-        if (!res.ok) throw new Error("Failed to fetch votes");
+        // Static user for now
+        const res = await fetch(`/api/coolspots/${spot.id}/votes?user_id=1`);
+        if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
+
         setLikes(data.likes);
         setDislikes(data.dislikes);
+        setUserVote(data.user_vote); // now button will color correctly
       } catch (err) {
-        console.error("Error fetching votes:", err);
-        setLikes(spot.likes || 0);
-        setDislikes(spot.dislikes || 0);
+        console.error("Failed to fetch votes:", err);
       }
     }
+
     fetchVotes();
-  }, [spot.id, spot.likes, spot.dislikes]);
-
-
-  // Initialize user's vote on mount
-  useEffect(() => {
-    if (currentUser && spot.votes) {
-      const vote = spot.votes.find((v) => v.user_id === currentUser.id);
-      setUserVote(vote ? vote.vote_type : null);
-    }
-  }, [currentUser, spot.votes]);
+  }, [spot.id]);
 
 
   async function vote(type) {
-    const userId = currentUser?.id || 1;
-    if (!userId) return;
-
     try {
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${userId}`, { method: "POST" });
+      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=1`, { method: "POST" });
       if (!res.ok) throw new Error(await res.text());
-
       const data = await res.json();
+
       setLikes(data.likes);
       setDislikes(data.dislikes);
-      setUserVote((prev) => (prev === type ? null : type));
 
-      setSelectedSpot((prev) => ({ ...prev, likes: data.likes, dislikes: data.dislikes }));
-      setCoolSpots((prev) =>
-        prev.map((s) => (s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s))
+      // Toggle correctly:
+      if (userVote === type) setUserVote(null);
+      else setUserVote(type);
+
+      // Update parent
+      setSelectedSpot(prev => ({ ...prev, likes: data.likes, dislikes: data.dislikes }));
+      setCoolSpots(prev =>
+        prev.map(s => (s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s))
       );
     } catch (err) {
       console.error(`${type} error:`, err);
     }
   }
+
 
 
   const voteIcons = {
