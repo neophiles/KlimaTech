@@ -69,7 +69,9 @@ const CoolSpotModal = ({
   return (
     <div className="coolspot-modal-fullscreen">
       <button className="modal-back-arrow" onClick={onClose}>
-        &#8592;
+        <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+        </svg>
       </button>
 
       {spot.photo_url && <Carousel images={[`${API_BASE}${spot.photo_url}`]} />}

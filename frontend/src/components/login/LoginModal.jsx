@@ -1,55 +1,59 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import "./LoginModal.css";
 
 const API_BASE = "http://127.0.0.1:8000";
 
-const LoginModal = ({ isOpen, onClose, onConfirm }) => {
-    const [username, setUsername] = React.useState("");
-    const [phoneNum, setPhoneNum] = React.useState("");
-    const [allowLocation, setAllowLocation] = React.useState(false);
+function LoginModal({ isOpen, onClose, onConfirm }) {
+    const [username, setUsername] = useState("");
+    const [phoneNum, setPhoneNum] = useState("");
+    const [allowLocation, setAllowLocation] = useState(false);
+
+    // On mount, check if location permission is already granted
+    useEffect(() => {
+        if (!navigator.permissions) return;
+
+        navigator.permissions.query({ name: "geolocation" }).then((result) => {
+            if (result.state === "granted") setAllowLocation(true);
+            else setAllowLocation(false);
+
+            // Listen for future changes
+            result.onchange = () => {
+                setAllowLocation(result.state === "granted");
+            };
+        });
+    }, []);
 
     if (!isOpen) return null;
 
-        const handleConfirm = async () => {
+    const handleConfirm = async () => {
         try {
-            // Validate inputs
-            if (!username.trim()) {
-                alert("Please enter a username.");
-                return;
-            }
-            if (!phoneNum.trim()) {
-                alert("Please enter a phone number.");
-                return;
-            }
-
             if (!allowLocation) {
-                alert("Please enable location access to continue.");
+                alert("Location access is required to continue.");
                 return;
             }
 
+            // Get location
             let lat = null;
             let lon = null;
 
-            // Get location
-            if (allowLocation && navigator.geolocation) {
-                await new Promise((resolve) => {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            lat = pos.coords.latitude;
-                            lon = pos.coords.longitude;
-                            resolve();
-                        },
-                        (err) => {
-                            console.warn("Location access denied:", err);
-                            resolve();
-                        }
-                    );
-                });
-            }
+            await new Promise((resolve) => {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        lat = pos.coords.latitude;
+                        lon = pos.coords.longitude;
+                        resolve();
+                    },
+                    (err) => {
+                        console.warn("Location access denied:", err);
+                        alert("Location access is required to continue.");
+                        resolve();
+                    }
+                );
+            });
 
             const userData = {
-                username,
-                phone_number: phoneNum,
+                username: username.trim() || null, // Optional
+                phone_number: phoneNum.trim() || null, // Optional
                 lat,
                 lon,
             };
@@ -74,60 +78,70 @@ const LoginModal = ({ isOpen, onClose, onConfirm }) => {
             console.log("User created:", createdUser);
 
             onConfirm?.(createdUser);
-            onClose();
+            onClose?.();
         } catch (err) {
             console.error("Error creating user:", err);
             alert("Something went wrong while creating user.");
         }
     };
 
-
     return (
         <div className="modal-overlay">
             <div className="modal">
                 <div className="title">
-                    <h2>Welcome to</h2>
+                    <h2>Hey there! Let’s keep you</h2>
                     <img className="logo" src="/logo/name_logo.png" alt="PRESKO LOGO" />
                 </div>
                 <h3>Login</h3>
                 
-                <div className="input-group">
-                    <label className="input-labels">Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Enter your username"
-                    />
-                </div>
+                <form
+                    className="login-form"
+                    onSubmit={async (e) => {
+                        e.preventDefault(); // prevent reload
+                        handleConfirm();    // run your logic
+                    }}
+                >
+                    <div className="input-group">
+                        <label>What should we call you?</label>
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Enter a name or nickname"
+                        />
+                    </div>
 
-                <div className="input-group">
-                    <label>Phone Number:</label>
-                    <input
-                        type="tel"
-                        value={phoneNum}
-                        onChange={(e) => setPhoneNum(e.target.value)}
-                        placeholder="Enter your phone number"
-                        pattern="[0-9]*"
-                        inputMode="numeric"
-                    />
-                </div>
+                    <div className="input-group">
+                        <label>Want to share your number?</label>
+                        <input
+                            type="tel"
+                            required
+                            value={phoneNum}
+                            onChange={(e) => setPhoneNum(e.target.value)}
+                            placeholder="e.g. 09123456789"
+                            pattern="[0-9]*"
+                            inputMode="numeric"
+                        />
+                        <small className="hint">We’ll only use this if we need to contact you.</small>
+                    </div>
 
-                <div className="switch-group">
-                    <label>Allow Location Access</label>
-                    <label className="switch">
+                    <div className="switch-group">
+                        <label>Allow Location Access</label>
+                        <label className="switch">
                         <input
                             type="checkbox"
+                            readOnly
                             checked={allowLocation}
-                            onChange={() => setAllowLocation(!allowLocation)}
                         />
                         <span className="slider"></span>
-                    </label>
-                </div>
+                        </label>
+                    </div>
 
-                <div className="button-group">
-                    <button onClick={handleConfirm}>Confirm</button>
-                </div>
+                    <div className="button-group">
+                        <button className="confirm-btn" type="submit">Let’s Go!</button>
+                    </div>
+                </form>
             </div>
         </div>
     );
