@@ -18,6 +18,9 @@
   max-width: 400px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .title {
@@ -34,22 +37,27 @@ h3 {
     color: #0E2A47
 }
 
-label {
-    margin-bottom: 0.5rem;
-    color: #17191b;
-    margin: .3rem 0;
-}
-
 .logo {
     width: 40%;
     max-width: 120px;
     height: auto;
 }
 
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 1px;
+}
+
+.input-group label {
+    color: #17191b;
+    margin: .3rem 0;
 }
 
 .input-group input {
@@ -120,7 +128,7 @@ input:checked + .slider:before {
   flex-wrap: wrap;
 }
 
-button {
+.confirm-btn {
   padding: 0.75rem 1.25rem;
   border: none;
   border-radius: 10px;
@@ -131,22 +139,22 @@ button {
   color: #17191b;
 }
 
-button:hover {
+.confirm-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   background-color: #13A0D8;
 }
 
-button:active {
+.confirm-btn:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
-button.confirm {
+.confirm-btn.confirm {
   background-color: #4caf50;
   color: white;
 }
 
-button.confirm:hover {
+.confirm-btn.confirm:hover {
   background-color: #43a047;
 }
