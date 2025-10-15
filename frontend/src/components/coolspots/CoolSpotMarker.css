@@ -1,14 +1,15 @@
+
+
 /* popup wrapper (outer box) */
-.leaflet-popup.coolspot-popup .leaflet-popup-content-wrapper {
+.leaflet-popup .leaflet-popup-content-wrapper {
   background: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-  padding: 12px 16px;
   position: relative;
 }
 
 /* popup arrow */
-.leaflet-popup.coolspot-popup .leaflet-popup-tip {
+.leaflet-popup .leaflet-popup-tip {
   background: #fff;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
@@ -16,12 +17,19 @@
 /* actual content inside the popup */
 .leaflet-popup.coolspot-popup .leaflet-popup-content {
   margin: 0; /* remove Leaflet's default margin */
-  min-width: 260px;
   max-width: 320px;
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1rem;
+}
+
+.leaflet-popup.user-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .coolspot-header {

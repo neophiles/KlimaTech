@@ -203,9 +203,15 @@ function HeatMap() {
 
           {/* User location marker with custom icon */}
           {!heatmapMode && userLocation && (
-            <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon}>
-              <Popup>
-                <strong>Your Location</strong>
+            <Marker 
+              position={[userLocation.lat, userLocation.lon]} 
+              icon={userIcon}
+            >
+              <Popup
+                className="user-popup"
+                closeButton={false}
+              >
+                <strong>You</strong>
               </Popup>
             </Marker>
           )}
