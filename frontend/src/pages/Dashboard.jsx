@@ -34,12 +34,6 @@ function Dashboard() {
     localStorage.setItem("userData", JSON.stringify(data));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userData");
-    setUserData(null);
-    setShowLogin(true);
-  };
-
 
   // Get user's location
   useEffect(() => {
@@ -107,6 +101,7 @@ function Dashboard() {
         <ErrorWidget
           children={<span className="error-text">Please log in to continue</span>}
         />
+        
       </div>
     );
   }
@@ -149,9 +144,6 @@ function Dashboard() {
         uv_index={uv_index}
       />
       <HeatClockWidget />
-      <button onClick={handleLogout} className="logout-btn">
-        Logout
-      </button>
     </div>
   );
 }

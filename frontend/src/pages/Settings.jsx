@@ -1,10 +1,10 @@
+import React from "react";
 import GuideWidget from "../components/widgets/GuideWidget";
 
-function Settings() {
+function Settings({ onLogout }) {
     return (
-        <div className="settings">
-            <h1>Settings</h1>
-            <GuideWidget />
+        <div>
+            <GuideWidget onLogout={onLogout} />
         </div>
     );
 }
