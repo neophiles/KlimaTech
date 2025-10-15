@@ -149,3 +149,10 @@ def like_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_ses
 @router.post("/{coolspot_id}/dislike")
 def dislike_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
     return vote_spot(coolspot_id, user_id, "dislike", session)
+
+@router.get("/{coolspot_id}/votes")
+def get_votes(coolspot_id: int, session: Session = Depends(get_session)):
+    spot = session.get(CoolSpot, coolspot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Spot not found")
+    return {"likes": spot.likes, "dislikes": spot.dislikes}
