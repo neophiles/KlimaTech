@@ -53,8 +53,6 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
     }
   }
 
-
-
   const voteIcons = {
     like: {
       outline: (
@@ -88,6 +86,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       eventHandlers={{
         click: () => {
           const point = map.latLngToContainerPoint([spot.lat, spot.lon]);
+          point.x += 25;
           point.y -= 100; // move map up by 100px so marker appears lower on screen
           const offsetLatLng = map.containerPointToLatLng(point);
           map.flyTo(offsetLatLng, map.getZoom(), { animate: true });
