@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import "./LoginModal.css";
+import "./RegisterModal.css";
 
 const API_BASE = "http://127.0.0.1:8000";
 
-function LoginModal({ isOpen, onClose, onConfirm }) {
+function RegisterModal({ isOpen, onClose, onConfirm }) {
     const [username, setUsername] = useState("");
     const [phoneNum, setPhoneNum] = useState("");
     const [allowLocation, setAllowLocation] = useState(false);
@@ -92,10 +92,10 @@ function LoginModal({ isOpen, onClose, onConfirm }) {
                     <span>Hey there! Let’s keep you</span>
                     <img className="logo" src="/logo/name_logo.png" alt="PRESKO LOGO" />
                 </div>
-                <h3>Login</h3>
+                <h3>Register</h3>
                 
                 <form
-                    className="login-form"
+                    className="register-form"
                     onSubmit={async (e) => {
                         e.preventDefault(); // prevent reload
                         handleConfirm();    // run your logic
@@ -147,4 +147,4 @@ function LoginModal({ isOpen, onClose, onConfirm }) {
     );
 };
 
-export default LoginModal;
+export default RegisterModal;
