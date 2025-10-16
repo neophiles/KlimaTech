@@ -1,7 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
-import L from "leaflet";
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import "leaflet/dist/leaflet.css";
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import "leaflet.heat";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
@@ -205,10 +207,6 @@ function HeatMap() {
 
   return (
     <div className="map-page">
-      {/* Toggle button for heatmap mode */}
-      {/* <button onClick={() => setHeatmapMode(m => !m)}>
-        {heatmapMode ? "Show Markers" : "Show Heatmap"}
-      </button> */}
 
       {/* Centered map container */}
       <div className="map-container">
@@ -246,16 +244,24 @@ function HeatMap() {
           {!heatmapMode && userLocation && <UserMarker userLocation={userLocation} />}
 
           {/* Cool spot markers */}
-          {!heatmapMode && coolSpots.map(spot =>
-            spot.lat !== undefined && spot.lon !== undefined ? (
-              <CoolSpotMarker
-                key={spot.id}
-                spot={spot}
-                onViewDetails={handleViewDetails}
-                setSelectedSpot={setSelectedSpot}
-                setCoolSpots={setCoolSpots}
-              />
-            ) : null
+          {!heatmapMode && (
+            <MarkerClusterGroup
+              chunkedLoading={true}
+              maxClusterRadius={40} // smaller = more clusters
+              showCoverageOnHover={false}
+            >
+              {coolSpots.map(spot =>
+                spot.lat !== undefined && spot.lon !== undefined ? (
+                  <CoolSpotMarker
+                    key={spot.id}
+                    spot={spot}
+                    onViewDetails={handleViewDetails}
+                    setSelectedSpot={setSelectedSpot}
+                    setCoolSpots={setCoolSpots}
+                  />
+                ) : null
+              )}
+            </MarkerClusterGroup>
           )}
 
           {/* Add spot on click */}
