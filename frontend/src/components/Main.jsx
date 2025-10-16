@@ -4,32 +4,32 @@ import Planner from "../pages/Planner";
 import { Routes, Route } from "react-router-dom";
 import Settings from '../pages/Settings';
 import { useState, useEffect } from "react";
-import LoginModal from "../components/login/LoginModal";
+import RegisterModal from "../components/AuthModal/RegisterModal";
 
 function Main() {
   const [userData, setUserData] = useState(null);
-  const [showLogin, setShowLogin] = useState(true);
+  const [showRegister, setShowRegister] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
     if (storedUser) {
       setUserData(JSON.parse(storedUser));
-      setShowLogin(false);
+      setShowRegister(false);
     }
   }, []);
 
-  const handleLoginConfirm = (data) => {
+  const handleRegisterConfirm = (data) => {
     setUserData(data);
-    setShowLogin(false);
+    setShowRegister(false);
     localStorage.setItem("userData", JSON.stringify(data));
   };
 
   return (
     <>
-        <LoginModal
-            isOpen={showLogin}
-            onClose={() => setShowLogin(false)}
-            onConfirm={handleLoginConfirm}
+        <RegisterModal
+            isOpen={showRegister}
+            onClose={() => setShowRegister(false)}
+            onConfirm={handleRegisterConfirm}
         />
         <main>
             <Routes>
