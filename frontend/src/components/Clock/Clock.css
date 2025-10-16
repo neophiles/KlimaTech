@@ -65,7 +65,7 @@
 }
 
 /* Center dot */
-.inner-clock::after {
+/* .inner-clock::after {
   content: "";
   position: absolute;
   width: 10px;
@@ -73,6 +73,11 @@
   background: #333;
   border-radius: 50%;
   z-index: 10;
+} */
+
+.clock-heat-info {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Hour numbers around the clock */
@@ -83,10 +88,21 @@
   font-weight: 500;
 }
 
-.risk-level {
-  font-size: 2rem;
+.am-pm, .risk-level, .current-hour-heat-index {
   font-weight: bold;
   text-align: center;
+}
+
+.am-pm {
+  font-size: 1rem;
+}
+
+.risk-level {
+  font-size: 2rem;
+}
+
+.current-hour-heat-index  {
+  font-size: 1.25rem;
 }
 
 .twelve { top: 3.3%; left: 50%; transform: translateX(-50%); }
@@ -156,10 +172,16 @@
     width: 180px;
     height: 180px;
   }
-  .inner-clock .hour {
+  .hour {
     font-size: 0.85rem;
   }
-  .inner-clock .risk-level {
+  .am-pm {
+    font-size: 0.75rem;
+  }
+  .risk-level {
     font-size: 1.5rem;
+  }
+  .current-hour-heat-index  {
+    font-size: 1rem;
   }
 }

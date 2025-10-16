@@ -3,7 +3,7 @@ import { fetchForecastData } from "../../api/heatGauge";
 import { getColorByIndex, getIndexByHeat } from "../../utils/heatUtils";
 import "./Clock.css";
 
-export default function Clock({ riskLevel}) {
+export default function Clock({ riskLevel }) {
   const [time, setTime] = useState(new Date());
   const [forecast, setForecastData] = useState([]);
   const [error, setError] = useState(null);
@@ -77,9 +77,9 @@ export default function Clock({ riskLevel}) {
 
       {/* Inner clock */}
       <div className="inner-clock">
-        <div className="hour_hand" style={{ transform: `rotateZ(${time.getHours() * 30}deg)` }} />
+        {/* <div className="hour_hand" style={{ transform: `rotateZ(${time.getHours() * 30}deg)` }} />
         <div className="min_hand" style={{ transform: `rotateZ(${time.getMinutes() * 6}deg)` }} />
-        <div className="sec_hand" style={{ transform: `rotateZ(${time.getSeconds() * 6}deg)` }} />
+        <div className="sec_hand" style={{ transform: `rotateZ(${time.getSeconds() * 6}deg)` }} /> */}
 
         {/* Clock numbers */}
         {hourNames.map((name, i) => {
@@ -97,12 +97,23 @@ export default function Clock({ riskLevel}) {
           );
         })}
 
-        <span 
-          className="risk-level"
-          style={{color:riskColor}}
-        >
-          { riskLevel }
-        </span>
+        { currentHourData && (
+          <div className="clock-heat-info">
+            <span className="am-pm">{isAM ? "AM" : "PM"}</span>
+            <span 
+              className="risk-level"
+              style={{color:riskColor}}
+            >
+              { riskLevel }
+            </span>
+            <span
+              className="current-hour-heat-index"
+              style={{color:riskColor}}
+            >
+              { currentHourData.heat_index }°C
+            </span>
+          </div>
+        )}
 
         {/* (Optional) Heat index labels
         {hoursForDisplay.map((h) => {
