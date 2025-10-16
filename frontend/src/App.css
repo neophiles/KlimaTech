@@ -347,23 +347,38 @@ main {
   cursor: pointer;
 }
 
-.button.add {
+.button.map-btn {
+  z-index: 1000;
+  background-color: #02ccb4;
+  color: white;
+}
+
+.button.zoom-to-user {
   bottom: 4.5rem;
   right: 0.75rem;
-  background-color: #02ccb4;
+}
+
+.button.map-btn svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.button.add {
+  bottom: 1.5rem;
+  right: 0.75rem;
 }
 
 .button.cancel {
+  background-color: #02ccb4;
   top: 0.5rem;
   right: 0.5rem;
-  color: #02ccb4;
 }
 
-.button.add:hover {
+.button.map-btn:hover {
   background-color: #00a693;
 }
 
-.button.add:active {
+.button.map-btn:active {
   transform: translateY(2px);
 }
 
