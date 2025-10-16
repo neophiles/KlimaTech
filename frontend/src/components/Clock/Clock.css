@@ -35,34 +35,33 @@
   justify-content: center;
 }
 
-.hour_hand {
+/* Common hand styling */
+.hour_hand, .min_hand, .sec_hand {
   position: absolute;
-  top: 29%;
-  left: 49%;
-  transform-origin: bottom;
-  width: 5px;
-  height: 45px;
-  background: #333;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* Proportional sizes (percentages) */
+.hour_hand {
+  width: 1.5%;
+  height: 25%;
+  background: #222;
 }
 
 .min_hand {
-  position: absolute;
-  top: 20%;
-  left: 49.5%;
-  transform-origin: bottom;
-  width: 3px;
-  height: 65px;
-  background: #666;
+  width: 1%;
+  height: 33%;
+  background: #444;
 }
 
 .sec_hand {
-  position: absolute;
-  width: 2px;
-  height: 75px;
-  background: crimson;
-  top: 15%;
-  left: 49.5%;
-  transform-origin: bottom;
+  width: 0.6%;
+  height: 45%;
+  background: red;
 }
 
 /* Center dot */
@@ -77,25 +76,57 @@
 }
 
 /* Hour numbers around the clock */
-.inner-clock span {
+.inner-clock .hour {
   position: absolute;
   font-size: 1rem;
   color: #333;
   font-weight: 500;
 }
 
-.twelve  { top: 6%;  left: 50%; transform: translateX(-50%); }
-.one     { top: 15%; right: 26%; }
-.two     { top: 32%; right: 12%; }
-.three   { top: 50%; right: 5%; transform: translateY(-50%); }
-.four    { bottom: 32%; right: 12%; }
-.five    { bottom: 15%; right: 26%; }
-.six     { bottom: 6%; left: 50%; transform: translateX(-50%); }
-.seven   { bottom: 15%; left: 26%; }
-.eight   { bottom: 32%; left: 12%; }
-.nine    { top: 50%; left: 5%; transform: translateY(-50%); }
-.ten     { top: 32%; left: 12%; }
-.eleven  { top: 15%; left: 26%; }
+.risk-level {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.twelve { top: 3.3%; left: 50%; transform: translateX(-50%); }
+.one     { top: 10%; right: 26%; }
+.two     { top: 25%; right: 10%; }
+.three   { top: 50%; right: 3.3%; transform: translateY(-50%); }
+.four    { top: 67%; right: 10%; }
+.five    { top: 80%; right: 26%; }
+.six     { bottom: 3.3%; left: 50%; transform: translateX(-50%); }
+.seven   { top: 82%; left: 26%; }
+.eight   { top: 67%; left: 10%; }
+.nine    { top: 50%; left: 3.3%; transform: translateY(-50%); }
+.ten     { top: 25%; left: 10%; }
+.eleven  { top: 10%; left: 26%; }
+
+.active-hour {
+  position: relative;
+  color: #000;
+  font-weight: 700;
+}
+
+.active-hour::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  border: 2px solid #ff5722; /* or match rim color dynamically later */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1; /* keep behind the text */
+  background: rgba(255, 87, 34, 0.15);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+}
 
 /* Heat index labels (optional) */
 [class$="-heat"] {
@@ -120,12 +151,15 @@
 .eleven-heat  { top: 20%; left: 24%; }
 
 /* Responsiveness */
-/* @media (max-width: 500px) {
+@media (max-width: 500px) {
   .clock-container {
     width: 180px;
     height: 180px;
   }
-  .inner-clock span {
+  .inner-clock .hour {
     font-size: 0.85rem;
   }
-} */
+  .inner-clock .risk-level {
+    font-size: 1.5rem;
+  }
+}

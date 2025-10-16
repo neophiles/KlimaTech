@@ -3,7 +3,7 @@ import { fetchForecastData } from "../../api/heatGauge";
 import { getColorByIndex, getIndexByHeat } from "../../utils/heatUtils";
 import "./Clock.css";
 
-export default function Clock({ isAM = true }) {
+export default function Clock({ isAM = true, riskLevel}) {
   const [time, setTime] = useState(new Date());
   const [forecast, setForecastData] = useState([]);
   const [error, setError] = useState(null);
@@ -71,11 +71,22 @@ export default function Clock({ isAM = true }) {
         <div className="sec_hand" style={{ transform: `rotateZ(${time.getSeconds() * 6}deg)` }} />
 
         {/* Clock numbers */}
-        {hourNames.map((name, i) => (
-          <span key={i} className={name}>
-            {i === 0 ? 12 : i}
-          </span>
-        ))}
+        {hourNames.map((name, i) => {
+          const hourNumber = i === 0 ? 12 : i; // 12-hour format
+          const currentHour = time.getHours() % 12 || 12; // handle 0 → 12
+          const isCurrent = currentHour === hourNumber;
+
+          return (
+            <span
+              key={i}
+              className={`hour ${name} ${isCurrent ? "active-hour" : ""}`}
+            >
+              {hourNumber}
+            </span>
+          );
+        })}
+
+        <span className="risk-level">{ riskLevel }</span>
 
         {/* (Optional) Heat index labels
         {hoursForDisplay.map((h) => {
