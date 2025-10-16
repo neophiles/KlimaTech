@@ -3,10 +3,13 @@ import { fetchForecastData } from "../../api/heatGauge";
 import { getColorByIndex, getIndexByHeat } from "../../utils/heatUtils";
 import "./Clock.css";
 
-export default function Clock({ isAM = true, riskLevel}) {
+export default function Clock({ riskLevel}) {
   const [time, setTime] = useState(new Date());
   const [forecast, setForecastData] = useState([]);
   const [error, setError] = useState(null);
+
+  const currentHour = time.getHours();
+  const isAM = currentHour < 12; // automatically determine AM/PM
 
   // Live time update
   useEffect(() => {
@@ -37,6 +40,14 @@ export default function Clock({ isAM = true, riskLevel}) {
       index: getIndexByHeat(heat_index),
     };
   });
+
+  // Find matching forecast for the current hour
+  const currentHourData = classifiedHours.find(h => h.hour === currentHour);
+
+  // Determine color based on current heat index
+  const riskColor = currentHourData
+    ? getColorByIndex(currentHourData.index)
+    : "#999"; // default gray if no data
 
   // Filter for AM or PM hours
   const hoursForDisplay = classifiedHours.filter((h) =>
@@ -86,7 +97,12 @@ export default function Clock({ isAM = true, riskLevel}) {
           );
         })}
 
-        <span className="risk-level">{ riskLevel }</span>
+        <span 
+          className="risk-level"
+          style={{color:riskColor}}
+        >
+          { riskLevel }
+        </span>
 
         {/* (Optional) Heat index labels
         {hoursForDisplay.map((h) => {
