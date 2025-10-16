@@ -8,12 +8,12 @@ function Footer() {
                 label={'Home'}
             />
             <NavigationButton
-                route={'/heatmap'}
-                label={'Map'}
+                route={'/map'}
+                label={'PreskoSpots'}
             />
             <NavigationButton
-                route={'/planner'}
-                label={'Analysis'}
+                route={'/tips'}
+                label={'InitTips'}
             />
             <NavigationButton
                 route={'/settings'}

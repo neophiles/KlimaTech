@@ -34,8 +34,8 @@ function Main() {
         <main>
             <Routes>
                 <Route path="/" element={<Dashboard userData={userData} />} />
-                <Route path="/heatmap" element={<HeatMap />} />
-                <Route path="/planner" element={<Planner />} />
+                <Route path="/map" element={<HeatMap />} />
+                <Route path="/tips" element={<Planner />} />
                 <Route path="/settings" element={<Settings />} />
             </Routes>
         </main>

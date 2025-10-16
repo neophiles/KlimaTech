@@ -2,6 +2,7 @@ import { Marker, Popup, useMap } from "react-leaflet";
 import Carousel from "./Carousel";
 import "./CoolSpotMarker.css";
 import { useState, useEffect } from "react";
+import { preskoSpotMarker } from "../../utils/coolSpotsIcons";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, currentUser }) {
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
@@ -84,6 +85,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   return (
     <Marker 
       position={[spot.lat, spot.lon]}
+      icon={preskoSpotMarker}
       eventHandlers={{
         click: () => {
           const point = map.latLngToContainerPoint([spot.lat, spot.lon]);
