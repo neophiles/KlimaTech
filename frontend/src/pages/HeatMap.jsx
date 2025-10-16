@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -9,19 +9,6 @@ import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
 import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
 import { userIcon } from "../utils/coolSpotsIcons";
-
-// HeatLayer component to add heatmap layer to the map
-function HeatLayer({ points }) {
-  const map = useMap();
-  useEffect(() => {
-    if (!map || !points.length) return;
-    const heatLayer = window.L.heatLayer(points, { radius: 25 }).addTo(map);
-    return () => {
-      map.removeLayer(heatLayer);
-    };
-  }, [map, points]);
-  return null;
-}
 
 function HeatMap() {
   const [coolSpots, setCoolSpots] = useState([]);
@@ -40,15 +27,18 @@ function HeatMap() {
   const [isAdding, setIsAdding] = useState(false);
   const [centerMarker, setCenterMarker] = useState(null);
 
-
-  // Prepare heatmap points from cool spots
-  const heatPoints = coolSpots
-    .filter(spot =>
-      spot.lat !== undefined &&
-      spot.lon !== undefined &&
-      spot.heat_index != null
-    )
-    .map(spot => [spot.lat, spot.lon, spot.heat_index]); // heat_index: 0-1
+  // Zooms in to user's location
+  const zoomToUser = () => {
+  if (!userLocation) {
+    alert("User location not ready yet!");
+    return;
+  }
+  if (!mapRef.current) {
+    alert("Map not initialized yet!");
+    return;
+  }
+  mapRef.current.flyTo([userLocation.lat, userLocation.lon], 15, { animate: true });
+};
 
   // Fetch cool spots from backend on mount
   useEffect(() => {
@@ -63,9 +53,6 @@ function HeatMap() {
     }
     fetchCoolSpots();
   }, []);
-
-  // Fetch barangays when userLocation is available
- 
 
   // Get user's current location on mount, fallback to center if denied
   useEffect(() => {
@@ -166,6 +153,56 @@ function HeatMap() {
     ) : null;
   }
 
+  function UserMarker({ userLocation }) {
+    const map = useMap();
+
+    return (
+      <Marker
+        position={[userLocation.lat, userLocation.lon]}
+        icon={userIcon}
+        eventHandlers={{
+          click: () => {
+            const point = map.latLngToContainerPoint([userLocation.lat, userLocation.lon]);
+            const offsetLatLng = map.containerPointToLatLng(point);
+            map.flyTo(offsetLatLng, map.getZoom(), { animate: true });
+          },
+        }}
+      >
+        <Popup className="user-popup" closeButton={false}>
+          <strong>You</strong>
+        </Popup>
+      </Marker>
+    );
+  }
+
+  function ZoomToUserButton({ userLocation }) {
+    const map = useMap();
+
+    const zoomToUser = () => {
+      if (!userLocation) {
+        alert("User location not ready yet!");
+        return;
+      }
+      map.flyTo([userLocation.lat, userLocation.lon], 18, { animate: true });
+    };
+
+    return (
+      <Button
+        otherClass={"map-btn zoom-to-user"}
+        onClick={zoomToUser}
+        children={
+          <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path 
+              fillRule="evenodd"
+              d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+              clipRule="evenodd" />
+          </svg>
+        }
+      />
+    )
+  }
+
+
   return (
     <div className="map-page">
       {/* Toggle button for heatmap mode */}
@@ -182,15 +219,19 @@ function HeatMap() {
           minZoom={5.4}
           maxBounds={[[4, 116], [21, 127]]}
           zoomControl={false}
+          whenCreated={mapInstance => {
+            mapRef.current = mapInstance;
+            setMapReady(true);
+          }}
         >
 
-        {/* Base map layer (can and should be changed) */}
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        />
+          {/* Base map layer (can and should be changed) */}
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+          />
 
-        <ZoomControl position="topright" />
+          <ZoomControl position="topright" />
 
           {/* Show heat index overlay when toggled */}
           {heatmapMode && (
@@ -202,19 +243,7 @@ function HeatMap() {
           )}
 
           {/* User location marker with custom icon */}
-          {!heatmapMode && userLocation && (
-            <Marker 
-              position={[userLocation.lat, userLocation.lon]} 
-              icon={userIcon}
-            >
-              <Popup
-                className="user-popup"
-                closeButton={false}
-              >
-                <strong>You</strong>
-              </Popup>
-            </Marker>
-          )}
+          {!heatmapMode && userLocation && <UserMarker userLocation={userLocation} />}
 
           {/* Cool spot markers */}
           {!heatmapMode && coolSpots.map(spot =>
@@ -239,7 +268,24 @@ function HeatMap() {
           )}
 
           <CenterMarker isAdding={isAdding} setCenterMarker={setCenterMarker} />
+          
+          {/* Button to zoom in to user's location */}
+          <ZoomToUserButton userLocation={userLocation} />
 
+          {/* Button to enable add mode */}
+          <Button
+            otherClass={"map-btn add"}
+            onClick={() => setShowAddModal(true)}
+            children={
+              <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fillRule="evenodd"
+                  d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          />
         </MapContainer>
       </div>
 
@@ -304,21 +350,6 @@ function HeatMap() {
           />
         </>
       )}
-
-      {/* Button to enable add mode */}
-      <Button
-        otherClass={"add"}
-        onClick={() => setShowAddModal(true)}
-        children={
-          <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              fillRule="evenodd"
-              d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        }
-      />
 
       {/* Modal for adding new cool spot */}
       {showAddModal && (
