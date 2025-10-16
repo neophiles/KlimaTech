@@ -1,0 +1,131 @@
+.clock-container {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Outer rim showing the heat index gradient */
+.clock-rim {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#ccc 0deg, #ccc 360deg);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inner white face */
+.inner-clock {
+  position: relative;
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background: #f9f9f9;
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.1),
+    0 0 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hour_hand {
+  position: absolute;
+  top: 29%;
+  left: 49%;
+  transform-origin: bottom;
+  width: 5px;
+  height: 45px;
+  background: #333;
+}
+
+.min_hand {
+  position: absolute;
+  top: 20%;
+  left: 49.5%;
+  transform-origin: bottom;
+  width: 3px;
+  height: 65px;
+  background: #666;
+}
+
+.sec_hand {
+  position: absolute;
+  width: 2px;
+  height: 75px;
+  background: crimson;
+  top: 15%;
+  left: 49.5%;
+  transform-origin: bottom;
+}
+
+/* Center dot */
+.inner-clock::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #333;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+/* Hour numbers around the clock */
+.inner-clock span {
+  position: absolute;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.twelve  { top: 6%;  left: 50%; transform: translateX(-50%); }
+.one     { top: 15%; right: 26%; }
+.two     { top: 32%; right: 12%; }
+.three   { top: 50%; right: 5%; transform: translateY(-50%); }
+.four    { bottom: 32%; right: 12%; }
+.five    { bottom: 15%; right: 26%; }
+.six     { bottom: 6%; left: 50%; transform: translateX(-50%); }
+.seven   { bottom: 15%; left: 26%; }
+.eight   { bottom: 32%; left: 12%; }
+.nine    { top: 50%; left: 5%; transform: translateY(-50%); }
+.ten     { top: 32%; left: 12%; }
+.eleven  { top: 15%; left: 26%; }
+
+/* Heat index labels (optional) */
+[class$="-heat"] {
+  position: absolute;
+  font-size: 0.75rem;
+  color: #444;
+  opacity: 0.7;
+  transform: translate(-50%, -50%);
+}
+
+.twelve-heat  { top: 12%;  left: 50%; }
+.one-heat     { top: 20%;  right: 24%; }
+.two-heat     { top: 35%;  right: 14%; }
+.three-heat   { top: 50%;  right: 12%; }
+.four-heat    { bottom: 35%; right: 14%; }
+.five-heat    { bottom: 20%; right: 24%; }
+.six-heat     { bottom: 12%; left: 50%; }
+.seven-heat   { bottom: 20%; left: 24%; }
+.eight-heat   { bottom: 35%; left: 14%; }
+.nine-heat    { top: 50%; left: 12%; }
+.ten-heat     { top: 35%; left: 14%; }
+.eleven-heat  { top: 20%; left: 24%; }
+
+/* Responsiveness */
+/* @media (max-width: 500px) {
+  .clock-container {
+    width: 180px;
+    height: 180px;
+  }
+  .inner-clock span {
+    font-size: 0.85rem;
+  }
+} */
