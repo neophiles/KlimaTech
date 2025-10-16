@@ -21,7 +21,7 @@ export function formatFullTime(timestamp) {
         : "--:--";
 }
 
-export function formatHourLabel(timestamp, start, end) {
+export function formatHourLabel(timestamp, start=0, end=23) {
     if (!timestamp) return "--";
 
     const date = new Date(timestamp);
