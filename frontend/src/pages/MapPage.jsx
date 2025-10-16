@@ -4,7 +4,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import "leaflet/dist/leaflet.css";
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import "leaflet.heat";
 import CoolSpotMarker from "../components/coolspots/CoolSpotMarker";
 import CoolSpotModal from "../components/coolspots/CoolSpotModal";
 import AddSpotOnClick from "../components/coolspots/AddSpotOnClick";
@@ -12,20 +11,19 @@ import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
 import { userIcon } from "../utils/coolSpotsIcons";
 
-function HeatMap() {
+function Map() {
   const [coolSpots, setCoolSpots] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [reportNote, setReportNote] = useState("");
   const [reportSubmitting, setReportSubmitting] = useState(false);
-  const [newSpotType, setNewSpotType] = useState("Shaded Area");
   const [reportPhoto, setReportPhoto] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [pendingSpot, setPendingSpot] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [barangays, setBarangays] = useState([]);
-  const [heatmapMode, setHeatmapMode] = useState(false);
+  const [mapMode, setMapMode] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [centerMarker, setCenterMarker] = useState(null);
 
@@ -231,20 +229,11 @@ function HeatMap() {
 
           <ZoomControl position="topright" />
 
-          {/* Show heat index overlay when toggled */}
-          {heatmapMode && (
-            <TileLayer
-              url="https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=b6dc76044f7d0c20d49fb8dcc00c03d7"
-              attribution='Weather data © OpenWeatherMap'
-              opacity={0.5}
-            />
-          )}
-
           {/* User location marker with custom icon */}
-          {!heatmapMode && userLocation && <UserMarker userLocation={userLocation} />}
+          {!mapMode && userLocation && <UserMarker userLocation={userLocation} />}
 
           {/* Cool spot markers */}
-          {!heatmapMode && (
+          {!mapMode && (
             <MarkerClusterGroup
               chunkedLoading={true}
               maxClusterRadius={40} // smaller = more clusters
@@ -265,7 +254,7 @@ function HeatMap() {
           )}
 
           {/* Add spot on click */}
-          {!heatmapMode && (
+          {!mapMode && (
             <AddSpotOnClick
               addMode={addMode}
               pendingSpot={pendingSpot}
@@ -380,4 +369,4 @@ function HeatMap() {
   );
 }
 
-export default HeatMap;
+export default Map;
