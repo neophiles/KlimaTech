@@ -1,0 +1,44 @@
+.nearest-preskospot-widget {
+    background-color: rgb(2, 204, 180, 0.1);
+    gap: 10px;
+}
+
+.outer-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.inner-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inner-container > span:nth-child(1) {
+    color: rgb(118, 118, 118);
+}
+
+.inner-container > span:nth-child(3) {
+    color: #02ccb4;
+}
+
+.location-marker-icon {
+    margin: auto;
+    color: #02ccb4;
+    width: 32px;
+    height: 32px;
+}
+
+.button.go-to-preskospot {
+    width: 100%;
+    background-color: #02ccb4;
+    gap: 10px;
+}
+
+.go-to-preskospot-icon {
+    color: white;
+}
