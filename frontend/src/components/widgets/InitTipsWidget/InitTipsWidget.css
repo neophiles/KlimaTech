@@ -1,0 +1,39 @@
+.inittips-widget {
+    gap: 32px;
+}
+
+.inittips-widget .heading {
+    text-align: center;
+}
+
+.inittips-widget .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inittips-widget .container .subheading {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.inittips-widget .container.do .subheading {
+    color: #02ccb4;
+}
+
+.inittips-widget .container.dont .subheading {
+    color: #cc0202;
+}
+
+
+
+
+/* @media (max-width: 500px) {
+    .location-container .barangay {
+        font-size: 0.75rem;
+    }
+    .location-container .locality {
+        font-size: 0.5rem;
+    }
+} */

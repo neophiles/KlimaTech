@@ -1,0 +1,62 @@
+.tip-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding: 10px;
+    gap: 10px;
+}
+
+.tip-container.do {
+    background-color: rgb(2, 204, 180, 0.1);
+}
+
+.tip-container.dont {
+    background-color: rgba(204, 2, 2, 0.1);
+}
+
+.tip-container .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.tip-container.do .icon {
+    color: #02ccb4;
+}
+
+.tip-container.dont .icon {
+    color: #cc0202;
+}
+
+.tip-container .tip-texts .sub-text-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tip-container .tip-texts .sub-text-container .sub-text-icon {
+    width: 12px;
+    height: 12px;
+}
+
+.tip-container.do .tip-texts .sub-text-container {
+    color: #4d4d4d;
+}
+
+.tip-container.dont .tip-texts .sub-text-container {
+    color: #cc0202;
+}
+
+.tip-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tip-texts .main-text {
+    font-size: 0.9rem;
+}
+
+.tip-texts .sub-text-container .sub-text {
+    font-size: 0.75rem;
+}
