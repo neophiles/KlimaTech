@@ -3,6 +3,7 @@ import LocationWidget from "../components/widgets/LocationWidget";
 import BriefingsWidget from "../components/widgets/BriefingsWidget/BriefingsWidget";
 import ErrorWidget from "../components/widgets/ErrorWidget";
 import Clock from "../components/Clock/Clock";
+import NearestPreskoSpotWidget from "../components/widgets/NearestPreskoSpotWidget/NearestPreskoSpotWidget";
 
 function Dashboard({ userData }) {
   const [weatherData, setWeatherData] = useState(null);
@@ -78,7 +79,9 @@ function Dashboard({ userData }) {
       </div>
 
       <LocationWidget barangay={barangay} locality={locality} province={province} />
-            
+
+      <NearestPreskoSpotWidget />
+
     </div>
   );
 }
