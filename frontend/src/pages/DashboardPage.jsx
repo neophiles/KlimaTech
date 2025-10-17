@@ -72,14 +72,13 @@ function Dashboard({ userData }) {
 
   return (
     <div className="dashboard">
-      <Clock riskLevel={risk_level} />
+
+      <div className="base-widget raised-widget">
+        <Clock riskLevel={risk_level} />
+      </div>
+
       <LocationWidget barangay={barangay} locality={locality} province={province} />
-      <BriefingsWidget
-        temperature={temperature}
-        humidity={humidity}
-        wind_speed={wind_speed}
-        uv_index={uv_index}
-      />
+            
     </div>
   );
 }
