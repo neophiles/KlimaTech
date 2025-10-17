@@ -70,6 +70,14 @@ export default function Clock({ riskLevel }) {
     "six", "seven", "eight", "nine", "ten", "eleven"
   ];
 
+  const casualLabel = {
+    "Safe": "Ayos Lang!",
+    "Caution": "Mag-Ingat!",
+    "Extreme Caution": "Ingat Nang Husto!",
+    "Danger": "Delikado!",
+    "Extreme Danger": "’Wag Nang Lumabas!"
+  }
+
   return (
     <div className="clock-container">
       {/* Rim gradient */}
@@ -104,11 +112,11 @@ export default function Clock({ riskLevel }) {
               className="risk-level"
               style={{color:riskColor}}
             >
-              { riskLevel }
+              { casualLabel[riskLevel] }
             </span>
             <span
               className="current-hour-heat-index"
-              style={{color:riskColor}}
+              style={{backgroundColor:riskColor}}
             >
               { currentHourData.heat_index }°C
             </span>
@@ -125,6 +133,6 @@ export default function Clock({ riskLevel }) {
           );
         })} */}
       </div>
-    </div>
+    </div>    
   );
 }
