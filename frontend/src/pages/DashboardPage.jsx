@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import LocationWidget from "../components/widgets/LocationWidget";
-import BriefingsWidget from "../components/widgets/BriefingsWidget/BriefingsWidget";
 import ErrorWidget from "../components/widgets/ErrorWidget";
 import Clock from "../components/Clock/Clock";
 import NearestPreskoSpotWidget from "../components/widgets/NearestPreskoSpotWidget/NearestPreskoSpotWidget";
+import GreetingWidget from "../components/widgets/GreetingWidget/GreetingWidget";
+import InitTipsWidget from "../components/widgets/InitTipsWidget/InitTipsWidget";
 
 function Dashboard({ userData }) {
   const [weatherData, setWeatherData] = useState(null);
@@ -74,13 +74,15 @@ function Dashboard({ userData }) {
   return (
     <div className="dashboard">
 
+      <GreetingWidget barangay={barangay} locality={locality} province={province} />
+
       <div className="base-widget raised-widget">
-        <Clock riskLevel={risk_level} />
+        <Clock />
       </div>
 
-      <LocationWidget barangay={barangay} locality={locality} province={province} />
-
       <NearestPreskoSpotWidget />
+
+      <InitTipsWidget />
 
     </div>
   );
