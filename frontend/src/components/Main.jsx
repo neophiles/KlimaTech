@@ -1,9 +1,9 @@
-import Dashboard from '../pages/Dashboard';
-import HeatMap from "../pages/HeatMap";
-import Planner from "../pages/Planner";
-import { Routes, Route } from "react-router-dom";
-import Settings from '../pages/Settings';
 import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from '../pages/DashboardPage';
+import Map from "../pages/MapPage";
+import Planner from "../pages/InitTipsPage";
+import Settings from '../pages/SettingsPage';
 import RegisterModal from "../components/AuthModal/RegisterModal";
 
 function Main() {
@@ -34,7 +34,7 @@ function Main() {
         <main>
             <Routes>
                 <Route path="/" element={<Dashboard userData={userData} />} />
-                <Route path="/map" element={<HeatMap />} />
+                <Route path="/map" element={<Map />} />
                 <Route path="/tips" element={<Planner />} />
                 <Route path="/settings" element={<Settings />} />
             </Routes>
