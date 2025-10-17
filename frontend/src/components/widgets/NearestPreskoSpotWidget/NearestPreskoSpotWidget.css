@@ -3,14 +3,14 @@
     gap: 10px;
 }
 
-.outer-container {
+.nearest-preskospot-widget .outer-container {
     width: 100%;
     height: 100%;
     display: flex;
     gap: 10px;
 }
 
-.inner-container {
+.nearest-preskospot-widget .outer-container .inner-container {
     width: 100%;
     height: 100%;
     display: flex;
@@ -18,11 +18,11 @@
     gap: 5px;
 }
 
-.inner-container > span:nth-child(1) {
+.nearest-preskospot-widget .outer-container .inner-container span:nth-child(1) {
     color: rgb(118, 118, 118);
 }
 
-.inner-container > span:nth-child(3) {
+.nearest-preskospot-widget .outer-container .inner-container span:nth-child(3) {
     color: #02ccb4;
 }
 
