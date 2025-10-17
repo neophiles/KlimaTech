@@ -129,20 +129,22 @@ main {
 }
 
 .base-widget {
-  min-width: 18rem;
-  max-width: 18rem;
+  width: min(90%, 600px); /* Responsive: 90% until 500px max */
   height: auto;
   padding: 1rem;
   border: 0;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
 .raised-widget {
   background-color: #ffffff;
-  filter: drop-shadow(0 1px 1px black);
+  border: 1px solid rgb(215, 215, 215);
+  /* filter: drop-shadow(0 1px 1px black); */
 }
 
 .canvas-container {
