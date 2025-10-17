@@ -78,6 +78,9 @@
 .clock-heat-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 /* Hour numbers around the clock */
@@ -89,20 +92,26 @@
 }
 
 .am-pm, .risk-level, .current-hour-heat-index {
-  font-weight: bold;
   text-align: center;
 }
 
 .am-pm {
-  font-size: 1rem;
+  color: grey;
+  font-size: 0.9rem;
 }
 
 .risk-level {
-  font-size: 2rem;
+  font-weight: bold;
+  font-size: 1.75rem;
 }
 
 .current-hour-heat-index  {
-  font-size: 1.25rem;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: auto;
+  padding: 4px 8px;
 }
 
 .twelve { top: 3.3%; left: 50%; transform: translateX(-50%); }
@@ -179,9 +188,9 @@
     font-size: 0.75rem;
   }
   .risk-level {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
   .current-hour-heat-index  {
-    font-size: 1rem;
+    font-size: 0.75rem;
   }
 }
