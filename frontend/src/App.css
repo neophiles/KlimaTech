@@ -337,7 +337,6 @@ main {
 }
 
 .button {
-  position: absolute;
   padding: 0.5rem;
   display: flex;
   justify-content: center;
@@ -350,6 +349,7 @@ main {
 }
 
 .button.map-btn {
+  position: absolute;
   z-index: 1000;
   background-color: #02ccb4;
   color: white;
@@ -371,6 +371,7 @@ main {
 }
 
 .button.cancel {
+  position: absolute;
   background-color: #02ccb4;
   top: 0.5rem;
   right: 0.5rem;
