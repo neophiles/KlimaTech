@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { fetchForecastData } from "../../api/heatGauge";
 import { getColorByIndex, getIndexByHeat } from "../../utils/heatUtils";
 import "./Clock.css";
 
-export default function Clock({ riskLevel }) {
+export default function Clock() {
   const [time, setTime] = useState(new Date());
   const [forecast, setForecastData] = useState([]);
   const [error, setError] = useState(null);
@@ -70,13 +70,10 @@ export default function Clock({ riskLevel }) {
     "six", "seven", "eight", "nine", "ten", "eleven"
   ];
 
-  const casualLabel = {
-    "Safe": "Ayos Lang!",
-    "Caution": "Mag-Ingat!",
-    "Extreme Caution": "Ingat Nang Husto!",
-    "Danger": "Delikado!",
-    "Extreme Danger": "’Wag Nang Lumabas!"
-  }
+  const casualLabel = [
+    "Ayos Lang!", "Mag-Ingat!", "Ingat Nang Husto!", 
+    "Delikado!"," Wag Nang Lumabas!"
+  ]
 
   return (
     <div className="clock-container">
@@ -112,7 +109,7 @@ export default function Clock({ riskLevel }) {
               className="risk-level"
               style={{color:riskColor}}
             >
-              { casualLabel[riskLevel] }
+              { casualLabel[currentHourData.index] }
             </span>
             <span
               className="current-hour-heat-index"
