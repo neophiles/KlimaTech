@@ -32,7 +32,7 @@ function StudentModal({ userId, onClose }) {
         };
 
         try {
-            const res = await fetch(`api/user/student/${1}`, {
+            const res = await fetch(`api/user/student/${userId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

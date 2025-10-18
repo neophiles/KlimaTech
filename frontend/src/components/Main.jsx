@@ -99,7 +99,7 @@ function Main() {
       />
 
       {showPersonalizeModal && PersonalizeModal && (
-        <PersonalizeModal onClose={() => setShowPersonalizeModal(false)} />
+        <PersonalizeModal userId={userData.id} onClose={() => setShowPersonalizeModal(false)} />
       )}
 
       <main>
