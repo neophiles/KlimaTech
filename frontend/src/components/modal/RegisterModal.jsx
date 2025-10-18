@@ -6,14 +6,28 @@ const API_BASE = "http://127.0.0.1:8000";
 function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
     const [username, setUsername] = useState("");
     const [userType, setUserType] = useState("");
+    const [lat, setLat] = useState(null);
+    const [lon, setLon] = useState(null);
+    const [isLocating, setIsLocating] = useState(false);
 
     if (!isOpen) return null;
 
     const handleRegister = async () => {
+        if (!username.trim()) {
+            alert("Please enter your name or nickname.");
+            return;
+        }
+        if (!userType) {
+            alert("Please select your user type.");
+            return;
+        }
+
         try {
             const userData = {
-                username: username.trim() || null,
-                user_type: userType || null
+                username: username.trim(),
+                user_type: userType.toLowerCase().replace(" ", "_"), // match backend Enum format
+                lat,
+                lon,
             };
 
             const response = await fetch(`${API_BASE}/user/add`, {
@@ -33,12 +47,13 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
             }
 
             const createdUser = await response.json();
-            console.log("User logged in:", createdUser);
+            console.log("User registered:", createdUser);
+
             onConfirm?.(createdUser);
             onClose?.();
         } catch (err) {
             console.error("Error creating user:", err);
-            alert("Something went wrong while creating user.");
+            alert("Something went wrong while creating your account.");
         }
     };
 
@@ -60,6 +75,7 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
                         handleRegister();
                     }}
                 >
+                    {/* Username */}
                     <div className="input-group">
                         <label>What would you like us to call you?</label>
                         <input
@@ -71,29 +87,30 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
                         />
                     </div>
 
+                    {/* User Type */}
                     <div className="input-group">
                         <label>Which best describes you?</label>
                         <div className="user-type-options">
-                            {["Student", "Outdoor Worker", "Office Worker", "Home-based"].map((type) => (
-                                <label
-                                    key={type}
-                                    className={`option-btn ${userType === type ? "selected" : ""}`}
+                            {[
+                                { label: "Student", value: "student" },
+                                { label: "Outdoor Worker", value: "outdoor_worker" },
+                                { label: "Office Worker", value: "office_worker" },
+                                { label: "Home-based", value: "home_based" },
+                            ].map(({ label, value }) => (
+                                <button
+                                    type="button"
+                                    key={value}
+                                    className={`option-btn ${userType === value ? "selected" : ""}`}
+                                    onClick={() => setUserType(userType === value ? "" : value)}
                                 >
-                                    <input
-                                        type="radio"
-                                        name="userType"
-                                        value={type}
-                                        checked={userType === type}
-                                        onChange={(e) => setUserType(e.target.value)}
-                                    />
-                                    {type}
-                                </label>
+                                    {label}
+                                </button>
                             ))}
                         </div>
                     </div>
 
                     <hr />
-                    
+
                     <div className="button-group">
                         <button className="confirm-btn" type="submit">
                             Tara na!
