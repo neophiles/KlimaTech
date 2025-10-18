@@ -74,7 +74,12 @@ function Dashboard({ userData }) {
   return (
     <div className="dashboard">
 
-      <GreetingWidget barangay={barangay} locality={locality} province={province} />
+      <GreetingWidget
+        username={userData.username}
+        barangay={barangay}
+        locality={locality}
+        province={province}
+      />
 
       <Clock />
 

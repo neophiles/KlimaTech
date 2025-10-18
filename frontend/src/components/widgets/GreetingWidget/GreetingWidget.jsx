@@ -1,6 +1,6 @@
 import "./GreetingWidget.css";
 
-function GreetingWidget({ barangay, locality, province }) {
+function GreetingWidget({ username, barangay, locality, province }) {
     const currentTime = new Date().getHours();
 
     const greeting = 
@@ -9,12 +9,17 @@ function GreetingWidget({ barangay, locality, province }) {
         currentTime >= 18 && currentTime < 22 ? "Good evening" :
         "Good night";
 
+    const displayName =
+        username && username.trim().length > 0
+        ? username.charAt(0).toUpperCase() + username.slice(1)
+        : "User";
+
     return (
         <div className="base-widget greeting-widget">
             <div className="container">
                 <div className="greeting-container">
                     <span className="greeting">{greeting},</span>
-                    <span className="username">User!</span>
+                    <span className="username">{displayName}!</span>
                 </div>
                 <div className="location-outer-container">
                     <svg className="nav-btn-icon user-location-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
