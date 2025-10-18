@@ -5,8 +5,20 @@ from app.db import get_session
 from app.models import CoolSpot, Report, Vote
 from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 from fastapi import Query
+from math import radians, sin, cos, sqrt, atan2
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
+
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    """Calculate great-circle distance between two coordinates in km."""
+    R = 6371  # Earth radius in km
+    d_lat = radians(lat2 - lat1)
+    d_lon = radians(lon2 - lon1)
+    a = sin(d_lat / 2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(d_lon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return R * c
 
 
 def vote_spot(coolspot_id: int, user_id: int, vote_type: str, session: Session):
@@ -177,4 +189,32 @@ def get_votes(
         "likes": likes,
         "dislikes": dislikes,
         "user_vote": vote.vote_type if vote else None
+    }
+
+
+@router.get("/preskospots/nearest")
+def get_nearest_preskospot(
+    lat: float = Query(..., description="User latitude"),
+    lon: float = Query(..., description="User longitude"),
+    session: Session = Depends(get_session)
+):
+    spots = session.exec(select(CoolSpot)).all()
+
+    if not spots:
+        raise HTTPException(status_code=404, detail="No CoolSpots found")
+
+    nearest_spot = min(
+        spots,
+        key=lambda s: haversine(lat, lon, s.lat, s.lon)
+    )
+
+    distance = haversine(lat, lon, nearest_spot.lat, nearest_spot.lon)
+
+    return {
+        "id": nearest_spot.id,
+        "name": nearest_spot.name,
+        "lat": nearest_spot.lat,
+        "lon": nearest_spot.lon,
+        "distance": round(distance, 2),
+        "barangay_id": nearest_spot.barangay_id,
     }
