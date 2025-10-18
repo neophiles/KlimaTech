@@ -62,4 +62,13 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
             detail="User not found"
         )
 
-    return {"message": "Login successful", "user_id": user.id}
+    return {
+        "message": "Login successful",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "phone_number": user.phone_number,
+            "lat": user.lat,
+            "lon": user.lon
+            }
+        }
