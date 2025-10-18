@@ -8,8 +8,8 @@
 header, footer {
   height: var(--header-footer-height);
   padding: 0.5rem;
-  background-color: #FFFFFF;
-  /* background-color: #012a36; */
+  /* background-color: #FFFFFF; */
+  background-color: #012a36;
   position: sticky;
   z-index: 10;
 }
@@ -72,7 +72,7 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--grey-color);
+  color: #1ac6a2;
 }
 
 .nav-btn-container.active {
