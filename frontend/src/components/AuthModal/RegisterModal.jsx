@@ -7,6 +7,7 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
     const [username, setUsername] = useState("");
     const [phoneNum, setPhoneNum] = useState("");
     const [allowLocation, setAllowLocation] = useState(false);
+    const [isRegisterMode, setIsRegisterMode] = useState(true);
 
     // On mount, check if location permission is already granted
     useEffect(() => {
@@ -32,6 +33,37 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
                 return;
             }
 
+            // LOGIN mode
+            if (!isRegisterMode) {
+                try {
+                    const response = await fetch(`${API_BASE}/user/login`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: username.trim() }),
+                    }); 
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        alert(errorData.detail || "Invalid username.");
+                        return;
+                    }
+
+                    // Parse and extract the user object
+                    const data = await response.json();
+                    console.log("User logged in:", data);
+
+                    // Send only the user object (contains lat/lon)
+                    onConfirm?.(data.user);
+
+                    onClose?.();
+                } catch (err) {
+                    console.error("Login error:", err);
+                    alert("Something went wrong during login.");
+                }
+                return;
+            }
+
+            // REGISTER mode
             // Get location
             let lat = null;
             let lon = null;
@@ -92,13 +124,13 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
                     <span>Hey there! Let’s keep you</span>
                     <img className="logo" src="/logo/name_logo.png" alt="PRESKO LOGO" />
                 </div>
-                <h3>Register</h3>
+                <h3>{isRegisterMode ? "Register" : "Login"}</h3>
                 
                 <form
                     className="register-form"
                     onSubmit={async (e) => {
                         e.preventDefault(); // prevent reload
-                        handleConfirm();    // run your logic
+                        handleConfirm();    
                     }}
                 >
                     <div className="input-group">
@@ -112,34 +144,64 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
                         />
                     </div>
 
-                    <div className="input-group">
-                        <label>Want to share your number?</label>
-                        <input
-                            type="tel"
-                            required
-                            value={phoneNum}
-                            onChange={(e) => setPhoneNum(e.target.value)}
-                            placeholder="e.g. 09123456789"
-                            pattern="[0-9]*"
-                            inputMode="numeric"
-                        />
-                        <small className="hint">We’ll only use this if we need to contact you.</small>
-                    </div>
+                    {isRegisterMode && (
+                        <>
+                            <div className="input-group">
+                                <label>Phone Number</label>
+                                <input
+                                    type="tel"
+                                    required
+                                    value={phoneNum}
+                                    onChange={(e) => setPhoneNum(e.target.value)}
+                                    placeholder="e.g. 09123456789"
+                                    pattern="[0-9]*"
+                                    inputMode="numeric"
+                                />
+                                <small className="hint">
+                                    We’ll only use this if we need to contact you.
+                                </small>
+                            </div>
 
-                    <div className="switch-group">
-                        <label>Allow Location Access</label>
-                        <label className="switch">
-                        <input
-                            type="checkbox"
-                            readOnly
-                            checked={allowLocation}
-                        />
-                        <span className="slider"></span>
-                        </label>
-                    </div>
+                            <div className="switch-group">
+                                <label>Allow Location Access</label>
+                                <label className="switch">
+                                    <input type="checkbox" readOnly checked={allowLocation} />
+                                    <span className="slider"></span>
+                                </label>
+                            </div>
+                        </>
+                    )}
+
 
                     <div className="button-group">
                         <button className="confirm-btn" type="submit">Let’s Go!</button>
+                    </div>
+
+                    {/* Toggle link */}
+                    <div className="toggle-text">
+                        {isRegisterMode ? (
+                            <p>
+                                Already have an account?{" "}
+                                <button
+                                    type="button"
+                                    className="link-button"
+                                    onClick={() => setIsRegisterMode(false)}
+                                >
+                                    Login
+                                </button>
+                            </p>
+                        ) : (
+                            <p>
+                                Don’t have an account?{" "}
+                                <button
+                                    type="button"
+                                    className="link-button"
+                                    onClick={() => setIsRegisterMode(true)}
+                                >
+                                    Register
+                                </button>
+                            </p>
+                        )}
                     </div>
                 </form>
             </div>
