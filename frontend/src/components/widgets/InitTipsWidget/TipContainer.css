@@ -54,9 +54,19 @@
 }
 
 .tip-texts .main-text {
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 .tip-texts .sub-text-container .sub-text {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 500px) {
+    .tip-texts .main-text {
+        font-size: 0.9rem;
+    }
+
+    .tip-texts .sub-text-container .sub-text {
+        font-size: 0.75rem;
+    }
 }

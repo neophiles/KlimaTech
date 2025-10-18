@@ -15,7 +15,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
+    font-size: 1rem;
 }
 
 .nearest-preskospot-widget .outer-container .inner-container span:nth-child(1) {
@@ -41,4 +42,10 @@
 
 .go-to-preskospot-icon {
     color: white;
+}
+
+@media (max-width: 500px) {
+    .nearest-preskospot-widget .outer-container .inner-container {
+        font-size: 0.9rem;
+    }
 }

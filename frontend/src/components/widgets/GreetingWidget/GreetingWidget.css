@@ -24,7 +24,8 @@
 .location-outer-container {
     display: flex;
     background-color: rgb(2, 204, 180, 0.1);
-    padding:10px;
+    padding: 10px;
+    border: 1px solid rgb(215, 215, 215);
     border-radius: 8px;
     align-items: center;
     gap: 4px;
