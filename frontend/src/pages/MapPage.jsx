@@ -27,19 +27,6 @@ function Map() {
   const [isAdding, setIsAdding] = useState(false);
   const [centerMarker, setCenterMarker] = useState(null);
 
-  // Zooms in to user's location
-  const zoomToUser = () => {
-  if (!userLocation) {
-    alert("User location not ready yet!");
-    return;
-  }
-  if (!mapRef.current) {
-    alert("Map not initialized yet!");
-    return;
-  }
-  mapRef.current.flyTo([userLocation.lat, userLocation.lon], 15, { animate: true });
-};
-
   // Fetch cool spots from backend on mount
   useEffect(() => {
     async function fetchCoolSpots() {
@@ -183,7 +170,10 @@ function Map() {
         alert("User location not ready yet!");
         return;
       }
-      map.flyTo([userLocation.lat, userLocation.lon], 18, { animate: true });
+      map.flyTo([userLocation.lat, userLocation.lon], 18, { 
+        animate: true,
+        duration: 0.75
+      });
     };
 
     return (
