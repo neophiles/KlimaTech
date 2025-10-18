@@ -83,7 +83,8 @@ function Dashboard({ userData }) {
 
       <Clock />
 
-      <NearestPreskoSpotWidget />
+      <NearestPreskoSpotWidget userLocation={userLocation} />
+
 
       <InitTipsWidget />
 
