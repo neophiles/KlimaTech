@@ -4,12 +4,9 @@ import preskoSpotIcon from "/icons_png/preskospot-marker.png";
 
 export const userIcon = new L.Icon({
   iconUrl: youIcon,
-  iconSize: [30, 35],
-  iconAnchor: [10, 40],
+  iconSize: [15, 15],
+  iconAnchor: [7.5, 15],
   popupAnchor: [1, -35],
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-  shadowSize: [40, 40],
 });
 
 export const preskoSpotMarker = new L.Icon({
