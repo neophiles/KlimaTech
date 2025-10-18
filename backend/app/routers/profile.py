@@ -29,7 +29,6 @@ async def add_user(user: UserCreate, session: Session = Depends(get_session)):
 
     new_user = UserProfile(
         username=user.username,
-        phone_number=user.phone_number,
         lat=user.lat,
         lon=user.lon
     )
@@ -37,6 +36,7 @@ async def add_user(user: UserCreate, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(new_user)
     return new_user
+
 
 
 @router.get("/{user_id}", response_model=UserProfile)
@@ -48,6 +48,7 @@ async def get_user(user_id: int, session: Session = Depends(get_session)):
             detail="User not found"
         )
     return user
+
 
 
 @router.post("/login")
@@ -67,8 +68,8 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
         "user": {
             "id": user.id,
             "username": user.username,
-            "phone_number": user.phone_number,
             "lat": user.lat,
-            "lon": user.lon
-            }
+            "lon": user.lon,
+            "user_type": user.user_type
         }
+    }
