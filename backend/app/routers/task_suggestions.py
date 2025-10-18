@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlmodel import Session, select
 from app.db import get_session
 from app.models import Barangay, HeatLog
-from app.schemas.task_suggestions import TaskInput, TaskSuggestion
+from app.schemas.task_suggestions import TaskInput, TaskSuggestion, Tip
 from app.utils.heat_index import calculate_heat_index
 import cohere
 import os
@@ -148,3 +148,73 @@ For each, follow this format exactly:
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+
+@router.get("/tips/{barangay_id}", response_model=list[Tip])
+async def get_tips(barangay_id: int, session: Session = Depends(get_session)):
+    barangay = session.get(Barangay, barangay_id)
+    if not barangay:
+        raise HTTPException(status_code=404, detail="Barangay not found")
+
+    forecast = await get_today_forecast_for_barangay(barangay)
+    if not forecast:
+        # fallback tips if weather API fails
+        return [
+            Tip(is_do=True, main_text="Magdala ng payong at tubig", sub_text="Paglabas"),
+            Tip(is_do=True, main_text="Manatili sa silid-aralan", sub_text="9AM-5PM"),
+            Tip(is_do=False, main_text="Mag-PE sa araw", sub_text="Panganib: Dehydration")
+        ]
+
+    # Prepare weather summary for AI
+    weather_summary = f"""
+Weather in {barangay.barangay}, {barangay.province}:
+Temp: {forecast[0]['temperature']}°C,
+Humidity: {forecast[0]['humidity']}%,
+UV index: {forecast[0]['uv_index']},
+Heat index: {forecast[0]['heat_index']}°C ({forecast[0]['risk_level']})
+"""
+
+    prompt = f"""
+You are an AI that gives 1-sentence practical tips for staying safe and healthy in hot weather.
+Generate 3 tips for things people SHOULD do, and 3 tips for things people SHOULD NOT do
+based on the following weather:
+
+{weather_summary}
+
+Return tips in this format, one per line:
+DO: [main_text] | [sub_text]
+DONT: [main_text] | [sub_text]
+"""
+
+    try:
+        response = co.chat(
+            model="command-r-plus-08-2024",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=300
+        )
+        ai_output = response.message.content[0].text.strip()
+        
+        tips = []
+        for line in ai_output.splitlines():
+            line = line.strip()
+            if line.startswith("DO:"):
+                main, sub = line[3:].split("|")
+                tips.append(Tip(is_do=True, main_text=main.strip(), sub_text=sub.strip()))
+            elif line.startswith("DONT:"):
+                main, sub = line[5:].split("|")
+                tips.append(Tip(is_do=False, main_text=main.strip(), sub_text=sub.strip()))
+        
+        # fallback if AI output is empty or malformed
+        if not tips:
+            raise ValueError("AI returned no tips")
+    except Exception as e:
+        print("Failed to generate AI tips:", e)
+        tips = [
+            Tip(is_do=True, main_text="Magdala ng payong at tubig", sub_text="Paglabas"),
+            Tip(is_do=True, main_text="Manatili sa silid-aralan", sub_text="9AM-5PM"),
+            Tip(is_do=False, main_text="Mag-PE sa araw", sub_text="Panganib: Dehydration")
+        ]
+
+    return tips

@@ -12,3 +12,8 @@ class TaskInput(BaseModel):
 class TaskSuggestion(BaseModel):
     task: str
     suggestion: str
+
+class Tip(BaseModel):
+    is_do: bool
+    main_text: str
+    sub_text: str
