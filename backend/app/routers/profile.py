@@ -4,7 +4,7 @@ from typing import Optional
 from app.db import get_session
 from app.models import UserProfile
 from pydantic import BaseModel
-from app.schemas.profile import UserCreate
+from app.schemas.profile import UserCreate, UserLogin
 
 router = APIRouter(prefix="/user", tags=["Users"])
 
@@ -51,13 +51,15 @@ async def get_user(user_id: int, session: Session = Depends(get_session)):
 
 
 @router.post("/login")
-def login_user(username: str, session: Session = Depends(get_session)):
+def login_user(data: UserLogin, session: Session = Depends(get_session)):
     user = session.exec(
-        select(UserProfile).where(UserProfile.username == username)
+        select(UserProfile).where(UserProfile.username == data.username)
     ).first()
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+
     return {"message": "Login successful", "user_id": user.id}
