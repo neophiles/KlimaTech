@@ -76,9 +76,7 @@ function Dashboard({ userData }) {
 
       <GreetingWidget barangay={barangay} locality={locality} province={province} />
 
-      <div className="base-widget raised-widget">
-        <Clock />
-      </div>
+      <Clock />
 
       <NearestPreskoSpotWidget />
 
