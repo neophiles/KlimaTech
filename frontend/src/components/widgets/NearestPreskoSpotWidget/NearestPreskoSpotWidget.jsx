@@ -1,7 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../Button";
 import "./NearestPreskoSpotWidget.css";
 
 function NearestPreskoSpotWidget() {
+    const navigate = useNavigate();
+
+    const handleGoToMap = () => {
+        navigate("/map");
+    };
+
     return (
         <div className="base-widget raised-widget nearest-preskospot-widget">
             <div className="outer-container">
@@ -15,7 +22,8 @@ function NearestPreskoSpotWidget() {
                     <span>0.5 km</span>
                 </div>
             </div>
-            <Button 
+            <Button
+                onClick={handleGoToMap}
                 otherClass={"go-to-preskospot"}
                 children={
                     <>
