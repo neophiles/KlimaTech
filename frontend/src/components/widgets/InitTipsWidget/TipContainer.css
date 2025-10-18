@@ -15,16 +15,16 @@
     background-color: rgba(204, 2, 2, 0.1);
 }
 
-.tip-container .icon {
-    width: 24px;
-    height: 24px;
+.tip-container .tip-icon {
+    min-width: 24px;
+    min-height: 24px;
 }
 
-.tip-container.do .icon {
+.tip-container.do .tip-icon {
     color: #02ccb4;
 }
 
-.tip-container.dont .icon {
+.tip-container.dont .tip-icon {
     color: #cc0202;
 }
 
@@ -34,16 +34,11 @@
     gap: 4px;
 }
 
-.tip-container .tip-texts .sub-text-container .sub-text-icon {
-    width: 12px;
-    height: 12px;
-}
-
-.tip-container.do .tip-texts .sub-text-container {
+.tip-container.do .tip-texts .sub-text {
     color: #4d4d4d;
 }
 
-.tip-container.dont .tip-texts .sub-text-container {
+.tip-container.dont .tip-texts .sub-text {
     color: #cc0202;
 }
 
@@ -57,7 +52,7 @@
     font-size: 1rem;
 }
 
-.tip-texts .sub-text-container .sub-text {
+.tip-texts .sub-text {
     font-size: 0.85rem;
 }
 
@@ -66,7 +61,7 @@
         font-size: 0.9rem;
     }
 
-    .tip-texts .sub-text-container .sub-text {
+    .tip-texts .sub-text {
         font-size: 0.75rem;
     }
 }
