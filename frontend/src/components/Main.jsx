@@ -6,6 +6,7 @@ import Planner from "../pages/InitTipsPage";
 import Settings from '../pages/SettingsPage';
 import AuthModal from "./modal/AuthModal";
 import LocationPermissionModal from "./modal/LocationPermissionModal";
+import StudentModal  from "./modal/StudentModal";
 
 function Main() {
   const [userData, setUserData] = useState(null);

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 from typing import Optional
 from app.db import get_session
-from app.models import UserProfile
+from app.models import UserProfile, StudentProfile
 from pydantic import BaseModel
 from app.schemas.profile import UserCreate, UserLogin
 
@@ -73,3 +73,35 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
             "user_type": user.user_type
         }
     }
+
+
+@router.post("/student/{user_id}", response_model=StudentProfile)
+def create_or_update_student_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    existing = session.exec(select(StudentProfile).where(StudentProfile.user_id == user_id)).first()
+
+    payload = StudentProfile(
+        user_id=user_id,
+        days_on_campus=",".join(data["selectedDays"]),
+        commute_mode=data["commuteType"],
+        class_hours=f"{data['classHours']['start']}-{data['classHours']['end']}",
+        has_outdoor_activities=(data["hasOutdoorActivities"] == "Yes"),
+        outdoor_hours=f"{data['activityHours']['start']}-{data['activityHours']['end']}" if data["hasOutdoorActivities"] == "Yes" else None
+    )
+
+    if existing:
+        # update existing
+        for field, value in payload.dict(exclude_unset=True).items():
+            setattr(existing, field, value)
+        session.add(existing)
+        session.commit()
+        session.refresh(existing)
+        return existing
+
+    session.add(payload)
+    session.commit()
+    session.refresh(payload)
+    return payload

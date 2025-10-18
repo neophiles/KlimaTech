@@ -1,12 +1,13 @@
 import { useState } from "react";
 import "./Modal.css";
 
-function StudentModal() {
+function StudentModal({ userId, onClose }) {
     const [selectedDays, setSelectedDays] = useState([]);
     const [commuteType, setCommuteType] = useState("");
     const [classHours, setClassHours] = useState({ start: "", end: "" });
     const [hasOutdoorActivities, setHasOutdoorActivities] = useState(null);
     const [activityHours, setActivityHours] = useState({ start: "", end: "" });
+    const [loading, setLoading] = useState(false);
 
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const commuteOptions = ["Walk / Bike", "Public Transport", "Private Vehicle"];
@@ -18,17 +19,41 @@ function StudentModal() {
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         const formData = {
             selectedDays,
             commuteType,
             classHours,
             hasOutdoorActivities,
-            activityHours: hasOutdoorActivities ? activityHours : null,
+            activityHours: hasOutdoorActivities === "Yes" ? activityHours : null,
         };
-        console.log("Student Data:", formData);
-        // You can proceed to save this data or close modal
+
+        try {
+            const res = await fetch(`api/user/student/${1}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to save profile");
+            }
+
+            const data = await res.json();
+            console.log("Profile saved:", data);
+            alert("Your Presko student profile has been saved!");
+            if (onClose) onClose();
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Something went wrong saving your profile.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -38,7 +63,7 @@ function StudentModal() {
                     <h3>Personalize Your Presko Experience</h3>
                     <p className="subtext">Tell us a bit about your weekly student life</p>
                 </div>
-                
+
                 <hr />
 
                 <form className="register-form" onSubmit={handleSubmit}>
@@ -50,9 +75,7 @@ function StudentModal() {
                                 <button
                                     type="button"
                                     key={day}
-                                    className={`option-btn ${
-                                        selectedDays.includes(day) ? "selected" : ""
-                                    }`}
+                                    className={`option-btn ${selectedDays.includes(day) ? "selected" : ""}`}
                                     onClick={() => toggleDay(day)}
                                 >
                                     {day}
@@ -69,12 +92,8 @@ function StudentModal() {
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${
-                                        commuteType === option ? "selected" : ""
-                                    }`}
-                                    onClick={() => setCommuteType (
-                                        commuteType === option ? null : option
-                                    )}
+                                    className={`option-btn ${commuteType === option ? "selected" : ""}`}
+                                    onClick={() => setCommuteType(commuteType === option ? "" : option)}
                                 >
                                     {option}
                                 </button>
@@ -89,18 +108,14 @@ function StudentModal() {
                             <input
                                 type="time"
                                 value={classHours.start}
-                                onChange={(e) =>
-                                    setClassHours({ ...classHours, start: e.target.value })
-                                }
+                                onChange={(e) => setClassHours({ ...classHours, start: e.target.value })}
                                 required
                             />
                             <span>to</span>
                             <input
                                 type="time"
                                 value={classHours.end}
-                                onChange={(e) =>
-                                    setClassHours({ ...classHours, end: e.target.value })
-                                }
+                                onChange={(e) => setClassHours({ ...classHours, end: e.target.value })}
                                 required
                             />
                         </div>
@@ -114,12 +129,8 @@ function StudentModal() {
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${
-                                        hasOutdoorActivities === option ? "selected" : ""
-                                    }`}
-                                    onClick={() => setHasOutdoorActivities(
-                                        hasOutdoorActivities === option ? null : option
-                                    )}
+                                    className={`option-btn ${hasOutdoorActivities === option ? "selected" : ""}`}
+                                    onClick={() => setHasOutdoorActivities(hasOutdoorActivities === option ? null : option)}
                                 >
                                     {option}
                                 </button>
@@ -135,23 +146,13 @@ function StudentModal() {
                                 <input
                                     type="time"
                                     value={activityHours.start}
-                                    onChange={(e) =>
-                                        setActivityHours({
-                                            ...activityHours,
-                                            start: e.target.value,
-                                        })
-                                    }
+                                    onChange={(e) => setActivityHours({ ...activityHours, start: e.target.value })}
                                 />
                                 <span>to</span>
                                 <input
                                     type="time"
                                     value={activityHours.end}
-                                    onChange={(e) =>
-                                        setActivityHours({
-                                            ...activityHours,
-                                            end: e.target.value,
-                                        })
-                                    }
+                                    onChange={(e) => setActivityHours({ ...activityHours, end: e.target.value })}
                                 />
                             </div>
                         </div>
@@ -159,10 +160,9 @@ function StudentModal() {
 
                     <hr />
 
-                    {/* Submit */}
                     <div className="button-group">
-                        <button className="confirm-btn" type="submit">
-                            Let's get you presko!
+                        <button className="confirm-btn" type="submit" disabled={loading}>
+                            {loading ? "Saving..." : "Let's get you presko!"}
                         </button>
                     </div>
                 </form>
