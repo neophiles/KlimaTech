@@ -6,3 +6,7 @@ class UserCreate(BaseModel):
     phone_number: Optional[str] = None
     lat: Optional[float] = None
     lon: Optional[float] = None
+
+
+class UserLogin(BaseModel):
+    username: str
