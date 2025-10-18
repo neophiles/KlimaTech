@@ -86,7 +86,8 @@ function Dashboard({ userData }) {
       <NearestPreskoSpotWidget userLocation={userLocation} />
 
 
-      <InitTipsWidget />
+      <InitTipsWidget barangayId={userLocation?.barangay_id} />
+
 
     </div>
   );

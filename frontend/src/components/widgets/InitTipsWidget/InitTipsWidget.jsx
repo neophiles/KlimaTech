@@ -1,45 +1,55 @@
+import { useEffect, useState } from "react";
 import TipContainer from "./TipContainer";
 import "./InitTipsWidget.css";
 
-function InitTipsWidget() {
+function InitTipsWidget({ barangayId }) {
+    const [tips, setTips] = useState([]);
+
+    useEffect(() => {
+        const fetchTips = async () => {
+            try {
+                // TODO: Replace hardcoded barangayId with actual barangayId when available
+                const res = await fetch(`api/suggestions/tips/${1}`);
+                if (!res.ok) throw new Error("Failed to fetch tips");
+                const data = await res.json();
+                setTips(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchTips();
+    }, [barangayId]);
+
+    const doTips = tips.filter(t => t.is_do);
+    const dontTips = tips.filter(t => !t.is_do);
+
     return (
         <div className="base-widget raised-widget inittips-widget">
             <div className="heading">Ano ang gagawin ko ngayong araw?</div>
+
             <div className="container do">
                 <span className="subheading">GAWIN</span>
-                <TipContainer
-                    isDo={true}
-                    mainText={"Magdala ng payong at tubig"}
-                    subText={"Paglabas"}
-                />
-                <TipContainer
-                    isDo={true}
-                    mainText={"Manatili sa silid-aralan"}
-                    subText={"9AM-5PM"}
-                />
-                <TipContainer
-                    isDo={true}
-                    mainText={"Magpahinga sa library o mall"}
-                    subText={"After class"}
-                />
+                {doTips.map((tip, i) => (
+                    <TipContainer
+                        key={i}
+                        isDo={tip.is_do}
+                        mainText={tip.main_text}
+                        subText={tip.sub_text}
+                    />
+                ))}
             </div>
+
             <div className="container dont">
                 <span className="subheading">HUWAG GAWIN</span>
-                <TipContainer
-                    isDo={false}
-                    mainText={"Maglaro sa labas ng tanghalian"}
-                    subText={"Panganib: Heat exhaustion"}
-                />
-                <TipContainer
-                    isDo={false}
-                    mainText={"Mag-PE sa araw"}
-                    subText={"Panganib: Dehydration"}
-                />
-                <TipContainer
-                    isDo={false}
-                    mainText={"Maglakad ng matagal walang payong"}
-                    subText={"Panganib: Heat stroke"}
-                />
+                {dontTips.map((tip, i) => (
+                    <TipContainer
+                        key={i}
+                        isDo={tip.is_do}
+                        mainText={tip.main_text}
+                        subText={tip.sub_text}
+                    />
+                ))}
             </div>
         </div>
     );
