@@ -55,14 +55,16 @@ function Main() {
     }
   }, [userData]);
 
-  const handleAuthConfirm = (data) => {
+  const handleAuthConfirm = (data, justRegistered) => {
     setUserData(data);
     setShowAuth(false);
     localStorage.setItem("userData", JSON.stringify(data));
 
-    // Show the personalization modal based on user_type
-    setPersonalizeType(data.user_type.toLowerCase().replace(" ", "_"));
-    setShowPersonalizeModal(true);
+    if (justRegistered) {
+      // Show personalization modal only after register
+      setPersonalizeType(data.user_type.toLowerCase().replace(" ", "_"));
+      setShowPersonalizeModal(true);
+    }
   };
 
   const handleLocationEnabled = (coords) => {
