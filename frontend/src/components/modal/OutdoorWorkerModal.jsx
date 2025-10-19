@@ -34,7 +34,7 @@ function OutdoorWorkerModal({ userId, onClose }) {
 
 
     try {
-        const res = await fetch(`http://127.0.0.1:8000/user/outdoorworker/${userId}`, {
+        const res = await fetch(`api/user/outdoor-worker/${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),

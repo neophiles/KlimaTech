@@ -106,7 +106,7 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
     return payload
 
 
-@router.post("/outdoorworker/{user_id}", response_model=OutdoorWorkerProfile)
+@router.post("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
 def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
