@@ -4,8 +4,8 @@ import Dashboard from '../pages/DashboardPage';
 import Map from "../pages/MapPage";
 import Planner from "../pages/InitTipsPage";
 import Settings from '../pages/SettingsPage';
-import AuthModal from "../components/AuthModal/AuthModal";
-import LocationPermissionModal from "./AuthModal/LocationPermissionModal";
+import AuthModal from "./modal/AuthModal";
+import LocationPermissionModal from "./modal/LocationPermissionModal";
 
 function Main() {
   const [userData, setUserData] = useState(null);
