@@ -1,4 +1,4 @@
-import "./AuthModal.css";
+import "./Modal.css";
 
 function LocationPermissionModal({ isOpen, onClose, allowLocation, onEnable }) {
   if (!isOpen) return null;

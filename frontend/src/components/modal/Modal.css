@@ -1,0 +1,225 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  max-height: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.modal::-webkit-scrollbar {
+  display: none;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #012a36;
+}
+
+.title-group span {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.modal h3 {
+  color: #012a36;
+}
+
+.logo {
+    width: 40%;
+    max-width: 120px;
+    height: auto;
+    vertical-align: middle;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  color: #17191b;
+}
+
+.input-group input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #eff3f5;
+  color: #17191b;
+}
+
+.input-group input:focus {
+  border-color: #a9c4d4;
+  outline: none;
+}
+
+.user-type-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 8px;
+}
+
+.option-btn {
+  padding: 6px;
+  border: 2px solid #1AC6A2;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #012a36;
+  background-color: #fff;
+  transition: background-color 0.25s, color 0.25s, transform 0.2s;
+}
+
+.option-btn:hover {
+  background-color: #1AC6A2;
+  color: white;
+}
+
+.option-btn.selected {
+  background-color: #1AC6A2;
+  color: white;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.switch-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 26px;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #1AC6A2;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  background-color: #1AC6A2;
+  color: #012a36;
+  transition: 
+    transform 0.25s ease-in-out,
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-2px);
+}
+
+.toggle-text {
+  font-size: 0.8rem;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Onboarding Modals */
+
+.subtext {
+  font-size: 0.9rem;
+}
+
+.day-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 8px;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+input[type="time"] {
+  padding: 6px;
+}

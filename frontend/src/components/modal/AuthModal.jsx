@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
-import "./AuthModal.css";
+import "./Modal.css";
 
 function AuthModal({ isOpen, onClose, onConfirm }) {
     const [mode, setMode] = useState("register");

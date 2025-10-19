@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./AuthModal.css";
+import "./Modal.css";
 
 const API_BASE = "http://127.0.0.1:8000";
 
@@ -77,7 +77,7 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
                             {["Student", "Outdoor Worker", "Office Worker", "Home-based"].map((type) => (
                                 <label
                                     key={type}
-                                    className={`user-type-btn ${userType === type ? "selected" : ""}`}
+                                    className={`option-btn ${userType === type ? "selected" : ""}`}
                                 >
                                     <input
                                         type="radio"
