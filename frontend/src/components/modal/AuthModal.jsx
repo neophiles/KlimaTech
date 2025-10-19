@@ -12,14 +12,14 @@ function AuthModal({ isOpen, onClose, onConfirm }) {
         <RegisterModal
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={onConfirm}
+            onConfirm={(data) => onConfirm(data, true)}
             onSwitchMode={() => setMode("login")}
         />
     ) : (
         <LoginModal
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={onConfirm}
+            onConfirm={(data) => onConfirm(data, false)}
             onSwitchMode={() => setMode("register")}
         />
     );
