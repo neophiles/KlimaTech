@@ -4,41 +4,87 @@ import Dashboard from '../pages/DashboardPage';
 import Map from "../pages/MapPage";
 import Planner from "../pages/InitTipsPage";
 import Settings from '../pages/SettingsPage';
-import RegisterModal from "../components/AuthModal/RegisterModal";
+import AuthModal from "../components/AuthModal/AuthModal";
+import LocationPermissionModal from "./AuthModal/LocationPermissionModal";
 
 function Main() {
   const [userData, setUserData] = useState(null);
-  const [showRegister, setShowRegister] = useState(true);
+  const [showAuth, setShowAuth] = useState(true);
+  const [allowLocation, setAllowLocation] = useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
     if (storedUser) {
       setUserData(JSON.parse(storedUser));
-      setShowRegister(false);
+      setShowAuth(false);
     }
   }, []);
 
-  const handleRegisterConfirm = (data) => {
+  useEffect(() => {
+    if (!navigator.permissions) return;
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      setAllowLocation(result.state === "granted");
+      result.onchange = () => setAllowLocation(result.state === "granted");
+    });
+  }, []);
+
+  useEffect(() => {
+    if (userData && (!userData.lat || !userData.lon)) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+          };
+          handleLocationEnabled(coords);
+        },
+        (err) => {
+          console.warn("User denied location:", err);
+          setShowLocationModal(true);
+        }
+      );
+    }
+  }, [userData]);
+
+  const handleAuthConfirm = (data) => {
     setUserData(data);
-    setShowRegister(false);
+    setShowAuth(false);
     localStorage.setItem("userData", JSON.stringify(data));
+  };
+
+  const handleLocationEnabled = (coords) => {
+    console.log("User granted location:", coords);
+    const updatedUser = { ...userData, lat: coords.lat, lon: coords.lon };
+    setUserData(updatedUser);
+    localStorage.setItem("userData", JSON.stringify(updatedUser));
+    setAllowLocation(true);
+    setShowLocationModal(false);
   };
 
   return (
     <>
-        <RegisterModal
-            isOpen={showRegister}
-            onClose={() => setShowRegister(false)}
-            onConfirm={handleRegisterConfirm}
-        />
-        <main>
-            <Routes>
-                <Route path="/" element={<Dashboard userData={userData} />} />
-                <Route path="/map" element={<Map />} />
-                <Route path="/tips" element={<Planner />} />
-                <Route path="/settings" element={<Settings />} />
-            </Routes>
-        </main>
+      <AuthModal
+        isOpen={showAuth}
+        onClose={() => setShowAuth(false)}
+        onConfirm={handleAuthConfirm}
+      />
+
+      <LocationPermissionModal
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        onEnable={handleLocationEnabled}
+        allowLocation={allowLocation}
+      />
+
+      <main>
+        <Routes>
+          <Route path="/" element={<Dashboard userData={userData} />} />
+          <Route path="/map" element={<Map />} />
+          <Route path="/tips" element={<Planner />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </main>
     </>
   );
 }
