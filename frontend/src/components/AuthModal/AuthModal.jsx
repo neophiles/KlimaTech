@@ -1,0 +1,28 @@
+import { useState } from "react";
+import RegisterModal from "./RegisterModal";
+import LoginModal from "./LoginModal";
+import "./AuthModal.css";
+
+function AuthModal({ isOpen, onClose, onConfirm }) {
+    const [mode, setMode] = useState("register");
+
+    if (!isOpen) return null;
+
+    return mode === "register" ? (
+        <RegisterModal
+            isOpen={isOpen}
+            onClose={onClose}
+            onConfirm={onConfirm}
+            onSwitchMode={() => setMode("login")}
+        />
+    ) : (
+        <LoginModal
+            isOpen={isOpen}
+            onClose={onClose}
+            onConfirm={onConfirm}
+            onSwitchMode={() => setMode("register")}
+        />
+    );
+}
+
+export default AuthModal;
