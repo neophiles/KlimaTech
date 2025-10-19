@@ -1,93 +1,19 @@
-import { useState, useEffect } from "react";
-import "./RegisterModal.css";
+import { useState } from "react";
+import "./AuthModal.css";
 
 const API_BASE = "http://127.0.0.1:8000";
 
-function RegisterModal({ isOpen, onClose, onConfirm }) {
+function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
     const [username, setUsername] = useState("");
-    const [phoneNum, setPhoneNum] = useState("");
-    const [allowLocation, setAllowLocation] = useState(false);
-    const [isRegisterMode, setIsRegisterMode] = useState(true);
-
-    // On mount, check if location permission is already granted
-    useEffect(() => {
-        if (!navigator.permissions) return;
-
-        navigator.permissions.query({ name: "geolocation" }).then((result) => {
-            if (result.state === "granted") setAllowLocation(true);
-            else setAllowLocation(false);
-
-            // Listen for future changes
-            result.onchange = () => {
-                setAllowLocation(result.state === "granted");
-            };
-        });
-    }, []);
+    const [userType, setUserType] = useState("");
 
     if (!isOpen) return null;
 
-    const handleConfirm = async () => {
+    const handleRegister = async () => {
         try {
-            if (!allowLocation) {
-                alert("Location access is required to continue.");
-                return;
-            }
-
-            // LOGIN mode
-            if (!isRegisterMode) {
-                try {
-                    const response = await fetch(`${API_BASE}/user/login`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ username: username.trim() }),
-                    }); 
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        alert(errorData.detail || "Invalid username.");
-                        return;
-                    }
-
-                    // Parse and extract the user object
-                    const data = await response.json();
-                    console.log("User logged in:", data);
-
-                    // Send only the user object (contains lat/lon)
-                    onConfirm?.(data.user);
-
-                    onClose?.();
-                } catch (err) {
-                    console.error("Login error:", err);
-                    alert("Something went wrong during login.");
-                }
-                return;
-            }
-
-            // REGISTER mode
-            // Get location
-            let lat = null;
-            let lon = null;
-
-            await new Promise((resolve) => {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        lat = pos.coords.latitude;
-                        lon = pos.coords.longitude;
-                        resolve();
-                    },
-                    (err) => {
-                        console.warn("Location access denied:", err);
-                        alert("Location access is required to continue.");
-                        resolve();
-                    }
-                );
-            });
-
             const userData = {
-                username: username.trim() || null, // Optional
-                phone_number: phoneNum.trim() || null, // Optional
-                lat,
-                lon,
+                username: username.trim() || null,
+                user_type: userType || null
             };
 
             const response = await fetch(`${API_BASE}/user/add`, {
@@ -107,8 +33,7 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
             }
 
             const createdUser = await response.json();
-            console.log("User created:", createdUser);
-
+            console.log("User logged in:", createdUser);
             onConfirm?.(createdUser);
             onClose?.();
         } catch (err) {
@@ -120,21 +45,23 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <div className="title">
+                <div className="title-group">
                     <span>Hey there! Let’s keep you</span>
                     <img className="logo" src="/logo/name_logo.png" alt="PRESKO LOGO" />
                 </div>
-                <h3>{isRegisterMode ? "Register" : "Login"}</h3>
-                
+
+                <hr />
+                <h3>Register</h3>
+
                 <form
                     className="register-form"
-                    onSubmit={async (e) => {
-                        e.preventDefault(); // prevent reload
-                        handleConfirm();    
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleRegister();
                     }}
                 >
                     <div className="input-group">
-                        <label>What should we call you?</label>
+                        <label>What would you like us to call you?</label>
                         <input
                             type="text"
                             required
@@ -144,69 +71,54 @@ function RegisterModal({ isOpen, onClose, onConfirm }) {
                         />
                     </div>
 
-                    {isRegisterMode && (
-                        <>
-                            <div className="input-group">
-                                <label>Phone Number</label>
-                                <input
-                                    type="tel"
-                                    required
-                                    value={phoneNum}
-                                    onChange={(e) => setPhoneNum(e.target.value)}
-                                    placeholder="e.g. 09123456789"
-                                    pattern="[0-9]*"
-                                    inputMode="numeric"
-                                />
-                                <small className="hint">
-                                    We’ll only use this if we need to contact you.
-                                </small>
-                            </div>
-
-                            <div className="switch-group">
-                                <label>Allow Location Access</label>
-                                <label className="switch">
-                                    <input type="checkbox" readOnly checked={allowLocation} />
-                                    <span className="slider"></span>
+                    <div className="input-group">
+                        <label>Which best describes you?</label>
+                        <div className="user-type-options">
+                            {["Student", "Outdoor Worker", "Office Worker", "Home-based"].map((type) => (
+                                <label
+                                    key={type}
+                                    className={`user-type-btn ${userType === type ? "selected" : ""}`}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="userType"
+                                        value={type}
+                                        checked={userType === type}
+                                        onChange={(e) => setUserType(e.target.value)}
+                                    />
+                                    {type}
                                 </label>
-                            </div>
-                        </>
-                    )}
-
-
-                    <div className="button-group">
-                        <button className="confirm-btn" type="submit">Let’s Go!</button>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* Toggle link */}
+                    <hr />
+                    
+                    <div className="button-group">
+                        <button className="confirm-btn" type="submit">
+                            Tara na!
+                        </button>
+                    </div>
+
                     <div className="toggle-text">
-                        {isRegisterMode ? (
-                            <p>
-                                Already have an account?{" "}
-                                <button
-                                    type="button"
-                                    className="link-button"
-                                    onClick={() => setIsRegisterMode(false)}
-                                >
-                                    Login
-                                </button>
-                            </p>
-                        ) : (
-                            <p>
-                                Don’t have an account?{" "}
-                                <button
-                                    type="button"
-                                    className="link-button"
-                                    onClick={() => setIsRegisterMode(true)}
-                                >
-                                    Register
-                                </button>
-                            </p>
-                        )}
+                        <p>
+                            Already have an account?{" "}
+                            <a
+                                href="#"
+                                className="link-button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSwitchMode();
+                                }}
+                            >
+                                Login
+                            </a>
+                        </p>
                     </div>
                 </form>
             </div>
         </div>
     );
-};
+}
 
 export default RegisterModal;
