@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 from typing import Optional
 from app.db import get_session
-from app.models import UserProfile, StudentProfile
+from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile
 from pydantic import BaseModel
 from app.schemas.profile import UserCreate, UserLogin
 
@@ -104,3 +104,36 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
     session.commit()
     session.refresh(payload)
     return payload
+
+
+@router.post("/outdoorworker/{user_id}", response_model=OutdoorWorkerProfile)
+def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    existing = session.exec(
+        select(OutdoorWorkerProfile).where(OutdoorWorkerProfile.user_id == user_id)
+    ).first()
+
+    payload = OutdoorWorkerProfile(
+        user_id=user_id,
+        work_type=data.get("workType"),
+        work_hours=f"{data['workHours']['start']}-{data['workHours']['end']}",
+        break_type=data.get("breakPreference")
+    )
+
+
+    if existing:
+        for field, value in payload.dict(exclude_unset=True).items():
+            setattr(existing, field, value)
+        session.add(existing)
+        session.commit()
+        session.refresh(existing)
+        return existing
+
+    session.add(payload)
+    session.commit()
+    session.refresh(payload)
+    return payload
+
