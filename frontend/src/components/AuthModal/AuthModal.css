@@ -11,7 +11,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   padding: 2rem;
   width: 90%;
@@ -23,20 +23,22 @@
   gap: 1rem;
 }
 
-.title {
-    align-items: center;
-    text-align: center;
-    color: #0E2A47
+.title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #012a36;
 }
 
-.title span {
-  font-size: 1.5rem;
+.title-group span {
+  font-size: 1rem;
   font-weight: bold;
   margin-right: 0.5rem;
 }
 
 .modal h3 {
-    color: #0E2A47
+  color: #012a36;
 }
 
 .logo {
@@ -46,21 +48,21 @@
     vertical-align: middle;
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
+  font-size: 0.9rem;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1px;
+  gap: 8px;
 }
 
 .input-group label {
-    color: #17191b;
-    margin: .3rem 0;
+  color: #17191b;
 }
 
 .input-group input {
@@ -76,11 +78,42 @@
   outline: none;
 }
 
+.user-type-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 8px;
+}
+
+.user-type-btn {
+  padding: 8px;
+  border: 2px solid #1AC6A2;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #012a36;
+  background-color: #fff;
+  transition: background-color 0.25s, color 0.25s, transform 0.2s;
+}
+
+.user-type-btn:hover {
+  background-color: #1AC6A2;
+  color: white;
+}
+
+.user-type-btn.selected {
+  background-color: #1AC6A2;
+  color: white;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
 .switch-group {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: .3rem 0;
 }
 
 .switch {
@@ -132,32 +165,31 @@ input:checked + .slider:before {
 }
 
 .confirm-btn {
-  padding: 0.75rem 1.25rem;
+  width: 100%;
+  padding: 8px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 1rem;
   background-color: #1AC6A2;
-  color: #17191b;
+  color: #012a36;
+  transition: 
+    transform 0.25s ease-in-out,
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .confirm-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #13A0D8;
 }
 
-.confirm-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
+.toggle-text {
+  font-size: 0.8rem;
 }
 
-.confirm-btn.confirm {
-  background-color: #4caf50;
-  color: white;
-}
-
-.confirm-btn.confirm:hover {
-  background-color: #43a047;
+.cancel-btn {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
 }
