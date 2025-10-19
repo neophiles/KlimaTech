@@ -11,7 +11,7 @@ function GreetingWidget({ username, barangay, locality, province }) {
 
     const displayName =
         username && username.trim().length > 0
-        ? username.charAt(0).toUpperCase() + username.slice(1)
+        ? username
         : "User";
 
     return (
