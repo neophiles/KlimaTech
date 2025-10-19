@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function OfficeWorkerModal() {
+function OfficeWorkerModal({ userId, initialData = null, onClose = () => {}, onSaved = () => {} }) {
     const [selectedDays, setSelectedDays] = useState([]);
     const [workHours, setWorkHours] = useState({ start: "", end: "" });
     const [commuteType, setCommuteType] = useState("");
     const [lunchHabit, setLunchHabit] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
     const commuteOptions = [
@@ -18,22 +20,71 @@ function OfficeWorkerModal() {
         "No, I eat inside the building / bring baon",
     ];
 
+    useEffect(() => {
+        if (!initialData) return;
+
+        // Prefill from initialData structure returned by backend
+        if (initialData.office_days) {
+            setSelectedDays(initialData.office_days.split(",").filter(Boolean));
+        }
+        if (initialData.work_hours) {
+            const [start = "", end = ""] = initialData.work_hours.split("-");
+            setWorkHours({ start, end });
+        }
+        if (initialData.commute_mode) setCommuteType(initialData.commute_mode);
+
+        // convert boolean goes_out_for_lunch to one of our labels
+        if (typeof initialData.goes_out_for_lunch === "boolean") {
+            setLunchHabit(
+                initialData.goes_out_for_lunch ? lunchOptions[0] : lunchOptions[1]
+            );
+        }
+    }, [initialData]);
+
     const toggleDay = (day) => {
         setSelectedDays((prev) =>
             prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = {
+        setError("");
+        setLoading(true);
+
+        const payload = {
             selectedDays,
             workHours,
             commuteType,
             lunchHabit,
         };
-        console.log("Office Worker Data:", formData);
-        // You can POST this to backend or close modal
+
+        console.log("OfficeWorkerModal submit payload:", payload);
+
+        try {
+            const res = await fetch(`/api/user/office-worker/${userId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || "Failed to save profile");
+            }
+
+            const data = await res.json();
+            console.log("OfficeWorkerModal: profile saved:", data);
+            alert("Your Presko office worker profile has been saved!");
+            onSaved(data); // let parent refresh UI
+            onClose();
+        } catch (err) {
+            console.error("OfficeWorkerModal submit error:", err);
+            alert("Something went wrong saving your profile.");
+            setError(err.message || "Failed to save profile");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -136,12 +187,14 @@ function OfficeWorkerModal() {
                         </div>
                     </div>
 
+                    {error && <div className="form-error">{error}</div>}
+
                     <hr />
 
                     {/* Submit */}
                     <div className="button-group">
-                        <button className="confirm-btn" type="submit">
-                            Let's get you presko!
+                        <button className="confirm-btn" type="submit" disabled={loading}>
+                            {loading ? "Saving..." : "Let's get you presko!"}
                         </button>
                     </div>
                 </form>
