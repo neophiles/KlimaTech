@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
-from typing import Optional, List
 from sqlmodel import Session, select
-
+from typing import Optional, List
 from app.db import get_session
 from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile, OfficeWorkerProfile, HomeBasedProfile
+from pydantic import BaseModel
 from app.schemas.profile import UserCreate, UserLogin
 
 router = APIRouter(prefix="/user", tags=["Users"])
@@ -76,6 +75,7 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
 
 
 @router.post("/student/{user_id}", response_model=StudentProfile)
+@router.put("/student/{user_id}", response_model=StudentProfile)
 def create_or_update_student_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
@@ -108,6 +108,7 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
 
 
 @router.post("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
+@router.put("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
 def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
