@@ -6,13 +6,20 @@ import Planner from "../pages/InitTipsPage";
 import Settings from '../pages/SettingsPage';
 import AuthModal from "./modal/AuthModal";
 import LocationPermissionModal from "./modal/LocationPermissionModal";
-import StudentModal  from "./modal/StudentModal";
+import StudentModal from "./modal/StudentModal";
+import OutdoorWorkerModal from "./modal/OutdoorWorkerModal";
+import OfficeWorkerModal from "./modal/OfficeWorkerModal";
+import HomeBasedModal from "./modal/HomeBasedModal";
 
 function Main() {
   const [userData, setUserData] = useState(null);
   const [showAuth, setShowAuth] = useState(true);
+
   const [allowLocation, setAllowLocation] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
+
+  const [showPersonalizeModal, setShowPersonalizeModal] = useState(false);
+  const [personalizeType, setPersonalizeType] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
@@ -52,6 +59,10 @@ function Main() {
     setUserData(data);
     setShowAuth(false);
     localStorage.setItem("userData", JSON.stringify(data));
+
+    // Show the personalization modal based on user_type
+    setPersonalizeType(data.user_type.toLowerCase().replace(" ", "_"));
+    setShowPersonalizeModal(true);
   };
 
   const handleLocationEnabled = (coords) => {
@@ -62,6 +73,15 @@ function Main() {
     setAllowLocation(true);
     setShowLocationModal(false);
   };
+
+  const modalMap = {
+    "student": StudentModal,
+    "outdoor_worker": OutdoorWorkerModal,
+    "office_worker": OfficeWorkerModal,
+    "home-based": HomeBasedModal
+  };
+
+  const PersonalizeModal = modalMap[personalizeType];
 
   return (
     <>
@@ -77,6 +97,10 @@ function Main() {
         onEnable={handleLocationEnabled}
         allowLocation={allowLocation}
       />
+
+      {showPersonalizeModal && PersonalizeModal && (
+        <PersonalizeModal onClose={() => setShowPersonalizeModal(false)} />
+      )}
 
       <main>
         <Routes>
