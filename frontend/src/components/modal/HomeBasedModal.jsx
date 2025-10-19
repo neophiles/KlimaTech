@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function HomeBasedModal() {
+function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSaved = () => {} }) {
     const [activities, setActivities] = useState([]);
     const [preferredTimes, setPreferredTimes] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const activityOptions = [
         "Exercise / Sports",
@@ -20,6 +22,20 @@ function HomeBasedModal() {
         "Evening (5 PM onwards)",
     ];
 
+    useEffect(() => {
+        if (!initialData) return;
+        if (initialData.outdoor_activities) {
+            setActivities(
+                initialData.outdoor_activities.split(",").map((s) => s.trim()).filter(Boolean)
+            );
+        }
+        if (initialData.preferred_times) {
+            setPreferredTimes(
+                initialData.preferred_times.split(",").map((s) => s.trim()).filter(Boolean)
+            );
+        }
+    }, [initialData]);
+
     const toggleOption = (option, stateSetter, currentState) => {
         if (currentState.includes(option)) {
             stateSetter(currentState.filter((o) => o !== option));
@@ -28,14 +44,42 @@ function HomeBasedModal() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = {
+        setError("");
+        setLoading(true);
+
+        const payload = {
             activities,
             preferredTimes,
         };
-        console.log("Home-Based Data:", formData);
-        // You can POST this to backend
+
+        console.log("HomeBasedModal submit payload:", payload);
+
+        try {
+            const res = await fetch(`/api/user/home-based/${userId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || "Failed to save profile");
+            }
+
+            const data = await res.json();
+            console.log("HomeBasedModal: profile saved:", data);
+            alert("Your Home-based profile has been saved!");
+            onSaved(data);
+            onClose();
+        } catch (err) {
+            console.error("HomeBasedModal submit error:", err);
+            setError(err.message || "Failed to save profile");
+            alert("Something went wrong saving your profile.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -43,9 +87,7 @@ function HomeBasedModal() {
             <div className="modal">
                 <div className="title-group">
                     <h3>Personalize Your Presko Experience</h3>
-                    <p className="subtext">
-                        Tell us a bit about your daily home-based routine
-                    </p>
+                    <p className="subtext">Tell us a bit about your daily home-based routine</p>
                 </div>
 
                 <hr />
@@ -59,12 +101,8 @@ function HomeBasedModal() {
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${
-                                        activities.includes(option) ? "selected" : ""
-                                    }`}
-                                    onClick={() =>
-                                        toggleOption(option, setActivities, activities)
-                                    }
+                                    className={`option-btn ${activities.includes(option) ? "selected" : ""}`}
+                                    onClick={() => toggleOption(option, setActivities, activities)}
                                 >
                                     {option}
                                 </button>
@@ -74,20 +112,14 @@ function HomeBasedModal() {
 
                     {/* b. Preferred times */}
                     <div className="input-group">
-                        <label>
-                            On days you go out, what time do you usually prefer?
-                        </label>
+                        <label>On days you go out, what time do you usually prefer?</label>
                         <div className="user-type-options">
                             {timeOptions.map((option) => (
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${
-                                        preferredTimes.includes(option) ? "selected" : ""
-                                    }`}
-                                    onClick={() =>
-                                        toggleOption(option, setPreferredTimes, preferredTimes)
-                                    }
+                                    className={`option-btn ${preferredTimes.includes(option) ? "selected" : ""}`}
+                                    onClick={() => toggleOption(option, setPreferredTimes, preferredTimes)}
                                 >
                                     {option}
                                 </button>
@@ -95,12 +127,16 @@ function HomeBasedModal() {
                         </div>
                     </div>
 
+                    {error && <div className="form-error">{error}</div>}
+
                     <hr />
 
-                    {/* Submit */}
                     <div className="button-group">
-                        <button className="confirm-btn" type="submit">
-                            Let's get you presko!
+                        <button className="confirm-btn" type="submit" disabled={loading}>
+                            {loading ? "Saving..." : "Let's get you presko!"}
+                        </button>
+                        <button type="button" className="cancel-btn" onClick={() => onClose()} disabled={loading}>
+                            Cancel
                         </button>
                     </div>
                 </form>

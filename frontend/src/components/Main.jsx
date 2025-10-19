@@ -80,7 +80,7 @@ function Main() {
     "student": StudentModal,
     "outdoor_worker": OutdoorWorkerModal,
     "office_worker": OfficeWorkerModal,
-    "home-based": HomeBasedModal
+    "home_based": HomeBasedModal
   };
 
   const PersonalizeModal = modalMap[personalizeType];

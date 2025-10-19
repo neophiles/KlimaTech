@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlmodel import Session, select
-from typing import Optional, List
-from app.db import get_session
-from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile, OfficeWorkerProfile
 from pydantic import BaseModel
+from typing import Optional, List
+from sqlmodel import Session, select
+
+from app.db import get_session
+from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile, OfficeWorkerProfile, HomeBasedProfile
 from app.schemas.profile import UserCreate, UserLogin
 
 router = APIRouter(prefix="/user", tags=["Users"])
@@ -200,6 +201,51 @@ def create_or_update_office_worker_profile(
         work_hours=work_hours,
         commute_mode=commute_mode,
         goes_out_for_lunch=goes_out_for_lunch,
+    )
+    session.add(new)
+    session.commit()
+    session.refresh(new)
+    return new
+
+
+class HomeBasedIn(BaseModel):
+    activities: Optional[List[str]] = None
+    preferredTimes: Optional[List[str]] = None
+
+@router.post("/home-based/{user_id}", response_model=HomeBasedProfile, status_code=status.HTTP_201_CREATED)
+@router.put("/home-based/{user_id}", response_model=HomeBasedProfile)
+def create_or_update_home_based_profile(
+    user_id: int,
+    payload: HomeBasedIn,
+    session: Session = Depends(get_session),
+):
+    """
+    Create or update HomeBasedProfile for a user.
+    Expects JSON:
+      { "activities": [...], "preferredTimes": [...] }
+    Stored as CSV strings in outdoor_activities and preferred_times.
+    """
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    outdoor_activities = ",".join(payload.activities) if payload.activities else None
+    preferred_times = ",".join(payload.preferredTimes) if payload.preferredTimes else None
+
+    existing = session.exec(select(HomeBasedProfile).where(HomeBasedProfile.user_id == user_id)).first()
+
+    if existing:
+        existing.outdoor_activities = outdoor_activities
+        existing.preferred_times = preferred_times
+        session.add(existing)
+        session.commit()
+        session.refresh(existing)
+        return existing
+
+    new = HomeBasedProfile(
+        user_id=user_id,
+        outdoor_activities=outdoor_activities,
+        preferred_times=preferred_times,
     )
     session.add(new)
     session.commit()
