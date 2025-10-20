@@ -5,6 +5,13 @@
   flex-direction: column;
 }
 
+hr {
+    width: 100%;
+    align-self: stretch;
+    border: none;
+    border-top: 1px solid #aeaeae;
+}
+
 header, footer {
   height: var(--header-footer-height);
   padding: 0.5rem;
