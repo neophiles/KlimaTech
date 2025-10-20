@@ -24,8 +24,11 @@ header {
   justify-content: center;
 }
 
-.header-container {
+header .container,
+footer .container
+{
   width: min(100%, 650px);
+  display: flex;
 }
 
 .button.logo-btn {
