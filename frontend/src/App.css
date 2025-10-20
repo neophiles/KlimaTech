@@ -8,9 +8,10 @@
 header, footer {
   height: var(--header-footer-height);
   padding: 0.5rem;
-  /* background-color: #FFFFFF; */
   background-color: #012a36;
-  position: sticky;
+  position: fixed;
+  width: 100%;
+  height: 48px;
   z-index: 10;
 }
 
@@ -59,7 +60,6 @@ footer {
   left: 0;
   display: flex;
   justify-content: space-evenly;
-  /* background-color: #023e4a; */
 }
 
 .nav-btn {
@@ -106,6 +106,7 @@ footer {
 main {
   flex: 1;
   background-color: #f6f6f6;
+  padding: 48px 0 48px 0;
 }
 
 .map-page {
