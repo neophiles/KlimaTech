@@ -221,7 +221,7 @@ def get_votes(
 
 
 @router.get("/preskospots/nearest")
-def get_nearest_preskospot(
+def get_sorted_preskospots(
     lat: float = Query(..., description="User latitude"),
     lon: float = Query(..., description="User longitude"),
     session: Session = Depends(get_session)
@@ -231,18 +231,20 @@ def get_nearest_preskospot(
     if not spots:
         raise HTTPException(status_code=404, detail="No CoolSpots found")
 
-    nearest_spot = min(
-        spots,
-        key=lambda s: haversine(lat, lon, s.lat, s.lon)
+    # Sort all spots by distance
+    spots_with_distance = sorted(
+        [
+            {
+                "id": s.id,
+                "name": s.name,
+                "lat": s.lat,
+                "lon": s.lon,
+                "barangay_id": s.barangay_id,
+                "distance": round(haversine(lat, lon, s.lat, s.lon), 2),
+            }
+            for s in spots
+        ],
+        key=lambda x: x["distance"]
     )
 
-    distance = haversine(lat, lon, nearest_spot.lat, nearest_spot.lon)
-
-    return {
-        "id": nearest_spot.id,
-        "name": nearest_spot.name,
-        "lat": nearest_spot.lat,
-        "lon": nearest_spot.lon,
-        "distance": round(distance, 2),
-        "barangay_id": nearest_spot.barangay_id,
-    }
+    return {"spots": spots_with_distance}
