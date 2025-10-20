@@ -13,10 +13,6 @@ function Footer() {
                     label={'PreskoSpots'}
                 />
                 <NavigationButton
-                    route={'/tips'}
-                    label={'InitTips'}
-                />
-                <NavigationButton
                     route={'/settings'}
                     label={'Settings'}
                 />

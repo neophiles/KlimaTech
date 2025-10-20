@@ -114,7 +114,6 @@ function Main() {
         <Routes>
           <Route path="/" element={<Dashboard userData={userData} />} />
           <Route path="/map" element={<Map currentUser={userData} />} />
-          <Route path="/tips" element={<Planner />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
