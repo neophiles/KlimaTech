@@ -71,9 +71,15 @@ function Dashboard({ userData }) {
     daily_briefing: { advice },
   } = weatherData;
 
+  // use id directly
+  const barangayId = weatherData?.id ?? null;
+
+  console.log("barangayId:", barangayId);
+  console.log("userData:", userData);
+
+
   return (
     <div className="dashboard">
-
       <GreetingWidget
         username={userData.username}
         barangay={barangay}
@@ -86,7 +92,7 @@ function Dashboard({ userData }) {
       <NearestPreskoSpotWidget userLocation={userLocation} />
 
 
-      <InitTipsWidget barangayId={userLocation?.barangay_id} />
+      <InitTipsWidget barangayId={barangayId} currentUser={userData} />
 
 
     </div>
