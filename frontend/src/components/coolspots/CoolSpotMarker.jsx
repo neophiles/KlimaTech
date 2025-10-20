@@ -134,9 +134,18 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
         <div className="coolspot-votes">
           <button
             className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
-            onClick={(e) => { e.stopPropagation(); vote("like"); }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault(); 
+              vote("like");
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+            }}
             disabled={voting}
             aria-busy={voting}
             title={currentUser ? (userVote === "like" ? "Undo like" : "Like") : "Login to vote"}
