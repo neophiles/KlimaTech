@@ -97,3 +97,22 @@
   font-size: 1rem;
   font-weight: bold;
 }
+
+
+.coolspot-popup .leaflet-popup-content-wrapper {
+  pointer-events: auto;
+}
+
+.coolspot-popup .leaflet-popup-tip {
+  pointer-events: none;
+}
+
+/* Ensure vote buttons don't trigger popup close */
+.vote-btn, .coolspot-votes, .carousel, .coolspot-details-btn {
+  pointer-events: auto;
+}
+
+/* Prevent the default close button from interfering if you add it back */
+.coolspot-popup .leaflet-popup-close-button {
+  pointer-events: auto;
+}
