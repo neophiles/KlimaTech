@@ -129,24 +129,59 @@ For each, follow this format exactly:
 - [Task name] at [time] -> [one-sentence suggestion]
 """
 
+        # call the AI (increase max_tokens, lower temperature for stability)
         response = co.chat(
             model="command-r-plus-08-2024",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=300
+            temperature=0.3,
+            max_tokens=600
         )
 
         ai_output = response.message.content[0].text.strip()
         print("AI OUTPUT:", ai_output)
 
+        # if the model response seems cut off (doesn't end with sentence punctuation),
+        # retry once with more tokens and lower temperature
+        if ai_output and not ai_output.strip()[-1] in ".!?":
+            try:
+                print("AI output looks truncated, retrying for completion...")
+                response2 = co.chat(
+                    model="command-r-plus-08-2024",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.2,
+                    max_tokens=800
+                )
+                ai_output2 = response2.message.content[0].text.strip()
+                if ai_output2:
+                    ai_output = ai_output2
+                    print("AI OUTPUT RETRY:", ai_output2)
+            except Exception as _:
+                # ignore retry failures and continue with original output
+                pass
+
         suggestions = []
         for line in ai_output.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            # support formats like "- Task at 08:00 -> suggestion" or "Task at 08:00 -> suggestion"
             if "->" in line:
                 task, suggestion = line.split("->", 1)
                 suggestions.append(TaskSuggestion(
                     task=task.strip("- ").strip(),
                     suggestion=suggestion.strip()
                 ))
+            else:
+                # fallback: try to parse lines that start with "- " and contain " at "
+                text = line.lstrip("- ").strip()
+                if " at " in text and "->" not in line:
+                    # put the remainder as suggestion if present on same line after a dash
+                    parts = text.split(" at ", 1)
+                    # can't reliably split suggestion; skip or add as suggestion-less entry
+                    suggestions.append(TaskSuggestion(
+                        task=text,
+                        suggestion=""
+                    ))
 
         return suggestions
 
