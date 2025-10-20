@@ -6,7 +6,10 @@ from app.schemas.task_suggestions import TaskInput, TaskSuggestion, Tip
 from app.utils.heat_index import calculate_heat_index
 import cohere
 import os
+import logging
+import asyncio
 from datetime import datetime, timedelta, timezone
+import time
 import httpx
 from typing import Optional
 from sqlmodel import select
@@ -19,6 +22,18 @@ PH_TZ = timezone(timedelta(hours=8))
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 co = cohere.ClientV2(api_key=COHERE_API_KEY)
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+
+
+TIPS_CACHE: dict = {}
+TIPS_CACHE_LOCK = asyncio.Lock()
+TIPS_CACHE_TTL = timedelta(minutes=180) 
+
+logger = logging.getLogger("task_suggestions")
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 
 async def get_today_forecast_for_barangay(barangay: Barangay):
@@ -196,9 +211,21 @@ async def get_tips(
     user_id: Optional[int] = Query(None, description="Optional user id for personalization"),                    
     session: Session = Depends(get_session),
 ):
+    start_time = time.time()
+    cache_key = (barangay_id, user_id)
+    # check cache
+    async with TIPS_CACHE_LOCK:
+        entry = TIPS_CACHE.get(cache_key)
+        if entry and (datetime.now(timezone.utc) - entry["ts"]) < TIPS_CACHE_TTL:
+            logger.info("Returning cached tips for barangay=%s user=%s (age=%s sec)",
+                        barangay_id, user_id, (datetime.now(timezone.utc) - entry["ts"]).total_seconds())
+            return entry["tips"]
+
     barangay = session.get(Barangay, barangay_id)
     if not barangay:
         raise HTTPException(status_code=404, detail="Barangay not found")
+
+    logger.info("Generating tips for barangay=%s user=%s", barangay_id, user_id)
 
     # fetch user and profile details if provided
     user = None
@@ -295,6 +322,7 @@ DONT: [main_text] | [sub_text]
             max_tokens=300
         )
         ai_output = response.message.content[0].text.strip()
+        logger.debug("AI raw output length=%d chars", len(ai_output or ""))
 
         tips = []
         for line in ai_output.splitlines():
@@ -321,7 +349,7 @@ DONT: [main_text] | [sub_text]
         if not tips:
             raise ValueError("AI returned no tips")
     except Exception as e:
-        print("Failed to generate AI tips:", e)
+        logger.exception("Failed to generate AI tips: %s", e)
         # personalized simple fallback when user info exists
         if user_context:
             tips = [
@@ -336,4 +364,12 @@ DONT: [main_text] | [sub_text]
                 Tip(is_do=False, main_text="Mag-PE sa araw", sub_text="Panganib: Dehydration")
             ]
 
+    # save to cache (allow concurrent reads)
+    async with TIPS_CACHE_LOCK:
+        TIPS_CACHE[cache_key] = {"tips": tips, "ts": datetime.now(timezone.utc)}
+        logger.info("Cached tips for barangay=%s user=%s", barangay_id, user_id)
+
+    elapsed = time.time() - start_time
+    logger.info("Tips generation completed for barangay=%s user=%s in %.2fs (tips=%d)",
+                barangay_id, user_id, elapsed, len(tips))
     return tips

@@ -126,3 +126,20 @@ class Vote(SQLModel, table=True):
 
     user: Optional["UserProfile"] = Relationship()
     coolspot: Optional["CoolSpot"] = Relationship()
+
+
+class Tip(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    barangay_id: int = Field(foreign_key="barangay.id")
+    content: str
+
+    barangay: Optional["Barangay"] = Relationship()
+
+class TipLog(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="userprofile.id")
+    tip_id: int = Field(foreign_key="tip.id")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(PH_TZ).replace(tzinfo=None))
+
+    user: Optional["UserProfile"] = Relationship()
+    tip: Optional["Tip"] = Relationship()
