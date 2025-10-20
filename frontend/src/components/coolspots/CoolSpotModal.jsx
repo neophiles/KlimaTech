@@ -14,7 +14,8 @@ const CoolSpotModal = ({
   onSubmitReport,
   onClose,
   setSelectedSpot,
-  setCoolSpots
+  setCoolSpots,
+  currentUser
 }) => {
   if (!spot) return null;
 
@@ -26,7 +27,8 @@ const CoolSpotModal = ({
   useEffect(() => {
     async function fetchVotes() {
       try {
-        const res = await fetch(`/api/coolspots/${spot.id}/votes?user_id=1`);
+        const url = `/api/coolspots/${spot.id}/votes${currentUser && currentUser.id ? `?user_id=${currentUser.id}` : ""}`;
+        const res = await fetch(url);
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Failed to fetch votes: ${text}`);
@@ -34,7 +36,7 @@ const CoolSpotModal = ({
         const data = await res.json();
         setLikes(data.likes);
         setDislikes(data.dislikes);
-        setUserVote(data.user_vote); // 'like', 'dislike', or null
+        setUserVote(data.user_vote ?? null); // 'like', 'dislike', or null
       } catch (err) {
         console.error(err);
       }
@@ -44,8 +46,13 @@ const CoolSpotModal = ({
   }, [spot.id]);
 
   async function vote(type) {
+    if (!currentUser || !currentUser.id) {
+      alert("Please login to vote.");
+      return;
+    }
+
     try {
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=1`, { method: "POST" });
+      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, { method: "POST" });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(`Server error: ${text}`);
@@ -53,17 +60,13 @@ const CoolSpotModal = ({
 
       const data = await res.json();
 
-      // Update local state
+      // Update local state from authoritative response
       setLikes(data.likes);
       setDislikes(data.dislikes);
-      setUserVote(prev => (prev === type ? null : type));
+      setUserVote(data.user_vote ?? null);
 
       // Update parent state
-      setSelectedSpot(prev => ({
-        ...prev,
-        likes: data.likes,
-        dislikes: data.dislikes
-      }));
+      setSelectedSpot(prev => prev && prev.id === data.id ? { ...prev, likes: data.likes, dislikes: data.dislikes } : prev);
 
       setCoolSpots(prev =>
         prev.map(s =>
@@ -72,6 +75,7 @@ const CoolSpotModal = ({
       );
     } catch (err) {
       console.error(`${type} error:`, err);
+      alert("Failed to submit vote: " + (err.message || ""));
     }
   }
 
@@ -121,7 +125,10 @@ const CoolSpotModal = ({
         <div className="modal-votes">
           <button
             className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
-            onClick={() => vote("like")}
+            onClick={(e) => { e.stopPropagation(); vote("like"); }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            title={currentUser ? (userVote === "like" ? "Undo like" : "Like") : "Login to vote"}
           >
             {userVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
           </button>
@@ -129,7 +136,10 @@ const CoolSpotModal = ({
 
           <button
             className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
-            onClick={() => vote("dislike")}
+            onClick={(e) => { e.stopPropagation(); vote("dislike"); }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            title={currentUser ? (userVote === "dislike" ? "Undo dislike" : "Dislike") : "Login to vote"}
           >
             {userVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
           </button>

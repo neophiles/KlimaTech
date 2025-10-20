@@ -96,9 +96,14 @@ function Map({ currentUser }) {
   // Submit report handler
   function onSubmitReport(e) {
     e.preventDefault();
+    // prevent anonymous report
+    if (!currentUser?.id) {
+      alert("Please login to submit a report.");
+      return;
+    }
     setReportSubmitting(true);
     const formData = new FormData();
-    formData.append("user_id", currentUser?.id ?? 0); // use real user id if available
+    formData.append("user_id", currentUser.id);
     formData.append("note", reportNote);
     if (reportPhoto) formData.append("file", reportPhoto);
 
@@ -361,6 +366,7 @@ function Map({ currentUser }) {
               setIsAdding(true);
             }}
             barangays={barangays}
+            currentUser={currentUser}
           />
         </>
       )}
