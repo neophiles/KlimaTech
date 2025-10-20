@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./InfoSubPage.css";
 
 function InfoSubPage() {
     // track which accordion is open
