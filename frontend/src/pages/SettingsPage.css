@@ -1,0 +1,400 @@
+.back-btn-widget {
+    padding: 0;
+    border-radius: 0;
+    align-items: start;
+}
+
+.settings-btn {
+    border: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.settings-btn.back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #606060;
+}
+
+.settings-btn.back:hover {
+    color: #1AC6A2;
+}
+
+.settings-btn.logout {
+    padding: 8px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: #1AC6A2;
+    color: white;
+}
+
+.settings-widget {
+    align-items: start;
+    gap: 16px;
+}
+
+.settings-widget hr {
+    width: 100%;
+    align-self: stretch;
+    border: none;
+    border-top: 1px solid #aeaeae;
+}
+
+.settings-widget .widget-title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.settings-widget a {
+    font-size: 1rem;
+    color: #606060;
+    text-decoration: none;
+}
+
+.settings-widget a:hover {
+    color: #1AC6A2;
+}
+
+@media (max-width: 500px) {
+    .settings-widget {
+        gap: 12px;
+    }
+}
+
+/* PH HEAT DATA */
+
+.settings-widget.heat-info {
+    background-color: rgba(255, 0, 0, 0.104);
+}
+
+.heat-data-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 8px;
+}
+
+.heat-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background-color: #f6f6f6;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.heat-data .data {
+    font-size: 1.75rem;
+    color: #d50000;
+}
+
+.heat-data .desc-1 {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #606060;
+}
+
+.heat-data .desc-2 {
+    font-size: 0.8rem;
+    color: #828282;
+}
+
+@media (max-width: 500px) {
+    .heat-data .data {
+        font-size: 1.2rem;
+    }
+
+    .heat-data .desc-1 {
+        font-size: 0.75rem;
+    }
+
+    .heat-data .desc-2 {
+        font-size: 0.7rem;
+    }
+}
+
+/* ACCORDION */
+
+.atrisk {
+    background-color: rgba(255, 106, 0, 0.071);
+}
+
+.accordion {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px;
+    background-color: rgba(255, 106, 0, 0.092);
+    border-radius: 8px;
+    border: 1px solid rgb(215, 215, 215);
+}
+
+.atrisk .accordion {
+    background-color: #f6f6f6;
+}
+
+.accordion.open {
+    gap: 12px;
+}
+
+.accordion .header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: start;
+    transition: transform 0.3s ease-in-out;
+}
+
+.illnesses .accordion .header svg {
+    min-width: 28px;
+    height: auto;
+}
+
+.atrisk .accordion .header svg {
+    min-width: 24px;
+    height: auto;
+}
+
+.accordion .header .caret {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.accordion.open .header .caret {
+  transform: rotate(180deg);
+}
+
+.accordion .header .container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 4px;
+}
+
+.illnesses .accordion .header .name {
+    font-size: 1rem;
+}
+
+.atrisk .accordion .header .name {
+    font-size: 0.9rem;
+}
+
+.accordion .content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.accordion.open .content {
+    max-height: 1000px;
+    opacity: 1;
+}
+
+.accordion .content .label {
+    font-weight: bold;
+}
+
+.accordion.stroke .header,
+.accordion.children .header,
+.accordion.elderly .header
+{
+    color: #d4183d;
+}
+
+.accordion.exhaustion .header,
+.accordion.outdoor .header,
+.accordion.ill .header
+{
+    color: #f54900;
+}
+
+.accordion.cramps .header,
+.accordion.pregnant .header,
+.accordion.unprivileged .header
+{
+    color: #d08700;
+}
+
+.accordion .header .danger {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: white;
+}
+
+.accordion.stroke .header .danger {
+    background-color: #d4183d;
+}
+
+.accordion.exhaustion .header .danger {
+    background-color: #f54900;
+}
+
+.accordion.cramps .header .danger {
+    background-color: #d08700;
+}
+
+.accordion .content .symptoms,
+.accordion .content .firstaid
+{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.accordion .content .description,
+.accordion .content .symptoms,
+.accordion .content .firstaid,
+.accordion .content .why,
+.accordion .content .care
+{
+    color: #494949;
+    font-size: 0.9rem;
+}
+
+ul, ol {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 0 0 1.5em;
+    padding: 0;
+    list-style-position: outside;
+}
+
+@media (max-width: 500px) {
+    .accordion .header .name {
+        font-size: 0.9rem;
+    }
+
+    .accordion .header .danger {
+        font-size: 0.6rem;
+    }
+
+    .accordion .content .description,
+    .accordion .content .symptoms,
+    .accordion .content .firstaid,
+    .accordion .content .why,
+    .accordion .content .care
+    {
+        font-size: 0.8rem;
+    }
+}
+
+/* WHY */
+
+.whyheat {
+    background-color: rgba(242, 255, 0, 0.062);
+}
+
+.whyheat .container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.whyheat .container svg {
+    min-width: 48px;
+    height: auto;
+    color: #eac300;
+    animation: spin 4s linear infinite;
+    transition: color 0.25s ease-in-out;
+}
+
+.whyheat .container svg:hover {
+    color: #ea8c00;
+}
+
+.whyheat .cause {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.whyheat .cause,
+.whyheat .effects,
+.whyheat .sources
+{
+    color: #494949;
+}
+
+.whyheat .cause,
+.whyheat .effects
+{
+    font-size: 0.9rem;
+}
+
+.whyheat .sources {
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+ul.effects {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (max-width: 500px) {
+    .whyheat .cause,
+    .whyheat .effects,
+    .whyheat .sources 
+    {
+        font-size: 0.8rem;
+    }
+}
+
+/* CALL TO ACTION */
+
+.action {
+    background-color: rgb(2, 204, 180, 0.1);
+}
+
+.action .container {
+    display: flex;
+    gap: 8px;
+}
+
+.action .container svg {
+    min-width: 20px;
+    height: auto;
+    color: #02ccb4;
+    align-self: flex-start;
+}
+
+.action .container .text {
+    display: flex;;
+    flex-direction: column;
+    gap: 6px;
+    color: #494949;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 500px) {
+    .action .container .text {
+        font-size: 0.8rem;
+    }
+}
