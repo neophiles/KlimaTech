@@ -66,11 +66,11 @@ const CoolSpotModal = ({
       setUserVote(data.user_vote ?? null);
 
       // Update parent state
-      setSelectedSpot(prev => prev && prev.id === data.id ? { ...prev, likes: data.likes, dislikes: data.dislikes } : prev);
+      setSelectedSpot(prev => prev && prev.id === data.id ? { ...prev, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : prev);
 
       setCoolSpots(prev =>
         prev.map(s =>
-          s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s
+          s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : s
         )
       );
     } catch (err) {
