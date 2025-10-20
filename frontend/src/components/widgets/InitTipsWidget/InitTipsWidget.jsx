@@ -40,14 +40,14 @@ function InitTipsWidget({ barangayId, currentUser }) {
     <div className="base-widget raised-widget inittips-widget">
       <div className="heading">
         Ano ang gagawin ko ngayong araw?
-        <button
-          className="regen-btn"
-          onClick={() => fetchTips(true)}
-          disabled={loading}
-        >
-          Regenerate Tips
-        </button>
       </div>
+    <button
+        className="regen-btn"
+        onClick={() => fetchTips(true)}
+        disabled={loading}
+    >
+        Regenerate Tips
+    </button>
 
       {loading && <div className="loading">Loading tips...</div>}
       {error && <div className="error-text">Error: {error}</div>}
