@@ -208,18 +208,21 @@ For each, follow this format exactly:
 @router.get("/tips/{barangay_id}", response_model=list[Tip])
 async def get_tips(
     barangay_id: int,
-    user_id: Optional[int] = Query(None, description="Optional user id for personalization"),                    
+    user_id: Optional[int] = Query(None, description="Optional user id for personalization"),  
+    force: bool = Query(False, description="Force regenerate tips and ignore cache"),                  
     session: Session = Depends(get_session),
 ):
     start_time = time.time()
     cache_key = (barangay_id, user_id)
     # check cache
-    async with TIPS_CACHE_LOCK:
-        entry = TIPS_CACHE.get(cache_key)
-        if entry and (datetime.now(timezone.utc) - entry["ts"]) < TIPS_CACHE_TTL:
-            logger.info("Returning cached tips for barangay=%s user=%s (age=%s sec)",
-                        barangay_id, user_id, (datetime.now(timezone.utc) - entry["ts"]).total_seconds())
-            return entry["tips"]
+
+    if not force:
+        async with TIPS_CACHE_LOCK:
+            entry = TIPS_CACHE.get(cache_key)
+            if entry and (datetime.now(timezone.utc) - entry["ts"]) < TIPS_CACHE_TTL:
+                logger.info("Returning cached tips for barangay=%s user=%s (age=%s sec)",
+                            barangay_id, user_id, (datetime.now(timezone.utc) - entry["ts"]).total_seconds())
+                return entry["tips"]
 
     barangay = session.get(Barangay, barangay_id)
     if not barangay:
