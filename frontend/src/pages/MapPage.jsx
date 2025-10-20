@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import "leaflet/dist/leaflet.css";
@@ -11,7 +11,13 @@ import AddCoolSpotModal from "../components/coolspots/AddCoolSpotModal";
 import Button from "../components/Button";
 import { userIcon } from "../utils/coolSpotsIcons";
 
-function Map() {
+function Map({ currentUser }) {
+  useEffect(() => {
+    console.log("MapPage currentUser:", currentUser);
+  }, [currentUser]);
+
+  const mapRef = useRef(null);
+  const [mapReady, setMapReady] = useState(false);
   const [coolSpots, setCoolSpots] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState(null);
@@ -27,6 +33,7 @@ function Map() {
   const [isAdding, setIsAdding] = useState(false);
   const [centerMarker, setCenterMarker] = useState(null);
 
+  // Prevent report submission when not logged in
   // Fetch cool spots from backend on mount
   useEffect(() => {
     async function fetchCoolSpots() {
@@ -91,7 +98,7 @@ function Map() {
     e.preventDefault();
     setReportSubmitting(true);
     const formData = new FormData();
-    formData.append("user_id", 0); // Replace with actual user id if available
+    formData.append("user_id", currentUser?.id ?? 0); // use real user id if available
     formData.append("note", reportNote);
     if (reportPhoto) formData.append("file", reportPhoto);
 
@@ -237,6 +244,7 @@ function Map() {
                     onViewDetails={handleViewDetails}
                     setSelectedSpot={setSelectedSpot}
                     setCoolSpots={setCoolSpots}
+                    currentUser={currentUser}
                   />
                 ) : null
               )}
@@ -332,7 +340,8 @@ function Map() {
             onSubmitReport={onSubmitReport}
             onClose={() => setShowModal(false)}  
             setCoolSpots={setCoolSpots} 
-          />
+            currentUser={currentUser}
+           />
         </>
       )}
 

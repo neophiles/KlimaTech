@@ -5,6 +5,8 @@ from app.db import get_session
 from app.models import CoolSpot, Report, Vote
 from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
 from fastapi import Query
+from sqlmodel import select
+from app.models import CoolSpot, Vote
 from math import radians, sin, cos, sqrt, atan2
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
@@ -22,47 +24,65 @@ def haversine(lat1, lon1, lat2, lon2):
 
 
 def vote_spot(coolspot_id: int, user_id: int, vote_type: str, session: Session):
-    if vote_type not in ("like", "dislike"):
-        raise HTTPException(status_code=400, detail="Invalid vote type")
+    try:
+        if vote_type not in ("like", "dislike"):
+            raise HTTPException(status_code=400, detail="Invalid vote type")
 
-    spot = session.get(CoolSpot, coolspot_id)
-    if not spot:
-        raise HTTPException(status_code=404, detail="Spot not found")
+        spot = session.get(CoolSpot, coolspot_id)
+        if not spot:
+            raise HTTPException(status_code=404, detail="Spot not found")
 
-    # Check if user already voted
-    vote = session.exec(
-        select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
-    ).first()
+        # ensure numeric counts
+        spot.likes = spot.likes or 0
+        spot.dislikes = spot.dislikes or 0
 
-    if vote:
-        if vote.vote_type == vote_type:
-            # Toggle off
-            session.delete(vote)
-            if vote_type == "like":
-                spot.likes -= 1
+        vote = session.exec(
+            select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
+        ).first()
+
+        if vote:
+            if vote.vote_type == vote_type:
+                # Toggle off
+                session.delete(vote)
+                if vote_type == "like":
+                    spot.likes = max(0, spot.likes - 1)
+                else:
+                    spot.dislikes = max(0, spot.dislikes - 1)
             else:
-                spot.dislikes -= 1
+                # Switch vote type
+                if vote_type == "like":
+                    spot.likes += 1
+                    spot.dislikes = max(0, spot.dislikes - 1)
+                else:
+                    spot.dislikes += 1
+                    spot.likes = max(0, spot.likes - 1)
+                vote.vote_type = vote_type
         else:
-            # Switch vote type
+            # New vote
+            new_vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type=vote_type)
+            session.add(new_vote)
             if vote_type == "like":
                 spot.likes += 1
-                spot.dislikes -= 1
             else:
                 spot.dislikes += 1
-                spot.likes -= 1
-            vote.vote_type = vote_type
-    else:
-        # New vote
-        vote = Vote(user_id=user_id, coolspot_id=coolspot_id, vote_type=vote_type)
-        session.add(vote)
-        if vote_type == "like":
-            spot.likes += 1
-        else:
-            spot.dislikes += 1
 
-    session.commit()
-    session.refresh(spot)
-    return {"likes": spot.likes, "dislikes": spot.dislikes}
+        session.add(spot)
+        session.commit()
+        session.refresh(spot)
+
+        # re-query user's vote after commit
+        current_vote = session.exec(
+            select(Vote).where(Vote.user_id == user_id, Vote.coolspot_id == coolspot_id)
+        ).first()
+        user_vote = current_vote.vote_type if current_vote else None
+
+        return {"likes": spot.likes, "dislikes": spot.dislikes, "user_vote": user_vote}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/all", response_model=list[CoolSpotRead])
@@ -155,12 +175,20 @@ async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)
 
 
 @router.post("/{coolspot_id}/like")
-def like_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
+def like_spot(
+    coolspot_id: int,
+    user_id: int = Query(..., description="Current user ID"),
+    session: Session = Depends(get_session),
+):
     return vote_spot(coolspot_id, user_id, "like", session)
 
 
 @router.post("/{coolspot_id}/dislike")
-def dislike_spot(coolspot_id: int, user_id: int, session: Session = Depends(get_session)):
+def dislike_spot(
+    coolspot_id: int,
+    user_id: int = Query(..., description="Current user ID"),
+    session: Session = Depends(get_session),
+):
     return vote_spot(coolspot_id, user_id, "dislike", session)
 
 

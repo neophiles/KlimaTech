@@ -8,52 +8,72 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
   const [likes, setLikes] = useState(spot.likes || 0);
   const [dislikes, setDislikes] = useState(spot.dislikes || 0);
+  const [voting, setVoting] = useState(false);
   const map = useMap();
 
-   // Fetch current votes on mount
+  // keep local counts in sync when parent updates spot
+  useEffect(() => {
+    setLikes(spot.likes || 0);
+    setDislikes(spot.dislikes || 0);
+  }, [spot.likes, spot.dislikes]);
+
+  // Fetch current votes on mount / when user changes
   useEffect(() => {
     async function fetchVotes() {
       try {
-        // Static user for now
-        const res = await fetch(`/api/coolspots/${spot.id}/votes?user_id=1`);
+        const url = currentUser && currentUser.id
+          ? `/api/coolspots/${spot.id}/votes?user_id=${currentUser.id}`
+          : `/api/coolspots/${spot.id}/votes`;
+        const res = await fetch(url);
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
 
-        setLikes(data.likes);
-        setDislikes(data.dislikes);
-        setUserVote(data.user_vote); // now button will color correctly
+        setLikes(data.likes || 0);
+        setDislikes(data.dislikes || 0);
+        setUserVote(data.user_vote ?? null);
       } catch (err) {
         console.error("Failed to fetch votes:", err);
       }
     }
 
     fetchVotes();
-  }, [spot.id]);
+  }, [spot.id, currentUser?.id]);
 
 
-  async function vote(type) {
+  const vote = async (type) => {
+    if (!currentUser || !currentUser.id) {
+      console.warn("Attempted to vote but currentUser is undefined");
+      alert("Please login to vote.");
+      return;
+    }
+
+    setVoting(true);
     try {
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=1`, { method: "POST" });
-      if (!res.ok) throw new Error(await res.text());
+      console.log("voting as user:", currentUser);
+      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, {
+        method: "POST"
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Vote failed");
+      }
       const data = await res.json();
 
-      // Update likes/dislikes from server
-      setLikes(data.likes);
-      setDislikes(data.dislikes);
+      // update local UI from authoritative response
+      setLikes(data.likes || 0);
+      setDislikes(data.dislikes || 0);
+      setUserVote(data.user_vote ?? null);
 
-      // Update userVote based on server: if server returns user voted the same, keep it, else null
-      setUserVote(data.user_vote);
-
-      // Update parent
-      setSelectedSpot(prev => ({ ...prev, likes: data.likes, dislikes: data.dislikes }));
-      setCoolSpots(prev =>
-        prev.map(s => (s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s))
-      );
+      // update parent lists / modal if present
+      setCoolSpots(prev => prev.map(s => s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes } : s));
+      setSelectedSpot(prev => prev && prev.id === spot.id ? { ...prev, likes: data.likes, dislikes: data.dislikes } : prev);
     } catch (err) {
-      console.error(`${type} error:`, err);
+      console.error(type, "error:", err);
+      alert("Failed to submit vote: " + (err.message || ""));
+    } finally {
+      setVoting(false);
     }
-  }
-
+  };
 
   const voteIcons = {
     like: {
@@ -112,11 +132,27 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
         )}
 
         <div className="coolspot-votes">
-          <button className={`vote-btn up ${userVote === "like" ? "active" : ""}`} onClick={() => vote("like")}>
+          <button
+            className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
+            onClick={(e) => { e.stopPropagation(); vote("like"); }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            disabled={voting}
+            aria-busy={voting}
+            title={currentUser ? (userVote === "like" ? "Undo like" : "Like") : "Login to vote"}
+          >
             {userVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
           </button>
           <div className="vote-count">{likes}</div>
-          <button className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`} onClick={() => vote("dislike")}>
+          <button
+            className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
+            onClick={(e) => { e.stopPropagation(); vote("dislike"); }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            disabled={voting}
+            aria-busy={voting}
+            title={currentUser ? (userVote === "dislike" ? "Undo dislike" : "Dislike") : "Login to vote"}
+          >
             {userVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
           </button>
           <div className="vote-count">{dislikes}</div>

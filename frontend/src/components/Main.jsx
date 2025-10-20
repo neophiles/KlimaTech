@@ -61,8 +61,10 @@ function Main() {
     localStorage.setItem("userData", JSON.stringify(data));
 
     if (justRegistered) {
-      // Show personalization modal only after register
-      setPersonalizeType(data.user_type.toLowerCase().replace(" ", "_"));
+      // normalize user_type: convert spaces / hyphens to underscore
+      setPersonalizeType(
+        data.user_type?.toLowerCase().replace(/[-\s]/g, "_") ?? null
+      );
       setShowPersonalizeModal(true);
     }
   };
@@ -94,20 +96,24 @@ function Main() {
       />
 
       <LocationPermissionModal
-        isOpen={showLocationModal}
-        onClose={() => setShowLocationModal(false)}
-        onEnable={handleLocationEnabled}
-        allowLocation={allowLocation}
-      />
+         isOpen={showLocationModal}
+         onClose={() => setShowLocationModal(false)}
+         onEnable={handleLocationEnabled}
+         allowLocation={allowLocation}
+       />
 
-      {showPersonalizeModal && PersonalizeModal && (
-        <PersonalizeModal userId={userData.id} onClose={() => setShowPersonalizeModal(false)} />
+      {showPersonalizeModal && PersonalizeModal && userData?.id && (
+        <PersonalizeModal
+          userId={userData.id}
+          initialData={null}
+          onClose={() => setShowPersonalizeModal(false)}
+        />
       )}
 
       <main>
         <Routes>
           <Route path="/" element={<Dashboard userData={userData} />} />
-          <Route path="/map" element={<Map />} />
+          <Route path="/map" element={<Map currentUser={userData} />} />
           <Route path="/tips" element={<Planner />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
