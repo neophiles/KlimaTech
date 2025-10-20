@@ -39,15 +39,25 @@ function InitTipsWidget({ barangayId, currentUser }) {
   return (
     <div className="base-widget raised-widget inittips-widget">
       <div className="heading">
-        Ano ang gagawin ko ngayong araw?
+        <div className="container">
+          <span>InitTips</span>
+          <span>Ano ang gagawin ko ngayong araw?</span>
+        </div>
+        
+        <button
+          className="regen-btn"
+          onClick={() => fetchTips(true)}
+          disabled={loading}
+        >
+            <svg className={`nav-btn-icon ${loading ? "rotate" : ""}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+              <path d="M20 4v5h-5" />
+            </svg>
+        </button>
       </div>
-    <button
-        className="regen-btn"
-        onClick={() => fetchTips(true)}
-        disabled={loading}
-    >
-        Regenerate Tips
-    </button>
+    
+      <hr />
 
       {loading && <div className="loading">Loading tips...</div>}
       {error && <div className="error-text">Error: {error}</div>}
