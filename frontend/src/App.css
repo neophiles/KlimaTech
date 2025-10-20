@@ -48,12 +48,6 @@ footer .container
   font-family: "Nunito Sans";
 }
 
-@media (max-width: 500px) {
-  .logo-btn .title {
-    display: none;
-  }
-}
-
 footer {
   width: 100%;
   bottom: 0;
