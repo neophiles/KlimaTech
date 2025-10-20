@@ -1,4 +1,5 @@
 import { Marker, Popup, useMap } from "react-leaflet";
+import { useRef } from "react";
 import Carousel from "./Carousel";
 import "./CoolSpotMarker.css";
 import { useState, useEffect } from "react";
@@ -74,6 +75,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       // update parent lists / modal with authoritative user_vote too
       setCoolSpots(prev => prev.map(s => s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : s));
       setSelectedSpot(prev => prev && prev.id === spot.id ? { ...prev, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : prev);
+      
     } catch (err) {
       console.error(type, "error:", err);
       alert("Failed to submit vote: " + (err.message || ""));
@@ -109,6 +111,23 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
     }
   };
 
+
+  const popupRef = useRef();
+
+  useEffect(() => {
+    const popup = popupRef.current;
+    if (!popup) return;
+
+    popup.on("add", () => {
+      const container = popup._container;
+      if (container) {
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.disableScrollPropagation(container);
+      }
+    });
+  }, []);
+
+
   return (
     <Marker 
       position={[spot.lat, spot.lon]}
@@ -123,7 +142,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
         },
       }}
     >
-      <Popup className="coolspot-popup" closeButton={false}>
+      <Popup ref={popupRef} className="coolspot-popup" closeButton={false}>
         <div className="coolspot-header">
           <span className="coolspot-title">{spot.name}</span>
           <span className="coolspot-desc">{spot.type}</span>
@@ -142,23 +161,22 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
           <button
             className={`vote-btn up ${effectiveUserVote === "like" ? "active" : ""}`}
             onClick={(e) => {
+              console.log("🟢 CLICK START");
               e.stopPropagation();
-              e.preventDefault(); 
+              e.preventDefault();
               vote("like");
+              console.log("🟢 CLICK END");
             }}
             onMouseDown={(e) => {
+              console.log("🟢 MOUSEDOWN");
               e.stopPropagation();
               e.preventDefault();
             }}
-            onTouchStart={(e) => {
-              e.stopPropagation();
-            }}
             disabled={voting}
-            aria-busy={voting}
-            title={currentUser ? (effectiveUserVote === "like" ? "Undo like" : "Like") : "Login to vote"}
           >
             {effectiveUserVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
           </button>
+
           <div className="vote-count">{likes}</div>
           <button
             className={`vote-btn down ${effectiveUserVote === "dislike" ? "active" : ""}`}
