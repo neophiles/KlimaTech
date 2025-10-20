@@ -1,8 +1,7 @@
 import { Marker, Popup, useMap } from "react-leaflet";
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Carousel from "./Carousel";
 import "./CoolSpotMarker.css";
-import { useState, useEffect } from "react";
 import { preskoSpotMarker } from "../../utils/coolSpotsIcons";
 
 function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, currentUser }) {
@@ -12,6 +11,8 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   const [voting, setVoting] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const map = useMap();
+  const markerRef = useRef(null);
+
   
   // keep local counts in sync when parent updates spot
   useEffect(() => {
@@ -34,7 +35,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
           ? `/api/coolspots/${spot.id}/votes?user_id=${currentUser.id}`
           : `/api/coolspots/${spot.id}/votes`;
         const res = await fetch(url);
-        if (!res.ok) throw new Error(await res.text());
+        if (!res.ok) throw new Error (await res.text());
         const data = await res.json();
 
         setLikes(data.likes || 0);
@@ -45,8 +46,10 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       }
     }
 
-    fetchVotes();
-  }, [spot.id, currentUser?.id]);
+    // 🟢 refetch every time popup opens
+    if (isPopupOpen) fetchVotes();
+  }, [spot.id, currentUser?.id, isPopupOpen]);
+
 
 
   const vote = async (type) => {
@@ -113,17 +116,28 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   };
 
   const handleMarkerClick = () => {
-    setIsPopupOpen(true);
+    // Always close any open Leaflet popups before opening this one
+    map.closePopup();
+
+    setIsPopupOpen(false);
+    setTimeout(() => setIsPopupOpen(true), 0);
+
     const point = map.latLngToContainerPoint([spot.lat, spot.lon]);
     point.x += 25;
-    point.y -= 100; // move map up by 100px so marker appears lower on screen
+    point.y -= 100;
     const offsetLatLng = map.containerPointToLatLng(point);
     map.flyTo(offsetLatLng, map.getZoom(), { animate: true });
   };
 
+
+
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    if (markerRef.current) {
+      markerRef.current.closePopup();
+    }
   };
+
 
   const handleVote = async (type, e) => {
     if (e) {
@@ -136,10 +150,12 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   return (
     <>
       <Marker 
+        ref={markerRef}
         position={[spot.lat, spot.lon]}
         icon={preskoSpotMarker}
         eventHandlers={{
           click: handleMarkerClick,
+          popupclose: () => setTimeout(() => setIsPopupOpen(false), 50),
         }}
       />
       
@@ -149,9 +165,17 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
           onClose={handleClosePopup}
           className="coolspot-popup"
           closeButton={true}
-          closeOnClick={false}
+          /* allow map clicks to close the popup (use default closeOnClick) */
         >
-          <div onClick={(e) => e.stopPropagation()}>
+          {/* inner wrapper prevents clicks/pointers inside popup from bubbling to the map,
+              so buttons won't close the popup. outside/map clicks still close it. */}
+          <div
+            className="coolspot-popup-inner"
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
             <div className="coolspot-header">
               <span className="coolspot-title">{spot.name}</span>
               <span className="coolspot-desc">{spot.type}</span>
@@ -169,7 +193,9 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
             <div className="coolspot-votes">
               <button
                 className={`vote-btn up ${effectiveUserVote === "like" ? "active" : ""}`}
-                onClick={(e) => handleVote("like", e)}
+                onClick={(e) => { e.stopPropagation(); handleVote("like", e); }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 disabled={voting}
               >
                 {effectiveUserVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
@@ -179,7 +205,9 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
               
               <button
                 className={`vote-btn down ${effectiveUserVote === "dislike" ? "active" : ""}`}
-                onClick={(e) => handleVote("dislike", e)}
+                onClick={(e) => { e.stopPropagation(); handleVote("dislike", e); }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 disabled={voting}
               >
                 {effectiveUserVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
