@@ -1,6 +1,6 @@
-import InfoSubPage from "./InfoSubPage";
-import AboutSubPage from "./AboutSubPage";
-import ProfileSubPage from "./ProfileSubPage";
+import InfoSubPage from "./subpages/InfoSubPage";
+import AboutSubPage from "./subpages/AboutSubPage";
+import ProfileSubPage from "./subpages/ProfileSubPage";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SettingsPage.css";
