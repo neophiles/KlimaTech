@@ -15,12 +15,13 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 4px;
     font-size: 1rem;
 }
 
 .nearest-preskospot-widget .outer-container .inner-container span:nth-child(1) {
-    color: rgb(118, 118, 118);
+    color: #494949;
 }
 
 .nearest-preskospot-widget .outer-container .inner-container span:nth-child(3) {
@@ -28,10 +29,10 @@
 }
 
 .location-marker-icon {
-    margin: auto;
+    align-self: center;
+    min-width: 36px;
+    height: auto;
     color: #02ccb4;
-    width: 32px;
-    height: 32px;
 }
 
 .button.go-to-preskospot {
@@ -40,12 +41,46 @@
     gap: 10px;
 }
 
-.go-to-preskospot-icon {
+.button.go-to-preskospot .go-to-preskospot-icon {
     color: white;
+}
+
+.nearest-preskospot-widget .outer-container .spot-nav-btn {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.nearest-preskospot-widget .outer-container .spot-nav-btn svg {
+    min-width: 32px;
+    height: auto;
+    color: #02ccb4;
+    transition: fill 0.25s ease-in-out;
+}
+
+.nearest-preskospot-widget .outer-container .spot-nav-btn:active svg {
+    fill: currentColor;
+}
+
+.nearest-preskospot-widget .outer-container .spot-nav-btn.prev {
+    border-right: 1px solid #aeaeae;
+}
+
+.nearest-preskospot-widget .outer-container .spot-nav-btn.next {
+    border-left: 1px solid #aeaeae;
 }
 
 @media (max-width: 500px) {
     .nearest-preskospot-widget .outer-container .inner-container {
         font-size: 0.9rem;
+    }
+
+    .location-marker-icon {
+        display: none;
+    }
+
+    .nearest-preskospot-widget .outer-container .spot-nav-btn svg {
+        min-width: 24px;
     }
 }
