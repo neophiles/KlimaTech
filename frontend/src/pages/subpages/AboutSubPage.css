@@ -1,0 +1,76 @@
+.about h4, .about p, .about ul
+{
+    color: #494949;
+    font-size: 0.9rem;
+}
+
+.highlight {
+    color: #02b9a3;
+}
+
+.highlight.bold {
+    font-weight: bold;
+}
+
+.about p a,
+.about ul li a
+{
+    color: #494949;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.about .university {
+    text-decoration: none;
+}
+
+.about ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.team-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: center;
+    gap: 16px;
+}
+
+.member {
+    display: flex;
+    flex-direction: column;
+    width: 160px;
+    height: auto;
+    text-align: center;
+    gap: 4px;
+    transition: transform 0.25s ease-in-out;
+}
+
+.member:hover {
+    .name {
+        color: #02b9a3;
+    }
+    .pic {
+        box-shadow: 0 0 16px #02b9a3;
+    }
+    transform: scale(1.05);
+}
+
+.member .pic {
+    width: 100%;
+    border-radius: 15px;
+    transition: box-shadow 0.25s ease-in-out;
+}
+
+.member .name {
+    margin-top: 8px;
+    transition: color 0.25s ease-in-out;
+}
+
+.member .role {
+    font-size: 0.75rem;
+}
