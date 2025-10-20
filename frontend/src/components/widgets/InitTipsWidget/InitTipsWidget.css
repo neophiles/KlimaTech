@@ -1,9 +1,28 @@
 .inittips-widget {
-    gap: 32px;
+    gap: 20px;
 }
 
 .inittips-widget .heading {
-    text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.inittips-widget .heading .container {
+    display: flex;
+    flex-direction: column;
+}
+
+.inittips-widget .heading .container span:nth-child(1) {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+@media (max-width: 500px) {
+    .inittips-widget .heading .container span:nth-child(2) {
+        font-size: 0.9rem;
+    }
 }
 
 .inittips-widget .container {
@@ -26,31 +45,24 @@
     color: #cc0202;
 }
 
-
-
-
-/* @media (max-width: 500px) {
-    .location-container .barangay {
-        font-size: 0.75rem;
-    }
-    .location-container .locality {
-        font-size: 0.5rem;
-    }
-} */
-
 .regen-btn {
-  margin-left: 8px;
-  padding: 4px 8px;
-  font-size: 14px;
-  background-color: #f4f4f4;
+  padding: 0;
+  background-color: transparent;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.regen-btn:hover {
-  background-color: #e5e5e5;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.regen-btn {
+    color: #02ccb4;
+}
+
+.regen-btn svg.rotate {
+    animation: spin 1s linear infinite;
 }
 
 .regen-btn:disabled {
