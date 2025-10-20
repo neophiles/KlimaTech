@@ -10,7 +10,7 @@ function Header() {
 
     return (
         <header>
-            <div className="header-container">
+            <div className="container">
                 <Button
                     otherClass={"logo-btn"}
                     onClick={handleGoToHome}
