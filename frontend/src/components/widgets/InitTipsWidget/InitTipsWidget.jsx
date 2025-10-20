@@ -7,32 +7,29 @@ function InitTipsWidget({ barangayId, currentUser }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fetchTips = async (force = false) => {
+    if (!barangayId) return;
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(
+        `/api/suggestions/tips/${barangayId}?user_id=${currentUser?.id ?? ""}&force=${force}`
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch tips");
+
+      const data = await res.json();
+      setTips(data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!barangayId) return; // don't fetch until valid
-
-    const fetchTips = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const res = await fetch(
-          `/api/suggestions/tips/${barangayId}?user_id=${currentUser?.id ?? ""}`
-        );
-
-        console.log(res)
-
-        if (!res.ok) throw new Error("Failed to fetch tips");
-
-        const data = await res.json();
-        setTips(data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTips();
   }, [barangayId, currentUser?.id]);
 
@@ -41,7 +38,16 @@ function InitTipsWidget({ barangayId, currentUser }) {
 
   return (
     <div className="base-widget raised-widget inittips-widget">
-      <div className="heading">Ano ang gagawin ko ngayong araw?</div>
+      <div className="heading">
+        Ano ang gagawin ko ngayong araw?
+        <button
+          className="regen-btn"
+          onClick={() => fetchTips(true)}
+          disabled={loading}
+        >
+          Regenerate Tips
+        </button>
+      </div>
 
       {loading && <div className="loading">Loading tips...</div>}
       {error && <div className="error-text">Error: {error}</div>}

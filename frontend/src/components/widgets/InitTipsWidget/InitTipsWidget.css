@@ -37,3 +37,23 @@
         font-size: 0.5rem;
     }
 } */
+
+.regen-btn {
+  margin-left: 8px;
+  padding: 4px 8px;
+  font-size: 14px;
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.regen-btn:hover {
+  background-color: #e5e5e5;
+}
+
+.regen-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
