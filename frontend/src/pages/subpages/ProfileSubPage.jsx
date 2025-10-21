@@ -65,6 +65,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
                         setActiveTypeModal(null);
                     }}
                     existingProfile={currentUser.outdoor_worker_profile || null}
+                    editMode={editMode}
                 />
             )}
             {activeTypeModal === "office_worker" && (
@@ -75,6 +76,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
                         setActiveTypeModal(null);
                     }}
                     existingProfile={currentUser.office_worker_profile || null}
+                    editMode={editMode}
                 />
             )}
             {activeTypeModal === "home_based" && (
