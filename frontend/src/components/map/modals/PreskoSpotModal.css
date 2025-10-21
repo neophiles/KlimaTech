@@ -1,0 +1,255 @@
+.coolspot-modal {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  max-width: 400px;
+  margin: auto;
+  padding: 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  position: fixed;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+.coolspot-modal-fullscreen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 2000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 32px;
+}
+
+.modal-back-arrow {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #333;
+  padding: 18px 24px 0 18px;
+  cursor: pointer;
+  z-index: 2100;
+  align-self: flex-start;
+}
+
+.modal-section {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  width: 95vw;
+  max-width: 420px;
+  margin: 18px 0;
+  padding: 24px 18px 12px 18px;
+}
+
+.modal-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.modal-desc {
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.modal-votes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.vote-btn {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.vote-btn.up { color: #00c853; }
+.vote-btn.down { color: #d50000; }
+
+.vote-btn.up.active .nav-btn-icon, .vote-btn.down.active .nav-btn-icon {
+  fill: currentColor; 
+}
+
+.vote-count {
+  font-size: 1em;
+  font-weight: bold;
+  min-width: 24px;
+  text-align: center;
+}
+
+.vote-bar {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  margin-left: 8px;
+  display: flex;
+  overflow: hidden;
+}
+
+.vote-bar-up {
+  background: #00c853;
+  height: 100%;
+}
+
+.vote-bar-down {
+  background: #d50000;
+  height: 100%;
+}
+
+.report-card {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95em;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.report-user {
+  font-weight: bold;
+}
+
+.report-thumb {
+  width: 100%;
+  max-width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  display: block;
+  background: #eee;
+}
+
+.report-note {
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.report-form {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  width: 95vw;
+  max-width: 420px;
+  margin: 18px 0;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.report-form input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.report-form input[type="file"] {
+  font-size: 1em;
+}
+
+.report-form button {
+  background: #007bff;
+  color: #fff;
+  border-radius: 24px;
+  padding: 10px 0;
+  border: none;
+  font-weight: bold;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.carousel .no-img, .carousel img {
+  min-height: 125px;
+  max-height: 125px;
+  width: 100%;
+  max-width: 320px;
+  background: #eee;
+  display: block;
+}
+
+.carousel .no-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.carousel img {
+  object-fit: cover;
+}
+
+/* Report Photo Upload Box */
+.report-upload-box {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin: 12px 0;
+}
+
+.report-upload-box:hover {
+  background-color: #f8f8f8;
+}
+
+.report-upload-icon {
+  width: 48px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.report-upload-text {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.report-upload-subtext {
+  color: #888;
+  font-size: 14px;
+}
+
+.report-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-preview {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  object-fit: cover;
+}
+
+.report-filename {
+  margin-top: 6px;
+  color: #666;
+  font-size: 14px;
+}
