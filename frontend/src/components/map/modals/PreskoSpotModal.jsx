@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Carousel from "./Carousel";
 import "./PreskoSpotModal.css";
 
-const API_BASE = "http://127.0.0.1:8000";
-
 const CoolSpotModal = ({
   spot,
   reportNote,
@@ -211,7 +209,7 @@ const CoolSpotModal = ({
           {spot.reports.map((r, idx) => (
             <div className="report-card" key={idx}>
               <div className="report-header">
-                <span className="report-user">User{r.user_id}</span>
+                <span className="report-user">{r.username}</span>
                 <span className="report-date">{r.date} {r.time}</span>
               </div>
               {r.photo_url && (

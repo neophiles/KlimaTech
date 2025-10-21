@@ -49,7 +49,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
 
   return (
     <>
-      {/* 🟩 Edit main profile modal */}
+      {/* Edit main profile modal */}
       {editMode && (
         <EditProfileModal
           isOpen={true}
@@ -60,7 +60,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
         />
       )}
 
-      {/* 🟦 Type-specific modals */}
+      {/* Type-specific modals */}
       {activeTypeModal === "student" && (
         <StudentModal
           userId={currentUser.id}
@@ -97,7 +97,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
         />
       )}
 
-      {/* 🧱 Profile info */}
+      {/* Profile info */}
       <div className="base-widget raised-widget settings-widget">
         <span className="widget-title">PROFILE</span>
         <hr />
@@ -113,7 +113,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
         </div>
       </div>
 
-      {/* ⚙️ Actions */}
+      {/* Actions */}
       <div className="base-widget raised-widget settings-widget">
         <span className="widget-title">ACTIONS</span>
         <hr />
