@@ -24,13 +24,25 @@ function OutdoorWorkerModal({ userId, onClose, existingProfile = null, editMode 
 
   // Pre-fill fields if in edit mode
   useEffect(() => {
-    if (editMode && existingProfile) {
+    if (existingProfile) {
       setWorkType(existingProfile.workType || "");
-      setOtherWork(existingProfile.otherWork || "");
       setWorkHours(existingProfile.workHours || { start: "", end: "" });
-      setBreakPreference(existingProfile.breakPreference || null);
+      setBreakPreference(existingProfile.breakPreference || "");
+    } else {
+      fetch(`/api/user/outdoor-worker/${userId}`)
+        .then(res => {
+          if (!res.ok) throw new Error("No existing outdoor profile");
+          return res.json();
+        })
+        .then(data => {
+          setWorkType(data.workType || "");
+          setWorkHours(data.workHours || { start: "", end: "" });
+          setBreakPreference(data.breakPreference || "");
+        })
+        .catch(() => {});
     }
-  }, [editMode, existingProfile]);
+  }, [userId, existingProfile]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

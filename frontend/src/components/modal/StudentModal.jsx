@@ -12,15 +12,32 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const commuteOptions = ["Walk / Bike", "Public Transport", "Private Vehicle"];
 
+    // Prefill data if edit mode
     useEffect(() => {
-        if (editMode && existingProfile) {
+        if (!existingProfile && userId) {
+            fetch(`/api/user/student/${userId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("No existing profile");
+                    return res.json();
+                })
+                .then(data => {
+                    setSelectedDays(data.selectedDays || []);
+                    setCommuteType(data.commuteType || "");
+                    setClassHours(data.classHours || { start: "", end: "" });
+                    setHasOutdoorActivities(data.hasOutdoorActivities || null);
+                    setActivityHours(data.activityHours || { start: "", end: "" });
+                })
+                .catch(err => console.log("No profile found:", err));
+        } else if (existingProfile) {
+            // Prefill from props
             setSelectedDays(existingProfile.selectedDays || []);
             setCommuteType(existingProfile.commuteType || "");
             setClassHours(existingProfile.classHours || { start: "", end: "" });
             setHasOutdoorActivities(existingProfile.hasOutdoorActivities || null);
             setActivityHours(existingProfile.activityHours || { start: "", end: "" });
         }
-    }, [editMode, existingProfile]);
+    }, [userId, existingProfile]);
+
 
     // Toggle day selection
     const toggleDay = (day) => {
@@ -53,11 +70,9 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
                 body: JSON.stringify(formData),
             });
 
-            if (!res.ok) {
-                throw new Error(`${method} request failed`);
-            }
+            if (!res.ok) throw new Error(`${method} request failed`);
+            await res.json();
 
-            const data = await res.json();
             alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
             if (onClose) onClose();
         } catch (err) {
@@ -74,8 +89,9 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
                 <div className="title-group">
                     <h3>Personalize Your Presko Experience</h3>
                     <p className="subtext">
-                        {editMode ? "Update your student profile information" : 
-                        "Tell us a bit about your weekly student life"}
+                        {editMode
+                            ? "Update your student profile information"
+                            : "Tell us a bit about your weekly student life"}
                     </p>
                 </div>
 
@@ -190,9 +206,7 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
                                 Cancel
                             </button>
                         )}
-
                     </div>
-
                 </form>
             </div>
         </div>

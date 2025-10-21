@@ -24,10 +24,24 @@ function HomeBasedModal({ userId, onClose, existingProfile = null, editMode = fa
 
     // Prefill data when editing
     useEffect(() => {
-        if (editMode && existingProfile) {
+        if (existingProfile) {
             setActivities(existingProfile.activities || []);
             setPreferredTimes(existingProfile.preferredTimes || []);
+            return;
         }
+
+        // If no existingProfile, attempt to fetch
+        fetch(`/api/user/home-based/${userId}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("No existing profile");
+                return res.json();
+            })
+            .then((data) => {
+                setActivities(data.activities || []);
+                setPreferredTimes(data.preferredTimes || []);
+            })
+            .catch(() => {});
+    
     }, [editMode, existingProfile]);
 
     // Reusable toggle function

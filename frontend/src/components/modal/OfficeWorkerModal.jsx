@@ -20,14 +20,29 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
   ];
 
   // Prefill form when in edit mode
-  useEffect(() => {
-    if (editMode && existingProfile) {
-      setSelectedDays(existingProfile.selectedDays || []);
-      setWorkHours(existingProfile.workHours || { start: "", end: "" });
-      setCommuteType(existingProfile.commuteType || "");
-      setLunchHabit(existingProfile.lunchHabit || "");
-    }
-  }, [editMode, existingProfile]);
+    useEffect(() => {
+        if (existingProfile) {
+        setSelectedDays(existingProfile.selectedDays || []);
+        setWorkHours(existingProfile.workHours || { start: "", end: "" });
+        setCommuteType(existingProfile.commuteType || "");
+        setLunchHabit(existingProfile.lunchHabit || "");
+        return;
+        }
+
+        // If no existingProfile, attempt to fetch
+        fetch(`/api/user/office-worker/${userId}`)
+        .then((res) => {
+            if (!res.ok) throw new Error("No existing profile");
+            return res.json();
+        })
+        .then((data) => {
+            setSelectedDays(data.selectedDays || []);
+            setWorkHours(data.workHours || { start: "", end: "" });
+            setCommuteType(data.commuteType || "");
+            setLunchHabit(data.lunchHabit || "");
+        })
+        .catch(() => {});
+    }, [userId, existingProfile]);
 
   const toggleDay = (day) => {
     setSelectedDays((prev) =>
