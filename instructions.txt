@@ -29,7 +29,7 @@ Create the PostgreSQL database:
     \q
 
 Look inside the database:
-    psql -h localhost -U your_postgres_user -d heat_project
+    
     \dt
     SELECT * FROM heatlog;
     SELECT * FROM barangay;

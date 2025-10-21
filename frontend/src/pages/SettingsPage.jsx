@@ -11,7 +11,9 @@ function Settings() {
 
   const navigate = useNavigate();
 
-  const currentUser = JSON.parse(localStorage.getItem("userData"));
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("userData"))
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("userData");
@@ -52,7 +54,7 @@ function Settings() {
     <div className="dashboard">
       {subPage !== "" && backButton}
 
-      {subPage === "profile" ? <ProfileSubPage currentUser={currentUser}/> :
+      {subPage === "profile" ? <ProfileSubPage currentUser={currentUser} setCurrentUser={setCurrentUser} /> :
         subPage === "info" ? <InfoSubPage /> :
         subPage === "about" ? <AboutSubPage /> :
         

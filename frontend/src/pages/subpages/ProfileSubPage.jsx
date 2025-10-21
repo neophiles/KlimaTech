@@ -1,38 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./ProfileSubPage.css";
 import EditProfileModal from "../../components/modal/EditProfileModal";
+import StudentModal from "../../components/modal/StudentModal";
+import OutdoorWorkerModal from "../../components/modal/OutdoorWorkerModal";
+import OfficeWorkerModal from "../../components/modal/OfficeWorkerModal";
+import HomeBasedModal from "../../components/modal/HomeBasedModal";
 
-function ProfileSubPage({ currentUser }) {
+const API_BASE = "http://127.0.0.1:8000";
+
+function ProfileSubPage({ currentUser, setCurrentUser }) {
     const [editMode, setEditMode] = useState(false);
-    const [userProfile, setUserProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [activeTypeModal, setActiveTypeModal] = useState(null); // "student" | "outdoor_worker" | "office_worker" | "home_based"
 
-    useEffect(() => {
-        if (!currentUser?.id) return;
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
 
-        const fetchUserProfile = async () => {
-            try {
-                setLoading(true);
-                setError(null);
+        try {
+            const response = await fetch(`${API_BASE}/user/${currentUser.id}`, { method: "DELETE" });
 
-                const res = await fetch(`/api/user/${currentUser.id}`);
-                if (!res.ok) throw new Error("Failed to fetch user profile");
-
-                const data = await res.json();
-                setUserProfile(data);
-            } catch (err) {
-                console.error(err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
+            if (response.status === 204) {
+                alert("Account deleted successfully.");
+                setCurrentUser(null);
+            } else {
+                const errorData = await response.json();
+                alert(errorData.detail || "Failed to delete account.");
             }
-        };
-
-        fetchUserProfile();
-    }, [currentUser?.id]);
-
-    const profile = userProfile || currentUser;
+        } catch (err) {
+            console.error("Error deleting account:", err);
+            alert("Something went wrong while deleting your account.");
+        }
+    };
 
     return (
         <>
@@ -40,52 +37,64 @@ function ProfileSubPage({ currentUser }) {
                 <EditProfileModal
                     isOpen={true}
                     onClose={() => setEditMode(false)}
-                    currentUser={profile}
+                    currentUser={currentUser}
+                    onUpdate={(updatedUser) => {
+                        setCurrentUser(updatedUser);
+                        localStorage.setItem("userData", JSON.stringify(updatedUser));
+                    }}
+                    onUserTypeChosen={(type) => setActiveTypeModal(type)} 
+                />
+            )}
+
+            {/* Type-specific modals */}
+            {activeTypeModal === "student" && (
+                <StudentModal
+                    userId={currentUser.id}
+                    onClose={() => setActiveTypeModal(null)}
+                />
+            )}
+            {activeTypeModal === "outdoor_worker" && (
+                <OutdoorWorkerModal
+                    userId={currentUser.id}
+                    onClose={() => setActiveTypeModal(null)}
+                />
+            )}
+            {activeTypeModal === "office_worker" && (
+                <OfficeWorkerModal
+                    userId={currentUser.id}
+                    onClose={() => setActiveTypeModal(null)}
+                />
+            )}
+            {activeTypeModal === "home_based" && (
+                <HomeBasedModal
+                    userId={currentUser.id}
+                    onClose={() => setActiveTypeModal(null)}
                 />
             )}
 
             <div className="base-widget raised-widget settings-widget">
                 <span className="widget-title">PROFILE</span>
                 <hr />
-
-                {loading ? (
-                    <div className="loading">Loading profile...</div>
-                ) : error ? (
-                    <div className="error-text">Error: {error}</div>
-                ) : (
-                    <div className="profile-info">
-                        <div className="info-group">
-                            <label htmlFor="username">Username</label>
-                            <input
-                                id="username"
-                                type="text"
-                                value={profile?.username || ""}
-                                readOnly
-                            />
-                        </div>
-
-                        <div className="info-group">
-                            <label htmlFor="user-type">User Type</label>
-                            <input
-                                id="user-type"
-                                type="text"
-                                value={profile?.user_type || ""}
-                                readOnly
-                            />
-                        </div>
+                <div className="profile-info">
+                    <div className="info-group">
+                        <label>Username</label>
+                        <input type="text" value={currentUser?.username || ""} readOnly />
                     </div>
-                )}
+                    <div className="info-group">
+                        <label>User Type</label>
+                        <input type="text" value={currentUser?.user_type || ""} readOnly />
+                    </div>
+                </div>
             </div>
 
             <div className="base-widget raised-widget settings-widget">
                 <span className="widget-title">ACTIONS</span>
                 <hr />
-
                 <div className="profile-actions">
                     <button className="edit-profile-btn" onClick={() => setEditMode(true)}>
                         Edit Profile
                     </button>
-                    <button className="delete-account-btn">
+                    <button className="delete-account-btn" onClick={handleDelete}>
                         Delete Account
                     </button>
                 </div>
