@@ -216,6 +216,14 @@ class OfficeWorkerProfileIn(BaseModel):
     lunchHabit: Optional[str] = None 
 
 
+class OfficeWorkerProfileOut(BaseModel):
+    selectedDays: List[str]
+    workHours: dict
+    commuteType: Optional[str]
+    lunchHabit: Optional[str]
+
+
+
 @router.api_route("/office-worker/{user_id}", methods=["POST", "PUT"], response_model=OfficeWorkerProfile)
 def create_or_update_office_worker_profile(
     user_id: int,
@@ -276,9 +284,11 @@ def create_or_update_office_worker_profile(
     session.refresh(new)
     return new
 
-@router.get("/office-worker/{user_id}", response_model=OfficeWorkerProfile)
+@router.get("/office-worker/{user_id}", response_model=OfficeWorkerProfileOut)
 def get_office_worker_profile(user_id: int, session: Session = Depends(get_session)):
-    profile = session.exec(select(OfficeWorkerProfile).where(OfficeWorkerProfile.user_id == user_id)).first()
+    profile = session.exec(
+        select(OfficeWorkerProfile).where(OfficeWorkerProfile.user_id == user_id)
+    ).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
 
@@ -290,6 +300,7 @@ def get_office_worker_profile(user_id: int, session: Session = Depends(get_sessi
         "commuteType": profile.commute_mode,
         "lunchHabit": "Yes" if profile.goes_out_for_lunch else "No" if profile.goes_out_for_lunch == False else None
     }
+
 
 class HomeBasedIn(BaseModel):
     activities: Optional[List[str]] = None
