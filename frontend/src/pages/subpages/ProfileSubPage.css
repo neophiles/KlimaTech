@@ -1,0 +1,71 @@
+.profile-info, .profile-actions {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+}
+
+@media (max-width: 500px) {
+    .profile-info, .profile-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+.profile-info .info-group, .profile-actions button {
+    min-width: 200px;
+    width: 100%;
+}
+
+.profile-info .info-group{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-info .info-group label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--dark-grey-color);
+}
+
+.profile-info .info-group input {
+    padding: 8px 16px;
+    background-color: #eff3f5;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #17191b;
+}
+
+.profile-info .info-group input:focus {
+  border-color: #a9c4d4;
+  outline: none;
+}
+
+/* .profile-actions button {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+} */
+
+
+.edit-profile-btn {
+    background-color: #1AC6A2;
+}
+
+.delete-account-btn {
+    background-color: #FF4D4D;
+}
+
+.edit-profile-btn, .delete-account-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
