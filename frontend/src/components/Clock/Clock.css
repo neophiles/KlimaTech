@@ -194,3 +194,29 @@
     font-size: 0.75rem;
   }
 }
+
+.clock-heat-info.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px; /* adjust to fit your design */
+}
+
+.loader-icon {
+  min-width: 80px;
+  height: auto;
+  color: yellow;
+  animation: rotate 1s linear infinite, colorShift 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes colorShift {
+  0% { color: yellow; }
+  33% { color: orange; }
+  66% { color: red; }
+  100% { color: yellow; }
+}
