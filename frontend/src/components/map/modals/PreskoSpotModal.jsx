@@ -109,111 +109,119 @@ const CoolSpotModal = ({
   };
 
   return (
-    <div className="coolspot-modal-fullscreen">
+    <div className="modal preskospot">
       <button className="modal-back-arrow" onClick={onClose}>
         <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M13.883 5.007l.058 -.005h.118l.058 .005l.06 .009l.052 .01l.108 .032l.067 .027l.132 .07l.09 .065l.081 .073l.083 .094l.054 .077l.054 .096l.017 .036l.027 .067l.032 .108l.01 .053l.01 .06l.004 .057l.002 .059v12c0 .852 -.986 1.297 -1.623 .783l-.084 -.076l-6 -6a1 1 0 0 1 -.083 -1.32l.083 -.094l6 -6l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01z" />
         </svg>
       </button>
 
-      {spot.photo_url && <Carousel images={[`${API_BASE}${spot.photo_url}`]} />}
+      {spot.photo_url && <Carousel otherClass={"modal-img"} images={[`${API_BASE}${spot.photo_url}`]} />}
 
-      <div className="modal-section">
-        <h2 className="modal-title">{spot.name}</h2>
-        <div className="modal-desc">{spot.type}</div>
+      <div className="container">
+        <div className="modal-section">
+          <div className="modal-heading">
+              <h2 className="modal-title">{spot.name}</h2>
+              <div className="modal-desc">{spot.type}</div>
+          </div>
 
-        <div className="modal-votes">
-          <button
-            className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
-            onClick={(e) => { e.stopPropagation(); vote("like"); }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            title={currentUser ? (userVote === "like" ? "Undo like" : "Like") : "Login to vote"}
-          >
-            {userVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
-          </button>
-          <span className="vote-count">{likes}</span>
+          <div className="modal-votes">
+            <button
+              className={`vote-btn up ${userVote === "like" ? "active" : ""}`}
+              onClick={(e) => { e.stopPropagation(); vote("like"); }}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              title={currentUser ? (userVote === "like" ? "Undo like" : "Like") : "Login to vote"}
+            >
+              {userVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
+            </button>
+            <span className="vote-count">{likes}</span>
 
-          <button
-            className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
-            onClick={(e) => { e.stopPropagation(); vote("dislike"); }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            title={currentUser ? (userVote === "dislike" ? "Undo dislike" : "Dislike") : "Login to vote"}
-          >
-            {userVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
-          </button>
-          <span className="vote-count">{dislikes}</span>
+            <button
+              className={`vote-btn down ${userVote === "dislike" ? "active" : ""}`}
+              onClick={(e) => { e.stopPropagation(); vote("dislike"); }}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              title={currentUser ? (userVote === "dislike" ? "Undo dislike" : "Dislike") : "Login to vote"}
+            >
+              {userVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
+            </button>
+            <span className="vote-count">{dislikes}</span>
 
-          <div className="vote-bar">
-            <div
-              className="vote-bar-up"
-              style={{ width: `${(likes / totalVotes) * 100}%` }}
-            />
-            <div
-              className="vote-bar-down"
-              style={{ width: `${(dislikes / totalVotes) * 100}%` }}
-            />
+            <div className="vote-bar">
+              <div
+                className="vote-bar-up"
+                style={{ width: `${(likes / totalVotes) * 100}%` }}
+              />
+              <div
+                className="vote-bar-down"
+                style={{ width: `${(dislikes / totalVotes) * 100}%` }}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="modal-section">
-        <h3>Ratings</h3>
-        {spot.reports.map((r, idx) => (
-          <div className="report-card" key={idx}>
-            <div className="report-header">
-              <span className="report-user">User{r.user_id}</span>
-              <span className="report-date">{r.date} {r.time}</span>
-            </div>
-            {r.photo_url && (
-              <img src={`${API_BASE}${r.photo_url}`} alt="Report" className="report-thumb" />
-            )}
-            <div className="report-note">{r.note}</div>
-          </div>
-        ))}
-      </div>
+        <hr />
 
-      <form className="report-form" onSubmit={onSubmitReport}>
-        <input
-          type="text"
-          value={reportNote}
-          onChange={e => setReportNote(e.target.value)}
-          placeholder="Add a report..."
-          required
-        />
-        <div
-          className="report-upload-box"
-          onClick={() => document.getElementById("report-photo-input").click()}
-        >
+        <form className="modal-section report-form" onSubmit={onSubmitReport}>
           <input
-            id="report-photo-input"
-            type="file"
-            accept="image/*"
-            capture="environment"
-            style={{ display: "none" }}
-            onChange={e => setReportPhoto(e.target.files[0])}
+            type="text"
+            value={reportNote}
+            onChange={e => setReportNote(e.target.value)}
+            placeholder="Add a report..."
+            required
           />
-          {!reportPhoto ? (
-            <>
-              <img src="/camera-icon.png" alt="Camera Icon" className="report-upload-icon" />
-              <div className="report-upload-text">📸 Take or Upload a Photo</div>
-              <div className="report-upload-subtext">
-                Tap to open camera or choose from gallery
+          <div
+            className="report-upload-box"
+            onClick={() => document.getElementById("report-photo-input").click()}
+          >
+            <input
+              id="report-photo-input"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              style={{ display: "none" }}
+              onChange={e => setReportPhoto(e.target.files[0])}
+            />
+            {!reportPhoto ? (
+              <>
+                <div className="report-upload-text">📸 Take or Upload a Photo</div>
+                <div className="report-upload-subtext">
+                  Tap to open camera or choose from gallery
+                </div>
+              </>
+            ) : (
+              <div className="report-preview-wrapper">
+                <img src={URL.createObjectURL(reportPhoto)} alt="Preview" className="report-preview" />
+                <div className="report-filename">{reportPhoto.name}</div>
               </div>
-            </>
-          ) : (
-            <div className="report-preview-wrapper">
-              <img src={URL.createObjectURL(reportPhoto)} alt="Preview" className="report-preview" />
-              <div className="report-filename">{reportPhoto.name}</div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <button type="submit" disabled={reportSubmitting}>
-          {reportSubmitting ? "Submitting..." : "Add Report"}
-        </button>
-      </form>
+          <button type="submit" disabled={reportSubmitting}>
+            {reportSubmitting ? "Submitting..." : "Add Report"}
+          </button>
+        </form>
+
+        <hr />
+
+        <div className="modal-section">
+          <h3>Ratings</h3>
+          {spot.reports.map((r, idx) => (
+            <div className="report-card" key={idx}>
+              <div className="report-header">
+                <span className="report-user">User{r.user_id}</span>
+                <span className="report-date">{r.date} {r.time}</span>
+              </div>
+              {r.photo_url && (
+                <img src={`${API_BASE}${r.photo_url}`} alt="Report" className="report-thumb" />
+              )}
+              <div className="report-note">{r.note}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
