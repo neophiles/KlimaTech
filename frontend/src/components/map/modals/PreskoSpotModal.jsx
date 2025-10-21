@@ -117,7 +117,7 @@ const CoolSpotModal = ({
 
       {
         spot.photo_url
-        ? <Carousel otherClass={"modal-img"} images={[`/api/${spot.photo_url}`]} />
+        ? <Carousel otherClass={"modal-img"} images={[`/api${spot.photo_url}`]} />
         : <div className="no-img">No Image</div>
       }
 
@@ -217,7 +217,7 @@ const CoolSpotModal = ({
                 <span className="report-date">{r.date} {r.time}</span>
               </div>
               {r.photo_url && (
-                <img src={`/api/${r.photo_url}`} alt="Report" className="report-thumb" />
+                <img src={`/api${r.photo_url}`} alt="Report" className="report-thumb" />
               )}
               <div className="report-note">{r.note}</div>
             </div>
