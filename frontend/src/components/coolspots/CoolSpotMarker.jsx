@@ -116,7 +116,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   };
 
   const handleMarkerClick = () => {
-    // Always close any open Leaflet popups before opening this one
+    // Close any other popups first
     map.closePopup();
 
     setIsPopupOpen(false);

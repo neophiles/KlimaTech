@@ -333,7 +333,7 @@ function Map({ currentUser }) {
         <>
           <div className="modal-overlay" />
           <CoolSpotModal
-           key={selectedSpot.id + '-' + selectedSpot.likes + '-' + selectedSpot.dislikes}
+           key={selectedSpot.id ?? "none"}
             spot={selectedSpot}
             setSelectedSpot={setSelectedSpot}
             reportNote={reportNote}
@@ -343,7 +343,10 @@ function Map({ currentUser }) {
             reportSubmitting={reportSubmitting}
             setReportSubmitting={setReportSubmitting}
             onSubmitReport={onSubmitReport}
-            onClose={() => setShowModal(false)}  
+            onClose={() => {
+              setShowModal(false);
+              setSelectedSpot(null);
+            }}
             setCoolSpots={setCoolSpots} 
             currentUser={currentUser}
            />
