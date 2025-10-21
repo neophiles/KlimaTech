@@ -11,6 +11,8 @@ function Settings() {
 
   const navigate = useNavigate();
 
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
+
   const handleLogout = () => {
     localStorage.removeItem("userData");
     setMessage("Logged out successfully!");
@@ -50,7 +52,7 @@ function Settings() {
     <div className="dashboard">
       {subPage !== "" && backButton}
 
-      {subPage === "profile" ? <ProfileSubPage /> :
+      {subPage === "profile" ? <ProfileSubPage currentUser={currentUser}/> :
         subPage === "info" ? <InfoSubPage /> :
         subPage === "about" ? <AboutSubPage /> :
         
