@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from '../pages/DashboardPage';
-import Map from "../pages/MapPage";
-import Planner from "../pages/InitTipsPage";
+import Map from "./map/Map";
 import Settings from '../pages/SettingsPage';
 import AuthModal from "./modal/AuthModal";
 import LocationPermissionModal from "./modal/LocationPermissionModal";
