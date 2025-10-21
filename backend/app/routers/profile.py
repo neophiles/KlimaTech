@@ -235,7 +235,7 @@ class OfficeWorkerProfileOut(BaseModel):
 
 
 
-@router.api_route("/office-worker/{user_id}", methods=["POST", "PUT"], response_model=OfficeWorkerProfile)
+@router.api_route("/office-worker/{user_id}", methods=["POST", "PUT"], response_model=OfficeWorkerProfileIn)
 def create_or_update_office_worker_profile(
     user_id: int,
     payload: OfficeWorkerProfileIn,
@@ -262,14 +262,12 @@ def create_or_update_office_worker_profile(
     commute_mode = payload.commuteType or None
 
     goes_out_for_lunch = None
-    if payload.lunchHabit is not None:
-        low = payload.lunchHabit.lower()
-        if "yes" in low or "walk" in low or "commute" in low or "out" in low:
+    if payload.lunchHabit:
+        if "walk" in payload.lunchHabit.lower() or "commute" in payload.lunchHabit.lower():
             goes_out_for_lunch = True
-        elif "no" in low or "inside" in low or "bring" in low:
+        elif "inside" in payload.lunchHabit.lower() or "baon" in payload.lunchHabit.lower():
             goes_out_for_lunch = False
-        else:
-            goes_out_for_lunch = None
+
 
     existing = session.exec(select(OfficeWorkerProfile).where(OfficeWorkerProfile.user_id == user_id)).first()
 
@@ -295,22 +293,38 @@ def create_or_update_office_worker_profile(
     session.refresh(new)
     return new
 
+
 @router.get("/office-worker/{user_id}", response_model=OfficeWorkerProfileOut)
 def get_office_worker_profile(user_id: int, session: Session = Depends(get_session)):
     profile = session.exec(
         select(OfficeWorkerProfile).where(OfficeWorkerProfile.user_id == user_id)
     ).first()
+
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
 
-    work_start, work_end = (profile.work_hours or "-").split("-")
+    # Handle work hours safely
+    if profile.work_hours and "-" in profile.work_hours:
+        work_start, work_end = profile.work_hours.split("-", 1)
+    else:
+        work_start, work_end = "", ""
+
+    # Match frontend exact strings
+    if profile.goes_out_for_lunch is True:
+        lunch_habit = "Yes, I walk/commute out"
+    elif profile.goes_out_for_lunch is False:
+        lunch_habit = "No, I eat inside the building / bring baon"
+    else:
+        lunch_habit = ""
 
     return {
         "selectedDays": profile.office_days.split(",") if profile.office_days else [],
         "workHours": {"start": work_start, "end": work_end},
-        "commuteType": profile.commute_mode,
-        "lunchHabit": "Yes" if profile.goes_out_for_lunch else "No" if profile.goes_out_for_lunch == False else None
+        "commuteType": profile.commute_mode or "",
+        "lunchHabit": lunch_habit,
     }
+
+
 
 
 class HomeBasedIn(BaseModel):
