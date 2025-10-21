@@ -29,12 +29,12 @@
 }
 
 .profile-info .info-group input {
-    padding: 8px 16px;
+    padding: 8px;
     background-color: #eff3f5;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 1rem;
-    color: #17191b;
+    font-size: 0.9rem;
+    color: var(--dark-grey-color);
 }
 
 .profile-info .info-group input:focus {
