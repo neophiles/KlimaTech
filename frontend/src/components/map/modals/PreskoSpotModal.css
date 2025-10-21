@@ -22,6 +22,17 @@
   min-height: 125px;
 }
 
+.modal.preskospot .no-img {
+  min-width: 100%;
+  min-height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  color: #aaa;
+  font-size: 1rem;
+}
+
 .modal-section {
   display: flex;
   flex-direction: column;

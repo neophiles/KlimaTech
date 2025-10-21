@@ -117,7 +117,11 @@ const CoolSpotModal = ({
         </svg>
       </button>
 
-      {spot.photo_url && <Carousel otherClass={"modal-img"} images={[`${API_BASE}${spot.photo_url}`]} />}
+      {
+        spot.photo_url
+        ? <Carousel otherClass={"modal-img"} images={[`${API_BASE}${spot.photo_url}`]} />
+        : <div className="no-img">No Image</div>
+      }
 
       <div className="container">
         <div className="modal-section">
