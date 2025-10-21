@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function StudentModal({ userId, onClose }) {
+function StudentModal({ userId, onClose, existingProfile = null }) {
     const [selectedDays, setSelectedDays] = useState([]);
     const [commuteType, setCommuteType] = useState("");
     const [classHours, setClassHours] = useState({ start: "", end: "" });
@@ -11,6 +11,20 @@ function StudentModal({ userId, onClose }) {
 
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const commuteOptions = ["Walk / Bike", "Public Transport", "Private Vehicle"];
+    const [isEditing, setIsEditing] = useState(!!existingProfile);
+
+    useEffect(() => {
+        setIsEditing(!!existingProfile);
+
+        if (existingProfile) {
+            setSelectedDays(existingProfile.selectedDays || []);
+            setCommuteType(existingProfile.commuteType || "");
+            setClassHours(existingProfile.classHours || { start: "", end: "" });
+            setHasOutdoorActivities(existingProfile.hasOutdoorActivities || null);
+            setActivityHours(existingProfile.activityHours || { start: "", end: "" });
+        }
+    }, [existingProfile]);
+
 
     // Toggle day selection
     const toggleDay = (day) => {
@@ -32,8 +46,11 @@ function StudentModal({ userId, onClose }) {
         };
 
         try {
-            const res = await fetch(`api/user/student/${userId}`, {
-                method: "POST",
+            const method = isEditing ? "PUT" : "POST";
+            const url = `/api/user/student/${userId}`;
+
+            const res = await fetch(url, {
+                method,
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -41,16 +58,15 @@ function StudentModal({ userId, onClose }) {
             });
 
             if (!res.ok) {
-                throw new Error("Failed to save profile");
+                throw new Error(`${method} request failed`);
             }
 
             const data = await res.json();
-            console.log("Profile saved:", data);
-            alert("Your Presko student profile has been saved!");
+            alert(isEditing ? "Profile updated successfully!" : "Profile created successfully!");
             if (onClose) onClose();
         } catch (err) {
             console.error("Error:", err);
-            alert("Something went wrong saving your profile.");
+            alert("Something went wrong while saving your profile.");
         } finally {
             setLoading(false);
         }
@@ -162,9 +178,22 @@ function StudentModal({ userId, onClose }) {
 
                     <div className="button-group">
                         <button className="confirm-btn" type="submit" disabled={loading}>
-                            {loading ? "Saving..." : "Let's get you presko!"}
+                            {loading ? "Saving..." : isEditing ? "Update Profile" : "Let's get you presko!"}
                         </button>
+
+                        {isEditing && (
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={onClose}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                        )}
+
                     </div>
+
                 </form>
             </div>
         </div>
