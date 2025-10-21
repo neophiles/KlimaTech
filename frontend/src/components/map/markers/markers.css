@@ -33,6 +33,27 @@
   font-size: 1rem;
 }
 
+.carousel .no-img, .carousel img {
+  min-height: 125px;
+  max-height: 125px;
+  width: 100%;
+  max-width: 320px;
+  background: #eee;
+  display: block;
+}
+
+.carousel .no-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.carousel img {
+  object-fit: cover;
+}
+
 .coolspot-header {
   display: flex;
   flex-direction: column;
@@ -54,13 +75,18 @@
 
 .coolspot-details-btn {
   position: absolute;
-  right: -3rem;
+  right: -48px;
   top: 0;
   background-color: rgba(255,255,255,0.85);
   border: none;
   border-radius: 15px;
-  padding: 0.75rem;
   cursor: pointer;
+  padding: 8px;
+}
+
+.coolspot-details-btn svg {
+  min-width: 16px;
+  height: auto;
 }
 
 .coolspot-details-btn:hover {
@@ -73,32 +99,13 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  right: -3rem;
-  top: 3.25rem;
+  right: -48px;
+  top: 48px;
   background: rgba(255,255,255,0.85);
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 0.5rem;
+  padding: 8px;
 }
-
-.vote-btn {
-  background: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.vote-btn.up { color: #00c853; }
-.vote-btn.down { color: #d50000; }
-
-.vote-btn.up.active .nav-btn-icon, .vote-btn.down.active .nav-btn-icon {
-  fill: currentColor; 
-}
-
-.vote-count {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
 
 .coolspot-popup .leaflet-popup-content-wrapper {
   pointer-events: auto;
