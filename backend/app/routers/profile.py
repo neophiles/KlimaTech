@@ -105,8 +105,7 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
     }
 
 
-@router.post("/student/{user_id}", response_model=StudentProfile)
-@router.put("/student/{user_id}", response_model=StudentProfile)
+@router.api_route("/student/{user_id}", methods=["POST", "PUT"], response_model=StudentProfile)
 def create_or_update_student_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
@@ -138,8 +137,28 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
     return payload
 
 
-@router.post("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
-@router.put("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
+@router.get("/student/{user_id}")
+def get_student_profile(user_id: int, session: Session = Depends(get_session)):
+    profile = session.exec(select(StudentProfile).where(StudentProfile.user_id == user_id)).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    # Parse DB strings into frontend-friendly format
+    class_start, class_end = (profile.class_hours or "-").split("-")
+    activity_start, activity_end = ("-", "-")
+    if profile.outdoor_hours:
+        activity_start, activity_end = profile.outdoor_hours.split("-")
+
+    return {
+        "selectedDays": profile.days_on_campus.split(",") if profile.days_on_campus else [],
+        "commuteType": profile.commute_mode,
+        "classHours": {"start": class_start, "end": class_end},
+        "hasOutdoorActivities": "Yes" if profile.has_outdoor_activities else "No",
+        "activityHours": {"start": activity_start, "end": activity_end} if profile.has_outdoor_activities else None
+    }
+
+
+@router.api_route("/outdoor-worker/{user_id}", methods=["POST", "PUT"], response_model=OutdoorWorkerProfile)
 def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
@@ -171,6 +190,25 @@ def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: S
     return payload
 
 
+@router.get("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
+def get_outdoor_worker_profile(user_id: int, session: Session = Depends(get_session)):
+    profile = session.exec(
+        select(OutdoorWorkerProfile).where(OutdoorWorkerProfile.user_id == user_id)
+    ).first()
+
+    if not profile:
+        raise HTTPException(status_code=404, detail="Outdoor worker profile not found")
+
+    start, end = profile.work_hours.split("-")
+
+    return {
+        "user_id": profile.user_id,
+        "workType": profile.work_type,
+        "workHours": {"start": start, "end": end},
+        "breakPreference": profile.break_type,
+    }
+
+
 class OfficeWorkerProfileIn(BaseModel):
     selectedDays: Optional[List[str]] = None
     workHours: Optional[dict] = None    # { "start": "09:00", "end": "18:00" }
@@ -178,8 +216,7 @@ class OfficeWorkerProfileIn(BaseModel):
     lunchHabit: Optional[str] = None 
 
 
-@router.post("/office-worker/{user_id}", response_model=OfficeWorkerProfile, status_code=status.HTTP_201_CREATED)
-@router.put("/office-worker/{user_id}", response_model=OfficeWorkerProfile)
+@router.api_route("/office-worker/{user_id}", methods=["POST", "PUT"], response_model=OfficeWorkerProfile)
 def create_or_update_office_worker_profile(
     user_id: int,
     payload: OfficeWorkerProfileIn,
@@ -239,13 +276,27 @@ def create_or_update_office_worker_profile(
     session.refresh(new)
     return new
 
+@router.get("/office-worker/{user_id}", response_model=OfficeWorkerProfile)
+def get_office_worker_profile(user_id: int, session: Session = Depends(get_session)):
+    profile = session.exec(select(OfficeWorkerProfile).where(OfficeWorkerProfile.user_id == user_id)).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    work_start, work_end = (profile.work_hours or "-").split("-")
+
+    return {
+        "selectedDays": profile.office_days.split(",") if profile.office_days else [],
+        "workHours": {"start": work_start, "end": work_end},
+        "commuteType": profile.commute_mode,
+        "lunchHabit": "Yes" if profile.goes_out_for_lunch else "No" if profile.goes_out_for_lunch == False else None
+    }
 
 class HomeBasedIn(BaseModel):
     activities: Optional[List[str]] = None
     preferredTimes: Optional[List[str]] = None
 
-@router.post("/home-based/{user_id}", response_model=HomeBasedProfile, status_code=status.HTTP_201_CREATED)
-@router.put("/home-based/{user_id}", response_model=HomeBasedProfile)
+
+@router.api_route("/home-based/{user_id}", methods=["POST", "PUT"], response_model=HomeBasedProfile)
 def create_or_update_home_based_profile(
     user_id: int,
     payload: HomeBasedIn,
@@ -283,3 +334,15 @@ def create_or_update_home_based_profile(
     session.commit()
     session.refresh(new)
     return new
+
+
+@router.get("/home-based/{user_id}", response_model=HomeBasedProfile)
+def get_home_based_profile(user_id: int, session: Session = Depends(get_session)):
+    profile = session.exec(select(HomeBasedProfile).where(HomeBasedProfile.user_id == user_id)).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    return {
+        "activities": profile.outdoor_activities.split(",") if profile.outdoor_activities else [],
+        "preferredTimes": profile.preferred_times.split(",") if profile.preferred_times else []
+    }
