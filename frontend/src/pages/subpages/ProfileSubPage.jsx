@@ -36,7 +36,9 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
             {editMode && (
                 <EditProfileModal
                     isOpen={true}
-                    onClose={() => setEditMode(false)}
+                    onClose={() => {
+                        setEditMode(false);
+                    }}
                     currentUser={currentUser}
                     onUpdate={(updatedUser) => setCurrentUser(updatedUser)}
                     onUserTypeChosen={(type) => setActiveTypeModal(type)} 
@@ -47,28 +49,41 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
             {activeTypeModal === "student" && (
                 <StudentModal
                     userId={currentUser.id}
-                    onClose={() => setActiveTypeModal(null)}
+                    onClose={() => {
+                        setEditMode(false);
+                        setActiveTypeModal(null);
+                    }}
                     existingProfile={currentUser.student_profile || null}
+                    editMode={editMode}
                 />
             )}
             {activeTypeModal === "outdoor_worker" && (
                 <OutdoorWorkerModal
                     userId={currentUser.id}
-                    onClose={() => setActiveTypeModal(null)}
+                    onClose={() => {
+                        setEditMode(false);
+                        setActiveTypeModal(null);
+                    }}
                     existingProfile={currentUser.outdoor_worker_profile || null}
                 />
             )}
             {activeTypeModal === "office_worker" && (
                 <OfficeWorkerModal
                     userId={currentUser.id}
-                    onClose={() => setActiveTypeModal(null)}
+                    onClose={() => {
+                        setEditMode(false);
+                        setActiveTypeModal(null);
+                    }}
                     existingProfile={currentUser.office_worker_profile || null}
                 />
             )}
             {activeTypeModal === "home_based" && (
                 <HomeBasedModal
                     userId={currentUser.id}
-                    onClose={() => setActiveTypeModal(null)}
+                    onClose={() => {
+                        setEditMode(false);
+                        setActiveTypeModal(null);
+                    }}
                     existingProfile={currentUser.home_based_profile || null}
                 />
             )}
