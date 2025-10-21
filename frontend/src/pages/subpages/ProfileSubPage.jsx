@@ -87,6 +87,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
                         setActiveTypeModal(null);
                     }}
                     existingProfile={currentUser.home_based_profile || null}
+                    editMode={editMode}
                 />
             )}
 

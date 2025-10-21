@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSaved = () => {} }) {
+function HomeBasedModal({ userId, onClose, existingProfile = null, editMode = false }) {
     const [activities, setActivities] = useState([]);
     const [preferredTimes, setPreferredTimes] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -22,26 +22,21 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
         "Evening (5 PM onwards)",
     ];
 
+    // Prefill data when editing
     useEffect(() => {
-        if (!initialData) return;
-        if (initialData.outdoor_activities) {
-            setActivities(
-                initialData.outdoor_activities.split(",").map((s) => s.trim()).filter(Boolean)
-            );
+        if (editMode && existingProfile) {
+            setActivities(existingProfile.activities || []);
+            setPreferredTimes(existingProfile.preferredTimes || []);
         }
-        if (initialData.preferred_times) {
-            setPreferredTimes(
-                initialData.preferred_times.split(",").map((s) => s.trim()).filter(Boolean)
-            );
-        }
-    }, [initialData]);
+    }, [editMode, existingProfile]);
 
-    const toggleOption = (option, stateSetter, currentState) => {
-        if (currentState.includes(option)) {
-            stateSetter(currentState.filter((o) => o !== option));
-        } else {
-            stateSetter([...currentState, option]);
-        }
+    // Reusable toggle function
+    const toggleOption = (option, setter, current) => {
+        setter(
+            current.includes(option)
+                ? current.filter((o) => o !== option)
+                : [...current, option]
+        );
     };
 
     const handleSubmit = async (e) => {
@@ -49,34 +44,30 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
         setError("");
         setLoading(true);
 
-        const payload = {
+        const formData = {
             activities,
             preferredTimes,
         };
 
-        console.log("HomeBasedModal submit payload:", payload);
-
         try {
-            const res = await fetch(`/api/user/home-based/${userId}`, {
-                method: "POST",
+            const method = editMode ? "PUT" : "POST";
+            const url = `/api/user/home-based/${userId}`;
+
+            const res = await fetch(url, {
+                method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(formData),
             });
 
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || "Failed to save profile");
-            }
+            if (!res.ok) throw new Error(`${method} request failed`);
 
             const data = await res.json();
-            console.log("HomeBasedModal: profile saved:", data);
-            alert("Your Home-based profile has been saved!");
-            onSaved(data);
-            onClose();
+            alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
+            if (onClose) onClose();
         } catch (err) {
             console.error("HomeBasedModal submit error:", err);
             setError(err.message || "Failed to save profile");
-            alert("Something went wrong saving your profile.");
+            alert("Something went wrong while saving your profile.");
         } finally {
             setLoading(false);
         }
@@ -87,7 +78,11 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
             <div className="modal">
                 <div className="title-group">
                     <h3>Personalize Your Presko Experience</h3>
-                    <p className="subtext">Tell us a bit about your daily home-based routine</p>
+                    <p className="subtext">
+                        {editMode
+                            ? "Update your home-based profile information"
+                            : "Tell us a bit about your daily home-based routine"}
+                    </p>
                 </div>
 
                 <hr />
@@ -101,8 +96,12 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${activities.includes(option) ? "selected" : ""}`}
-                                    onClick={() => toggleOption(option, setActivities, activities)}
+                                    className={`option-btn ${
+                                        activities.includes(option) ? "selected" : ""
+                                    }`}
+                                    onClick={() =>
+                                        toggleOption(option, setActivities, activities)
+                                    }
                                 >
                                     {option}
                                 </button>
@@ -118,8 +117,12 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
                                 <button
                                     type="button"
                                     key={option}
-                                    className={`option-btn ${preferredTimes.includes(option) ? "selected" : ""}`}
-                                    onClick={() => toggleOption(option, setPreferredTimes, preferredTimes)}
+                                    className={`option-btn ${
+                                        preferredTimes.includes(option) ? "selected" : ""
+                                    }`}
+                                    onClick={() =>
+                                        toggleOption(option, setPreferredTimes, preferredTimes)
+                                    }
                                 >
                                     {option}
                                 </button>
@@ -133,11 +136,23 @@ function HomeBasedModal({ userId, initialData = null, onClose = () => {}, onSave
 
                     <div className="button-group">
                         <button className="confirm-btn" type="submit" disabled={loading}>
-                            {loading ? "Saving..." : "Let's get you presko!"}
+                            {loading
+                                ? "Saving..."
+                                : editMode
+                                ? "Update Profile"
+                                : "Let's get you presko!"}
                         </button>
-                        <button type="button" className="cancel-btn" onClick={() => onClose()} disabled={loading}>
-                            Cancel
-                        </button>
+
+                        {editMode && (
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={onClose}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                        )}
                     </div>
                 </form>
             </div>
