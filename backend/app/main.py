@@ -17,13 +17,18 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 scheduler = BackgroundScheduler()
 
+# Allow frontend origins
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=origins,          # allowed frontend origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],            # allow all methods: GET, POST, PUT, DELETE
+    allow_headers=["*"],            # allow all headers
 )
 
 app.include_router(barangays.router)

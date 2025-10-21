@@ -49,6 +49,37 @@ async def get_user(user_id: int, session: Session = Depends(get_session)):
     return user
 
 
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(user_id: int, session: Session = Depends(get_session)):
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    session.delete(user)
+    session.commit()
+    return
+
+
+@router.put("/{user_id}", response_model=UserProfile)
+async def update_user(user_id: int, user_data: UserCreate, session: Session = Depends(get_session)):
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    user.username = user_data.username
+    user.user_type = user_data.user_type
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+
 
 @router.post("/login")
 def login_user(data: UserLogin, session: Session = Depends(get_session)):
