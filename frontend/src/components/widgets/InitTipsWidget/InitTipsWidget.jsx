@@ -49,24 +49,24 @@ function InitTipsWidget({ barangayId, currentUser }) {
           onClick={() => fetchTips(true)}
           disabled={loading}
         >
-            <svg className={`nav-btn-icon ${loading ? "rotate" : ""}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
-              <path d="M20 4v5h-5" />
-            </svg>
+          <svg className={`nav-btn-icon ${loading ? "rotate" : ""}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+            <path d="M20 4v5h-5" />
+          </svg>
         </button>
       </div>
-    
+
       <hr />
 
-      {loading && <div className="loading">Loading tips...</div>}
       {error && <div className="error-text">Error: {error}</div>}
 
-      {!loading && !error && (
-        <>
-          <div className="container do">
-            <span className="subheading">GAWIN</span>
-            {doTips.map((tip, i) => (
+      {/* always render sections, with conditional skeletons */}
+      <div className="container do">
+        <span className="subheading">GAWIN</span>
+        {loading
+          ? [...Array(3)].map((_, i) => <TipContainer key={`do-skel-${i}`} loading />)
+          : doTips.map((tip, i) => (
               <TipContainer
                 key={i}
                 isDo={tip.is_do}
@@ -74,11 +74,13 @@ function InitTipsWidget({ barangayId, currentUser }) {
                 subText={tip.sub_text}
               />
             ))}
-          </div>
+      </div>
 
-          <div className="container dont">
-            <span className="subheading">HUWAG GAWIN</span>
-            {dontTips.map((tip, i) => (
+      <div className="container dont">
+        <span className="subheading">HUWAG GAWIN</span>
+        {loading
+          ? [...Array(3)].map((_, i) => <TipContainer key={`dont-skel-${i}`} loading />)
+          : dontTips.map((tip, i) => (
               <TipContainer
                 key={i}
                 isDo={tip.is_do}
@@ -86,9 +88,7 @@ function InitTipsWidget({ barangayId, currentUser }) {
                 subText={tip.sub_text}
               />
             ))}
-          </div>
-        </>
-      )}
+      </div>
     </div>
   );
 }
