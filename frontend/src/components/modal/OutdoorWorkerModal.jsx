@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function OutdoorWorkerModal({ userId, onClose }) {
+function OutdoorWorkerModal({ userId, onClose, existingProfile = null, editMode = false }) {
   const [workType, setWorkType] = useState("");
   const [otherWork, setOtherWork] = useState("");
   const [workHours, setWorkHours] = useState({ start: "", end: "" });
@@ -22,34 +22,44 @@ function OutdoorWorkerModal({ userId, onClose }) {
     "Mostly indoors (with fan or AC)",
   ];
 
+  // Pre-fill fields if in edit mode
+  useEffect(() => {
+    if (editMode && existingProfile) {
+      setWorkType(existingProfile.workType || "");
+      setOtherWork(existingProfile.otherWork || "");
+      setWorkHours(existingProfile.workHours || { start: "", end: "" });
+      setBreakPreference(existingProfile.breakPreference || null);
+    }
+  }, [editMode, existingProfile]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-  const payload = {
-    workType: workType === "Others" ? otherWork : workType,
-    workHours: { start: workHours.start, end: workHours.end },
-    breakPreference: breakPreference,
-  };
-
+    const payload = {
+      workType: workType === "Others" ? otherWork : workType,
+      workHours: { start: workHours.start, end: workHours.end },
+      breakPreference,
+    };
 
     try {
-        const res = await fetch(`api/user/outdoor-worker/${userId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
+      const method = editMode ? "PUT" : "POST";
+      const url = `/api/user/outdoor-worker/${userId}`;
 
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      if (!res.ok) throw new Error("Failed to save profile");
+      if (!res.ok) throw new Error(`${method} request failed`);
 
       const data = await res.json();
-      console.log("Profile saved:", data);
-      alert("Your Presko outdoor worker profile has been saved!");
+      alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
       if (onClose) onClose();
     } catch (err) {
       console.error("Error:", err);
-      alert("Something went wrong saving your profile.");
+      alert("Something went wrong while saving your profile.");
     } finally {
       setLoading(false);
     }
@@ -61,7 +71,9 @@ function OutdoorWorkerModal({ userId, onClose }) {
         <div className="title-group">
           <h3>Personalize Your Presko Experience</h3>
           <p className="subtext">
-            Tell us a bit about your daily outdoor work routine
+            {editMode
+              ? "Update your outdoor worker profile information"
+              : "Tell us a bit about your daily outdoor work routine"}
           </p>
         </div>
 
@@ -77,9 +89,7 @@ function OutdoorWorkerModal({ userId, onClose }) {
                   type="button"
                   key={option}
                   className={`option-btn ${workType === option ? "selected" : ""}`}
-                  onClick={() =>
-                    setWorkType(workType === option ? "" : option)
-                  }
+                  onClick={() => setWorkType(workType === option ? "" : option)}
                 >
                   {option}
                 </button>
@@ -104,18 +114,14 @@ function OutdoorWorkerModal({ userId, onClose }) {
               <input
                 type="time"
                 value={workHours.start}
-                onChange={(e) =>
-                  setWorkHours({ ...workHours, start: e.target.value })
-                }
+                onChange={(e) => setWorkHours({ ...workHours, start: e.target.value })}
                 required
               />
               <span>to</span>
               <input
                 type="time"
                 value={workHours.end}
-                onChange={(e) =>
-                  setWorkHours({ ...workHours, end: e.target.value })
-                }
+                onChange={(e) => setWorkHours({ ...workHours, end: e.target.value })}
                 required
               />
             </div>
@@ -127,14 +133,16 @@ function OutdoorWorkerModal({ userId, onClose }) {
             <div className="user-type-options">
               {breakOptions.map((option) => (
                 <button
-                    type="button"
-                    key={option}
-                    className={`option-btn ${breakPreference === option ? "selected" : ""}`}
-                    onClick={() => setBreakPreference(option)}
+                  type="button"
+                  key={option}
+                  className={`option-btn ${breakPreference === option ? "selected" : ""}`}
+                  onClick={() =>
+                    setBreakPreference(breakPreference === option ? null : option)
+                  }
                 >
-                    {option}
+                  {option}
                 </button>
-                ))}
+              ))}
             </div>
           </div>
 
@@ -142,8 +150,23 @@ function OutdoorWorkerModal({ userId, onClose }) {
 
           <div className="button-group">
             <button className="confirm-btn" type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Let's get you presko!"}
+              {loading
+                ? "Saving..."
+                : editMode
+                ? "Update Profile"
+                : "Let's get you presko!"}
             </button>
+
+            {editMode && (
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={onClose}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </form>
       </div>
