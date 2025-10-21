@@ -129,33 +129,6 @@ setSelectedSpot(prev => {
     }
   };
 
-<<<<<<< HEAD:frontend/src/components/coolspots/CoolSpotMarker.jsx
-  const handleMarkerClick = () => {
-    // Close any other popups first
-    map.closePopup();
-
-    setIsPopupOpen(false);
-    setTimeout(() => setIsPopupOpen(true), 0);
-
-    const point = map.latLngToContainerPoint([spot.lat, spot.lon]);
-    point.x += 25;
-    point.y -= 100;
-    const offsetLatLng = map.containerPointToLatLng(point);
-    map.flyTo(offsetLatLng, map.getZoom(), { animate: true });
-  };
-
-
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-    if (markerRef.current) {
-      markerRef.current.closePopup();
-    }
-  };
-
-
-=======
->>>>>>> 145f1273b626b8b16af55410784b852d9ce6193b:frontend/src/components/map/markers/PreskoSpotPopupContent.jsx
   const handleVote = async (type, e) => {
     if (e) {
       e.stopPropagation();

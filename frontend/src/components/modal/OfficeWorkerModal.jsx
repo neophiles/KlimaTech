@@ -19,36 +19,35 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
     "No, I eat inside the building / bring baon",
   ];
 
-  // Prefill form when in edit mode
-    useEffect(() => {
-        if (existingProfile) {
+  // Prefill form
+  useEffect(() => {
+    const prefillProfile = async () => {
+      if (existingProfile) {
         setSelectedDays(existingProfile.selectedDays || []);
         setWorkHours(existingProfile.workHours || { start: "", end: "" });
         setCommuteType(existingProfile.commuteType || "");
         setLunchHabit(existingProfile.lunchHabit || "");
-        return;
+      } else if (userId) {
+        try {
+          const res = await fetch(`api/user/office-worker/${userId}`);
+          if (!res.ok) throw new Error("No existing profile");
+          const data = await res.json();
+          setSelectedDays(data.selectedDays || []);
+          setWorkHours(data.workHours || { start: "", end: "" });
+          setCommuteType(data.commuteType || "");
+          setLunchHabit(data.lunchHabit || "");
+        } catch (err) {
+          console.log("No profile found:", err);
         }
+      }
+    };
 
-        // If no existingProfile, attempt to fetch
-        fetch(`/api/user/office-worker/${userId}`)
-        .then((res) => {
-            if (!res.ok) throw new Error("No existing profile");
-            return res.json();
-        })
-        .then((data) => {
-            setSelectedDays(data.selectedDays || []);
-            setWorkHours(data.workHours || { start: "", end: "" });
-            setCommuteType(data.commuteType || "");
-            setLunchHabit(data.lunchHabit || "");
-        })
-        .catch(() => {});
-    }, [userId, existingProfile]);
+    prefillProfile();
+  }, [userId, existingProfile]);
 
   const toggleDay = (day) => {
     setSelectedDays((prev) =>
-      prev.includes(day)
-        ? prev.filter((d) => d !== day)
-        : [...prev, day]
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
@@ -56,26 +55,21 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
     e.preventDefault();
     setLoading(true);
 
-    const payload = {
-      selectedDays,
-      workHours,
-      commuteType,
-      lunchHabit,
-    };
+    const payload = { selectedDays, workHours, commuteType, lunchHabit };
 
     try {
       const method = editMode ? "PUT" : "POST";
-      const res = await fetch(`/api/user/office-worker/${userId}`, {
+      const res = await fetch(`api/user/office-worker/${userId}`, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error(`${method} request failed`);
-
       const data = await res.json();
+
       alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
-      if (onClose) onClose();
+      if (onClose) onClose(data); // pass updated profile back to parent if needed
     } catch (err) {
       console.error("Error:", err);
       alert("Something went wrong while saving your profile.");
@@ -99,7 +93,7 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
         <hr />
 
         <form className="register-form" onSubmit={handleSubmit}>
-          {/* a. Days in office */}
+          {/* Days in office */}
           <div className="input-group">
             <label>Which days do you usually go to the office?</label>
             <div className="day-options">
@@ -116,31 +110,27 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
             </div>
           </div>
 
-          {/* b. Working hours */}
+          {/* Working hours */}
           <div className="input-group time-range">
             <label>What are your usual working hours?</label>
             <div className="time-inputs">
               <input
                 type="time"
                 value={workHours.start}
-                onChange={(e) =>
-                  setWorkHours({ ...workHours, start: e.target.value })
-                }
+                onChange={(e) => setWorkHours({ ...workHours, start: e.target.value })}
                 required
               />
               <span>to</span>
               <input
                 type="time"
                 value={workHours.end}
-                onChange={(e) =>
-                  setWorkHours({ ...workHours, end: e.target.value })
-                }
+                onChange={(e) => setWorkHours({ ...workHours, end: e.target.value })}
                 required
               />
             </div>
           </div>
 
-          {/* c. Commute type */}
+          {/* Commute type */}
           <div className="input-group">
             <label>How do you usually commute to work?</label>
             <div className="user-type-options">
@@ -157,7 +147,7 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
             </div>
           </div>
 
-          {/* d. Lunch habit */}
+          {/* Lunch habit */}
           <div className="input-group">
             <label>Do you usually go out for lunch?</label>
             <div className="user-type-options">
