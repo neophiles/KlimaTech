@@ -8,9 +8,20 @@ from fastapi import Query
 from sqlmodel import select
 from app.models import CoolSpot, Vote
 from math import radians, sin, cos, sqrt, atan2
+from typing import List, Optional
+from pydantic import BaseModel
+from app.models import UserProfile, Report
+from app.schemas.coolspots import CoolSpotOut, ReportOut
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
+
+def save_upload_file(file: UploadFile) -> str:
+    os.makedirs("static/uploads", exist_ok=True)
+    file_location = f"static/uploads/{file.filename}"
+    with open(file_location, "wb") as f:
+        f.write(file.file.read())
+    return f"/static/uploads/{file.filename}"
 
 
 def haversine(lat1, lon1, lat2, lon2):
@@ -91,34 +102,39 @@ async def get_all_coolspots(session: Session = Depends(get_session)):
     return coolspots
 
 
-@router.post("/{coolspot_id}/report")
+@router.post("/{spot_id}/report", response_model=ReportOut)
 async def add_report(
-    coolspot_id: int,
+    spot_id: int,
     user_id: int = Form(...),
     note: str = Form(...),
     file: UploadFile = File(None),
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
 ):
-    # Handle file upload if provided
+    spot = session.get(CoolSpot, spot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Cool spot not found")
+
+    user = session.get(UserProfile, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
     photo_url = None
     if file:
-        os.makedirs("static/uploads", exist_ok=True) 
-        file_location = f"static/uploads/{file.filename}"
-        with open(file_location, "wb") as f:
-            f.write(await file.read())
-        photo_url = f"/static/uploads/{file.filename}"
+        photo_url = await save_upload_file(file)  # your existing function
 
-
-    new_report = Report(
-        coolspot_id=coolspot_id,
+    report = Report(
+        coolspot_id=spot_id,
         user_id=user_id,
         note=note,
-        photo_url=photo_url
+        photo_url=photo_url,
     )
-    session.add(new_report)
+
+    session.add(report)
     session.commit()
-    session.refresh(new_report)
-    return {"message": "Report added successfully", "report_id": new_report.id}
+    session.refresh(report)
+
+    return report
+
 
 
 @router.post("/add", response_model=CoolSpotRead)
@@ -155,23 +171,35 @@ async def create_coolspot(
     return new_coolspot
 
 
-@router.get("/{coolspot_id}", response_model=CoolSpotRead)
-async def get_coolspot(coolspot_id: int, session: Session = Depends(get_session)):
-    coolspot = session.get(CoolSpot, coolspot_id)
-    if not coolspot:
-        return {"error": "Cool spot not found"}
-    reports = session.exec(select(Report).where(Report.coolspot_id == coolspot_id)).all()
-    return {
-        "id": coolspot.id,
-        "barangay_id": coolspot.barangay_id,
-        "name": coolspot.name,
-        "description": coolspot.description,
-        "type": coolspot.type,
-        "lat": coolspot.lat,
-        "lon": coolspot.lon,
-        "photo_url": coolspot.photo_url,
-        "reports": reports
-    }
+
+@router.get("/{spot_id}", response_model=CoolSpotOut)
+def get_coolspot(spot_id: int, session: Session = Depends(get_session)):
+    spot = session.get(CoolSpot, spot_id)
+    if not spot:
+        raise HTTPException(status_code=404, detail="Cool spot not found")
+
+    reports = session.exec(
+        select(Report, UserProfile.username)
+        .join(UserProfile, UserProfile.id == Report.user_id)
+        .where(Report.coolspot_id == spot_id)
+    ).all()
+
+    spot_data = spot.dict()
+    spot_data["reports"] = [
+        {
+            "id": r.Report.id,
+            "user_id": r.Report.user_id,
+            "username": r.username,
+            "note": r.Report.note,
+            "date": r.Report.date,
+            "time": r.Report.time,
+            "photo_url": r.Report.photo_url,
+        }
+        for r in reports
+    ]
+
+    return spot_data
+
 
 
 @router.post("/{coolspot_id}/like")

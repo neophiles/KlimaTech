@@ -32,12 +32,14 @@ class HeatLog(SQLModel, table=True):
 class Report(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     coolspot_id: int = Field(foreign_key="coolspot.id")
-    user_id: int
+    user_id: int = Field(foreign_key="userprofile.id")  
     note: str
     date: str = Field(default_factory=lambda: datetime.now().date().isoformat())
     time: str = Field(default_factory=lambda: datetime.now().time().isoformat(timespec="seconds"))
     photo_url: Optional[str] = None 
+
     coolspot: Optional["CoolSpot"] = Relationship(back_populates="reports")
+    user: Optional["UserProfile"] = Relationship()  
 
 
 class CoolSpot(SQLModel, table=True):
