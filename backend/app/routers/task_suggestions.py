@@ -304,8 +304,9 @@ Heat index: {w['heat_index']}°C ({w['risk_level']})
     prompt = f"""
 You are an AI that gives 1-sentence practical tips for staying safe and healthy in hot weather.
 Generate 3 tips for things people SHOULD do, and 3 tips for things people SHOULD NOT do
-based on the following weather and the person's profile (if any). Tailor tips to the user's situation
-so they are actionable for that person.
+based on the following weather data and the person's profile. Tailor tips to the user's situation
+so they are realistic and actionable for that person. Also, make sure that the tips are 
+hyperspecific, concise, and accurate.
 Make the responses Tagalog/Filipino language.
 
 {weather_summary}
@@ -322,7 +323,7 @@ DONT: [main_text] | [sub_text]
             model="command-r-plus-08-2024",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
-            max_tokens=300
+            max_tokens=1000
         )
         ai_output = response.message.content[0].text.strip()
         logger.debug("AI raw output length=%d chars", len(ai_output or ""))
