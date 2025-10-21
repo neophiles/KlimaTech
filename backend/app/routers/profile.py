@@ -158,7 +158,18 @@ def get_student_profile(user_id: int, session: Session = Depends(get_session)):
     }
 
 
-@router.api_route("/outdoor-worker/{user_id}", methods=["POST", "PUT"], response_model=OutdoorWorkerProfile)
+class OutdoorWorkerProfileIn(BaseModel):
+    workType: Optional[str] = None
+    workHours: Optional[dict] = None    # { "start": "08:00", "end": "16:00" }
+    breakPreference: Optional[str] = None
+
+
+class OutdoorWorkerProfileOut(BaseModel):
+    workType: Optional[str] = None
+    workHours: dict
+    breakPreference: Optional[str] = None
+
+@router.api_route("/outdoor-worker/{user_id}", methods=["POST", "PUT"], response_model=OutdoorWorkerProfileIn)
 def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
@@ -190,7 +201,7 @@ def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: S
     return payload
 
 
-@router.get("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfile)
+@router.get("/outdoor-worker/{user_id}", response_model=OutdoorWorkerProfileOut)
 def get_outdoor_worker_profile(user_id: int, session: Session = Depends(get_session)):
     profile = session.exec(
         select(OutdoorWorkerProfile).where(OutdoorWorkerProfile.user_id == user_id)
@@ -306,8 +317,12 @@ class HomeBasedIn(BaseModel):
     activities: Optional[List[str]] = None
     preferredTimes: Optional[List[str]] = None
 
+class HomeBasedOut(BaseModel):
+    activities: List[str]
+    preferredTimes: List[str]
 
-@router.api_route("/home-based/{user_id}", methods=["POST", "PUT"], response_model=HomeBasedProfile)
+
+@router.api_route("/home-based/{user_id}", methods=["POST", "PUT"], response_model=HomeBasedIn)
 def create_or_update_home_based_profile(
     user_id: int,
     payload: HomeBasedIn,
@@ -347,7 +362,7 @@ def create_or_update_home_based_profile(
     return new
 
 
-@router.get("/home-based/{user_id}", response_model=HomeBasedProfile)
+@router.get("/home-based/{user_id}", response_model=HomeBasedOut)
 def get_home_based_profile(user_id: int, session: Session = Depends(get_session)):
     profile = session.exec(select(HomeBasedProfile).where(HomeBasedProfile.user_id == user_id)).first()
     if not profile:
