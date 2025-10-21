@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Carousel({ images }) {
+function Carousel({ otherClass="", images }) {
   const [idx, setIdx] = useState(0);
 
   // Filter out empty or invalid URLs
@@ -12,6 +12,7 @@ function Carousel({ images }) {
         <div className="no-img">No Image</div>
       ) : validImages.length === 1 ? (
         <img
+          className={otherClass}
           src={validImages[idx]}
           alt={`photo-${idx}`}
         />
@@ -26,6 +27,7 @@ function Carousel({ images }) {
           </button>
 
           <img
+            className={otherClass}
             src={validImages[idx]}
             alt={`photo-${idx}`}
           />
