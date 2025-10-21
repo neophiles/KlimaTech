@@ -33,8 +33,6 @@ function EditProfileModal({ isOpen, onClose, currentUser, onUpdate, onUserTypeCh
 
             // automatically open type-specific modal
             onUserTypeChosen?.(userType);
-
-            onClose?.();
         } catch (err) {
             console.error("Error updating user:", err);
             alert("Something went wrong while updating your profile.");
