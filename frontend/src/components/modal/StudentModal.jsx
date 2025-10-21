@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
 
-function StudentModal({ userId, onClose, existingProfile = null }) {
+function StudentModal({ userId, onClose, existingProfile = null, editMode = false }) {
     const [selectedDays, setSelectedDays] = useState([]);
     const [commuteType, setCommuteType] = useState("");
     const [classHours, setClassHours] = useState({ start: "", end: "" });
@@ -11,20 +11,16 @@ function StudentModal({ userId, onClose, existingProfile = null }) {
 
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const commuteOptions = ["Walk / Bike", "Public Transport", "Private Vehicle"];
-    const [isEditing, setIsEditing] = useState(!!existingProfile);
 
     useEffect(() => {
-        setIsEditing(!!existingProfile);
-
-        if (existingProfile) {
+        if (editMode && existingProfile) {
             setSelectedDays(existingProfile.selectedDays || []);
             setCommuteType(existingProfile.commuteType || "");
             setClassHours(existingProfile.classHours || { start: "", end: "" });
             setHasOutdoorActivities(existingProfile.hasOutdoorActivities || null);
             setActivityHours(existingProfile.activityHours || { start: "", end: "" });
         }
-    }, [existingProfile]);
-
+    }, [editMode, existingProfile]);
 
     // Toggle day selection
     const toggleDay = (day) => {
@@ -46,7 +42,7 @@ function StudentModal({ userId, onClose, existingProfile = null }) {
         };
 
         try {
-            const method = isEditing ? "PUT" : "POST";
+            const method = editMode ? "PUT" : "POST";
             const url = `/api/user/student/${userId}`;
 
             const res = await fetch(url, {
@@ -62,7 +58,7 @@ function StudentModal({ userId, onClose, existingProfile = null }) {
             }
 
             const data = await res.json();
-            alert(isEditing ? "Profile updated successfully!" : "Profile created successfully!");
+            alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
             if (onClose) onClose();
         } catch (err) {
             console.error("Error:", err);
@@ -77,7 +73,10 @@ function StudentModal({ userId, onClose, existingProfile = null }) {
             <div className="modal">
                 <div className="title-group">
                     <h3>Personalize Your Presko Experience</h3>
-                    <p className="subtext">Tell us a bit about your weekly student life</p>
+                    <p className="subtext">
+                        {editMode ? "Update your student profile information" : 
+                        "Tell us a bit about your weekly student life"}
+                    </p>
                 </div>
 
                 <hr />
@@ -178,10 +177,10 @@ function StudentModal({ userId, onClose, existingProfile = null }) {
 
                     <div className="button-group">
                         <button className="confirm-btn" type="submit" disabled={loading}>
-                            {loading ? "Saving..." : isEditing ? "Update Profile" : "Let's get you presko!"}
+                            {loading ? "Saving..." : editMode ? "Update Profile" : "Let's get you presko!"}
                         </button>
 
-                        {isEditing && (
+                        {editMode && (
                             <button
                                 type="button"
                                 className="cancel-btn"
