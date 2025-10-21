@@ -134,7 +134,7 @@
   width: 100%;
   max-width: 120px;
   height: 90px;
-  object-fit: cover;      /* Crops the image to fill the box */
+  object-fit: cover;
   border-radius: 10px;
   margin-bottom: 8px;
   display: block;
@@ -182,15 +182,25 @@
   cursor: pointer;
 }
 
-.carousel img {
+.carousel .no-img, .carousel img {
+  min-height: 125px;
+  max-height: 125px;
   width: 100%;
   max-width: 320px;
-  height: 180px;
-  object-fit: cover;      /* Crops the image for carousel */
-  border-radius: 16px;
   background: #eee;
-  margin: 0 auto;
   display: block;
+}
+
+.carousel .no-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.carousel img {
+  object-fit: cover;
 }
 
 /* Report Photo Upload Box */

@@ -1,18 +1,12 @@
-import { Marker, Popup, useMap } from "react-leaflet";
-import { useState, useEffect, useRef } from "react";
-import Carousel from "./Carousel";
-import "./CoolSpotMarker.css";
-import { preskoSpotMarker } from "../../utils/coolSpotsIcons";
+import { useState, useEffect } from "react";
+import Carousel from "../modals/Carousel";
 
-function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, currentUser }) {
+// This component contains ALL the logic and state
+function PreskoSpotPopupContent({ spot, currentUser, setCoolSpots, setSelectedSpot, onViewDetails, isPopupOpen }) {
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
   const [likes, setLikes] = useState(spot.likes || 0);
   const [dislikes, setDislikes] = useState(spot.dislikes || 0);
   const [voting, setVoting] = useState(false);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const map = useMap();
-  const markerRef = useRef(null);
-
   
   // keep local counts in sync when parent updates spot
   useEffect(() => {
@@ -46,11 +40,9 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       }
     }
 
-    // 🟢 refetch every time popup opens
+    //  refetch every time popup opens
     if (isPopupOpen) fetchVotes();
   }, [spot.id, currentUser?.id, isPopupOpen]);
-
-
 
   const vote = async (type) => {
     if (!currentUser || !currentUser.id) {
@@ -74,12 +66,34 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
       // update local UI from authoritative response
       setLikes(data.likes || 0);
       setDislikes(data.dislikes || 0);
-      setUserVote(data.user_vote ?? null);
+      setUserVote(data.user_vote ?? null);    
 
       // update parent lists / modal with authoritative user_vote too
-      setCoolSpots(prev => prev.map(s => s.id === spot.id ? { ...s, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : s));
-      setSelectedSpot(prev => prev && prev.id === spot.id ? { ...prev, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null } : prev);
-      
+      setCoolSpots(prev => {
+  const updated = prev.map(s =>
+    s.id === spot.id
+      ? { ...s, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null }
+      : s
+  );
+
+  // Only update if something actually changed
+  const changed = JSON.stringify(updated) !== JSON.stringify(prev);
+  return changed ? updated : prev;
+});
+
+setSelectedSpot(prev => {
+  if (!prev || prev.id !== spot.id) return prev;
+  if (
+    prev.likes === data.likes &&
+    prev.dislikes === data.dislikes &&
+    prev.user_vote === (data.user_vote ?? null)
+  ) {
+    return prev; // no change, skip rerender
+  }
+  return { ...prev, likes: data.likes, dislikes: data.dislikes, user_vote: data.user_vote ?? null };
+});
+
+
     } catch (err) {
       console.error(type, "error:", err);
       alert("Failed to submit vote: " + (err.message || ""));
@@ -115,6 +129,7 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
     }
   };
 
+<<<<<<< HEAD:frontend/src/components/coolspots/CoolSpotMarker.jsx
   const handleMarkerClick = () => {
     // Close any other popups first
     map.closePopup();
@@ -139,6 +154,8 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   };
 
 
+=======
+>>>>>>> 145f1273b626b8b16af55410784b852d9ce6193b:frontend/src/components/map/markers/PreskoSpotPopupContent.jsx
   const handleVote = async (type, e) => {
     if (e) {
       e.stopPropagation();
@@ -148,78 +165,46 @@ function CoolSpotMarker({ spot, onViewDetails, setSelectedSpot, setCoolSpots, cu
   };
 
   return (
-    <>
-      <Marker 
-        ref={markerRef}
-        position={[spot.lat, spot.lon]}
-        icon={preskoSpotMarker}
-        eventHandlers={{
-          click: handleMarkerClick,
-          popupclose: () => setTimeout(() => setIsPopupOpen(false), 50),
-        }}
-      />
-      
-      {isPopupOpen && (
-        <Popup
-          position={[spot.lat, spot.lon]}
-          onClose={handleClosePopup}
-          className="coolspot-popup"
-          closeButton={true}
-          /* allow map clicks to close the popup (use default closeOnClick) */
-        >
-          {/* inner wrapper prevents clicks/pointers inside popup from bubbling to the map,
-              so buttons won't close the popup. outside/map clicks still close it. */}
-          <div
-            className="coolspot-popup-inner"
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => e.stopPropagation()}
+    <div className="coolspot-popup-inner">
+        <Carousel images={spot.photo_url ? [`http://127.0.0.1:8000${spot.photo_url}`] : []} />
+
+        <div className="coolspot-header">
+            <span className="coolspot-title">{spot.name}</span>
+            <span className="coolspot-desc">{spot.type}</span>
+            <button className="coolspot-details-btn" onClick={() => onViewDetails(spot.id)}>
+            <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15M3 12h18" />
+            </svg>
+            </button>
+        </div>
+
+        <div className="coolspot-votes">
+            <button
+            className={`vote-btn up ${effectiveUserVote === "like" ? "active" : ""}`}
+            onClick={(e) => { e.stopPropagation(); handleVote("like", e); }}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-          >
-            <div className="coolspot-header">
-              <span className="coolspot-title">{spot.name}</span>
-              <span className="coolspot-desc">{spot.type}</span>
-              <button className="coolspot-details-btn" onClick={() => onViewDetails(spot.id)}>
-                <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15M3 12h18" />
-                </svg>
-              </button>
-            </div>
+            disabled={voting}
+            >
+            {effectiveUserVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
+            </button>
+
+            <div className="vote-count">{likes}</div>
             
-            {spot.photo_url && spot.photo_url.trim() !== "" && (
-              <Carousel images={[`http://127.0.0.1:8000${spot.photo_url}`]} />
-            )}
-
-            <div className="coolspot-votes">
-              <button
-                className={`vote-btn up ${effectiveUserVote === "like" ? "active" : ""}`}
-                onClick={(e) => { e.stopPropagation(); handleVote("like", e); }}
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-                disabled={voting}
-              >
-                {effectiveUserVote === "like" ? voteIcons.like.solid : voteIcons.like.outline}
-              </button>
-
-              <div className="vote-count">{likes}</div>
-              
-              <button
-                className={`vote-btn down ${effectiveUserVote === "dislike" ? "active" : ""}`}
-                onClick={(e) => { e.stopPropagation(); handleVote("dislike", e); }}
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-                disabled={voting}
-              >
-                {effectiveUserVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
-              </button>
-              
-              <div className="vote-count">{dislikes}</div>
-            </div>
-          </div>
-        </Popup>
-      )}
-    </>
+            <button
+            className={`vote-btn down ${effectiveUserVote === "dislike" ? "active" : ""}`}
+            onClick={(e) => { e.stopPropagation(); handleVote("dislike", e); }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            disabled={voting}
+            >
+            {effectiveUserVote === "dislike" ? voteIcons.dislike.solid : voteIcons.dislike.outline}
+            </button>
+            
+            <div className="vote-count">{dislikes}</div>
+        </div>
+    </div>
   );
 }
 
-export default CoolSpotMarker;
+export default PreskoSpotPopupContent;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./AddCoolSpotModal.css";
-import Button from "../Button";
+import "./AddPreskoSpotModal.css";
+import Button from "../../Button";
 
 function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   const [name, setName] = useState("");
