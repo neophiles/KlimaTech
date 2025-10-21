@@ -61,17 +61,18 @@
   font-size: 0.9rem;
 }
 
-.input-group {
+.register-form .input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
-.input-group label {
-  color: #17191b;
+.register-form .input-group label {
+  color: #454545;
+  font-weight: bold;
 }
 
-.input-group input {
+.register-form .input-group input {
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -79,7 +80,7 @@
   color: #17191b;
 }
 
-.input-group input:focus {
+.register-form .input-group input:focus {
   border-color: #a9c4d4;
   outline: none;
 }
@@ -165,12 +166,10 @@ input:checked + .slider:before {
 
 .button-group {
   display: flex;
-  justify-content: flex-end;
-  gap: .5rem;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.confirm-btn {
+.confirm-btn, .cancel-edit-btn {
   width: 100%;
   padding: 8px;
   border: none;
@@ -178,15 +177,22 @@ input:checked + .slider:before {
   cursor: pointer;
   font-weight: bold;
   font-size: 1rem;
-  background-color: #1AC6A2;
-  color: #012a36;
+  color: white;
   transition: 
     transform 0.25s ease-in-out,
     background-color 0.3s ease,
     color 0.3s ease;
 }
 
-.confirm-btn:hover {
+.confirm-btn {
+  background-color: #1AC6A2;
+}
+
+.cancel-edit-btn {
+  background-color: #FF4D4D;
+}
+
+.confirm-btn:hover, .cancel-edit-btn:hover {
   transform: translateY(-2px);
 }
 
