@@ -38,7 +38,6 @@
   max-height: 125px;
   width: 100%;
   max-width: 320px;
-  background: #eee;
   display: block;
 }
 
@@ -46,6 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #eee;
   color: #aaa;
   font-size: 1rem;
 }
