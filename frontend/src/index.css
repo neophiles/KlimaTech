@@ -136,6 +136,18 @@ body.dark .inittips-widget .tip-texts .sub-text {
   color: var(--dark-mode-grey);
 }
 
+body.dark .tip-container.skeleton {
+    background: rgba(143, 143, 143, 0.038);
+}
+
+body.dark .skeleton-circle {
+    background: linear-gradient(90deg, rgba(0,0,0,0.10) 25%, rgba(0,0,0,0.12) 50%, rgba(0,0,0,0.14) 75%);
+}
+
+body.dark .skeleton-line {
+    background: linear-gradient(90deg, rgba(0,0,0,0.10) 25%, rgba(0,0,0,0.12) 50%, rgba(0,0,0,0.14) 75%);
+}
+
 /* map */
 
 body.dark .leaflet-control-zoom a {
