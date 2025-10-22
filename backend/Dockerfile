@@ -10,8 +10,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./static /code/static
 COPY ./app /code/app
 
-# Run the barangays script (populate DB) during build
-RUN python -m app.scripts.add_barangays
 
 # Start the FastAPI server
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
