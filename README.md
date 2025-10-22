@@ -1,4 +1,4 @@
-[![Contributors][contributors-shield]][https://github.com/Lapotski/KlimaTech/graphs/contributors]
+[![Contributors][contributors-shield]][(https://github.com/Lapotski/KlimaTech/graphs/contributors)]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![project_license][license-shield]][license-url]
