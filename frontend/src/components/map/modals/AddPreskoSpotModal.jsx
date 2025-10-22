@@ -50,8 +50,8 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   if (!show) return null;
 
   return (
-    <div className="modal">
-      <h2 style={{ textAlign: "center", marginBottom: 24 }}>Add a Cool Spot!</h2>
+    <div className="modal addcoolspot">
+      <h2>Add a PreskoSpot!</h2>
       <form
         className="coolspot-form"
         onSubmit={(e) => {
