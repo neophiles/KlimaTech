@@ -6,9 +6,8 @@ from app.routers import (
     profile,
     task_suggestions
 )
-from app.db import init_db, get_session, engine
+from app.db import init_db, engine
 from app.tasks.collector import collect_heat_data
-from app.scripts.add_barangays import main as add_barangays
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -40,6 +39,25 @@ app.include_router(task_suggestions.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Barangays data to prepopulate DB
+barangays_data = [
+    {
+        "id": 1,
+        "barangay": "Ibabang Dupay",
+        "locality": "Lucena",
+        "province": "Quezon",
+        "lat": 13.9405,
+        "lon": 121.617
+    },
+    {
+        "id": 2,
+        "barangay": "Ikirin",
+        "locality": "Pagbilao",
+        "province": "Quezon",
+        "lat": 13.9968,
+        "lon": 121.7309
+    },
+]
 
 @app.on_event("startup")
 def on_startup():
@@ -51,7 +69,17 @@ def on_startup():
         result = session.exec(select(Barangay)).first()
         if not result:
             print("Barangays table is empty. Populating now...")
-            add_barangays()
+            for b in barangays_data:
+                barangay = Barangay(
+                    id=b["id"],
+                    barangay=b["barangay"],
+                    locality=b["locality"],
+                    province=b["province"],
+                    lat=b["lat"],
+                    lon=b["lon"]
+                )
+                session.add(barangay)
+            session.commit()
             print("Barangays added!")
 
     # Schedule job: run every 60 minutes
@@ -59,11 +87,9 @@ def on_startup():
     scheduler.start()
     print("APScheduler started. Collecting heat data every hour.")
 
-
 @app.on_event("shutdown")
 def shutdown_event():
     scheduler.shutdown()
-
 
 @app.get("/")
 def root():
