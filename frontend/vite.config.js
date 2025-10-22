@@ -1,17 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// Replace this with your actual Render backend URL
+const BACKEND_URL = 'https://presko.onrender.com';
+
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
     proxy: {
+      // All requests starting with /api will be forwarded to the backend
       '/api': {
-        target: 'http://127.0.0.1:8000/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
-})
+        target: BACKEND_URL,
+        changeOrigin: true,       // Makes the request appear as coming from the backend host
+        secure: true,             // Use HTTPS
+        rewrite: (path) => path.replace(/^\/api/, ''), // Remove /api prefix
+      },
+    },
+  },
+});

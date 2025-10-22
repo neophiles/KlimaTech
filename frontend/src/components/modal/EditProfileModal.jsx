@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./Modal.css";
 
-const API_BASE = "http://127.0.0.1:8000";
 
 function EditProfileModal({ isOpen, onClose, currentUser, onUpdate, onUserTypeChosen }) {
     const [username, setUsername] = useState(currentUser?.username || "");
@@ -16,7 +15,7 @@ function EditProfileModal({ isOpen, onClose, currentUser, onUpdate, onUserTypeCh
                 user_type: userType,
             };
 
-            const response = await fetch(`${API_BASE}/user/${currentUser.id}`, {
+            const response = await fetch(`api/user/${currentUser.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),

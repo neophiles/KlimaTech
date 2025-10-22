@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./Modal.css";
 
-const API_BASE = "http://127.0.0.1:8000";
 
 function LoginModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
     const [username, setUsername] = useState("");
@@ -10,7 +9,7 @@ function LoginModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${API_BASE}/user/login`, {
+            const response = await fetch(`/api/user/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username: username.trim() }),

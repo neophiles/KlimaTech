@@ -1,8 +1,6 @@
 import { useState } from "react";
 import "./Modal.css";
 
-const API_BASE = "http://127.0.0.1:8000";
-
 function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
     const [username, setUsername] = useState("");
     const [userType, setUserType] = useState("");
@@ -30,7 +28,7 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
                 lon,
             };
 
-            const response = await fetch(`${API_BASE}/user/add`, {
+            const response = await fetch(`api/user/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
