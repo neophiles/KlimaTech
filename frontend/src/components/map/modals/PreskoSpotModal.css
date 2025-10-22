@@ -10,7 +10,6 @@
   gap: 1rem;
   padding: 1.5rem;
   overflow-y: auto;
-
 }
 
 .modal.preskospot .container::-webkit-scrollbar {

@@ -50,6 +50,7 @@
   background-color: #02ccb4;
   top: 0.5rem;
   right: 0.5rem;
+  padding: 4px;
 }
 
 .button.map-btn:hover {
