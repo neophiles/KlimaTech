@@ -180,7 +180,7 @@ footer {
 main {
   flex: 1;
   background-color: #f6f6f6;
-  padding: 48px 0 48px 0;
+  padding: 48px 0 0 0;
 }
 
 .dashboard {
@@ -250,6 +250,12 @@ header .theme-toggle-container {
 @media (max-width: 500px) {
   header .theme-toggle-container {
     display: flex;
+  }
+
+  main {
+    flex: 1;
+    background-color: #f6f6f6;
+    padding: 48px 0 48px 0;
   }
 }
 
