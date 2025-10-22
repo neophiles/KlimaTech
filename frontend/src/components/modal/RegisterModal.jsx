@@ -29,7 +29,7 @@ function RegisterModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
                 lon,
             };
 
-            const response = await apiFetch(`user/add`, {
+            const response = await fetch(`api/user/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
