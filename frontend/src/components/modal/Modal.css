@@ -11,8 +11,12 @@
 }
 
 .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 2rem;
   width: 90%;
   max-width: 400px;
@@ -23,17 +27,6 @@
   flex-direction: column;
   gap: 1rem;
   overflow-y: auto;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255,255,255);
-  border-radius: 15px;
-  padding: 1rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
   z-index: 997;
 }
 
