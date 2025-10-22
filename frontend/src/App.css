@@ -139,7 +139,7 @@ footer {
 }
 
 .mobile-nav a {
-  color: #1ac6a2;
+  color: white;
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 600;
@@ -152,7 +152,6 @@ footer {
   cursor: pointer;
 }
 
-/* Dim overlay when sidebar is open */
 .overlay {
   position: fixed;
   inset: 0;
@@ -171,6 +170,10 @@ footer {
     border: none;
     color: #02b9a3;
     cursor: pointer;
+  }
+
+  .overlay, .mobile-nav {
+    display: none;
   }
 }
 
@@ -226,4 +229,73 @@ main {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.theme-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.theme-toggle-container svg {
+  min-width: 28px;
+  height: auto; 
+}
+
+header .theme-toggle-container {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  header .theme-toggle-container {
+    display: flex;
+  }
+}
+
+.button.switch-group {
+  justify-content: center;
+}
+
+.switch-group {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switch-group.light .slider-wrapper {
+  background-color: #c9a411;
+}
+
+.switch-group.dark .slider-wrapper {
+  background-color: #02CAB2;
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 26px;
+  transition: 0.3s;
+}
+
+.slider-wrapper.checked {
+  background-color: #1AC6A2;
+}
+
+.slider {
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.slider-wrapper.checked .slider {
+  transform: translateX(18px);
 }
