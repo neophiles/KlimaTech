@@ -37,7 +37,7 @@ app.include_router(coolspots.router)
 app.include_router(profile.router)
 app.include_router(task_suggestions.router)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static" ), name="static")
 
 # Barangays data to prepopulate DB
 barangays_data = [
