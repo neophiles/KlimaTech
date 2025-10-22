@@ -117,12 +117,19 @@ input[type="radio"] {
   display: none;
 }
 
-.button-group {
+.toggle-container {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.confirm-btn, .cancel-edit-btn {
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.confirm-btn, .cancel-btn, .cancel-edit-btn {
   width: 100%;
   padding: 8px;
   border: none;
@@ -154,7 +161,7 @@ input[type="radio"] {
 }
 
 .cancel-btn {
-  background-color: transparent;
+  background-color: #FF4D4D;
   border: 0;
   cursor: pointer;
 }
