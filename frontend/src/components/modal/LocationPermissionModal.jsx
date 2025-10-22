@@ -1,3 +1,4 @@
+import Toggle from "../Toggle";
 import "./Modal.css";
 
 function LocationPermissionModal({ isOpen, onClose, allowLocation, onEnable }) {
@@ -32,13 +33,11 @@ function LocationPermissionModal({ isOpen, onClose, allowLocation, onEnable }) {
           temperature updates around you.
         </p>
 
-        <div className="switch-group">
-          <label className="switch">
-            <input type="checkbox" readOnly checked={allowLocation} />
-            <span className="slider"></span>
-          </label>
+        <div className="toggle-container">
+          <Toggle checked={allowLocation} />
+          <span>Enable Browser's Location Permission</span>
         </div>
-
+        
         <div className="button-group">
           <button className="confirm-btn" onClick={handleEnable}>
             Enable Location
