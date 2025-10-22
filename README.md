@@ -134,7 +134,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 
 Email us at: feedback@presko.ph
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/neophiles/KlimaTech)
+Project Link: [https://github.com/neophiles/KlimaTech](https://github.com/neophiles/KlimaTech)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
