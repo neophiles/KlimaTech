@@ -3,4 +3,3 @@ __pycache__
 .env
 frontend\klimatech-app\node_modules
 heat_project.db
-backend/static/uploads
