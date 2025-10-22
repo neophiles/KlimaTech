@@ -136,6 +136,19 @@ body.dark .inittips-widget .tip-texts .sub-text {
   color: var(--dark-mode-grey);
 }
 
+/* map */
+
+body.dark .leaflet-control-zoom a {
+  background-color: #00161c !important;
+  color: white !important;
+  border: 1px solid #444 !important;
+}
+
+body.dark .leaflet-control-zoom a:hover {
+  background-color: var(--dark-mode-accent, #02b9a3) !important;
+  color: white !important;
+}
+
 /* settings */
 
 body.dark .profile-info .info-group label,

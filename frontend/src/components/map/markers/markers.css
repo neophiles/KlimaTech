@@ -33,6 +33,17 @@
   font-size: 1rem;
 }
 
+.leaflet-control-zoom a {
+  background-color: white !important;
+  color: black !important;
+  box-shadow: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: var(--dark-mode-accent, #02b9a3) !important;
+  color: white !important;
+}
+
 .carousel .no-img, .carousel img {
   min-height: 125px;
   max-height: 125px;
