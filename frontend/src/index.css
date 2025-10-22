@@ -161,6 +161,22 @@ body.dark .leaflet-control-zoom a:hover {
   color: white !important;
 }
 
+body.dark .coolspot-header span {
+  color: black;
+}
+
+body.dark .modal.preskospot .modal-title {
+  color: black;
+}
+
+body.dark .modal-votes span {
+  color: black; 
+}
+
+body.dark .modal.addcoolspot h2 {
+  color: black;
+}
+
 /* settings */
 
 body.dark .profile-info .info-group label,
