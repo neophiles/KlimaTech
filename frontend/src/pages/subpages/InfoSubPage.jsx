@@ -73,7 +73,7 @@ function InfoSubPage() {
                             <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Heat Stroke</h4>
+                            <h3 className="name">Heat Stroke</h3>
                             <span className="danger">EMERGENCY</span>
                         </div>
                         <svg 
@@ -90,11 +90,11 @@ function InfoSubPage() {
                     {/* Accordion Content */}
                     <div className="content">
                         <hr />
-                        <p className="description">
+                        <h4 className="description">
                             Banta sa buhay. Kailangan ng agarang atensyong medikal.
-                        </p>
+                        </h4>
 
-                        <p className="symptoms label">Senyales:</p>
+                        <h4 className="symptoms label">Senyales:</h4>
                         <ul className="symptoms">
                             <li>Nalilito, iritable, o nahihirapang magsalita</li>
                             <li>Nawalan ng malay (nahimatay)</li>
@@ -104,7 +104,7 @@ function InfoSubPage() {
                             </li>
                         </ul>
 
-                        <p className="firstaid label">Agad na Lunas:</p>
+                        <h4 className="firstaid label">Agad na Lunas:</h4>
                         <ol className="firstaid">
                             <li>TUMAWAG AGAD NG 911 (o local emergency number).</li>
                             <li>Dalhin sa malamig na lugar (sa lilim o may aircon).</li>
@@ -129,7 +129,7 @@ function InfoSubPage() {
                             <path d="M10.072 10.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67 -3.798l-2.095 -3.227a.6 .6 0 0 0 -1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798z" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Heat Exhaustion</h4>
+                            <h3 className="name">Heat Exhaustion</h3>
                             <span className="danger">DELIKADO</span>
                         </div>
                         <svg
@@ -145,11 +145,11 @@ function InfoSubPage() {
                     {/* Accordion Content */}
                     <div className="content">
                         <hr />
-                        <p className="description">
+                        <h4 className="description">
                             Matinding pagod dahil sa init. Pwedeng mauwi sa Heat Stroke kung hindi naagapan.
-                        </p>
+                        </h4>
 
-                        <p className="symptoms label">Senyales:</p>
+                        <h4 className="symptoms label">Senyales:</h4>
                         <ul className="symptoms">
                             <li>Matindi at maraming pawis</li>
                             <li>Maputla at malamig na balat (clammy skin)</li>
@@ -159,7 +159,7 @@ function InfoSubPage() {
                             <li>Mabilis pero mahinang pulso</li>
                         </ul>
                         
-                        <p className="firstaid label">Agad na Lunas:</p>
+                        <h4 className="firstaid label">Agad na Lunas:</h4>
                         <ol className="firstaid">
                             <li>Pumunta agad sa malamig na lugar at magpahinga.</li>
                             <li>Uminom ng tubig o sports drink (paunti-unti).</li>
@@ -179,7 +179,7 @@ function InfoSubPage() {
                             <path d="M3 12h5l4 8v-16l4 8h5" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Heat Cramps</h4>
+                            <h3 className="name">Heat Cramps</h3>
                             <span className="danger">MAG-INGAT</span>
                         </div>
                         <svg
@@ -197,13 +197,13 @@ function InfoSubPage() {
                         <hr />
                         <p className="description">Maagang senyales na nauubusan na ng tubig at asin ang katawan.</p>
                         
-                        <p className="symptoms label">Senyales:</p>
+                        <h4 className="symptoms label">Senyales:</h4>
                         <ul className="symptoms">
                             <li>Pamumulikat (muscle spasms) o pananakit ng kalamnan, karaniwan sa binti, braso, o tiyan</li>
                             <li>Nangyayari habang o pagkatapos mag-ehersisyo sa init</li>
                         </ul>
 
-                        <p className="firstaid label">Agad na Lunas:</p>
+                        <h4 className="firstaid label">Agad na Lunas:</h4>
                         <ol className="firstaid">
                             <li>Itigil ang anumang mabigat na gawain at magpahinga sa malamig na lugar.</li>
                             <li>Uminom ng tubig o sports drink na may electrolytes.</li>
@@ -229,7 +229,7 @@ function InfoSubPage() {
                             <path d="M8 20l2 -5h4l2 5" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Mga Bata at Sanggol</h4>
+                            <h3 className="name">Mga Bata at Sanggol</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -246,12 +246,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Hindi pa ganap na developed ang kanilang body temperature control. Mas mabilis silang uminit.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Hinding-hindi dapat iniiwan sa loob ng nakaparadang sasakyan, kahit saglit lang.</li>
                             <li>Laging painumin ng tubig. Sila ay hindi magsasabi na nauuhaw sila.</li>
@@ -272,7 +272,7 @@ function InfoSubPage() {
                             <path d="M16 21v-8.5a1.5 1.5 0 0 1 3 0v.5" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Matatanda (65+ years old)</h4>
+                            <h3 className="name">Matatanda (65+ years old)</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -289,12 +289,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Mas mabagal ang cooling mechanism ng katawan at minsan ay hindi na nila nararamdaman na sila ay nauuhaw.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Regular na i-check ang kanilang kalagayan (e.g., tawagan o bisitahin). Huwag umasa na sila ang magsasabi na nahihirapan na sila.</li>
                             <li>Siguraduhin na ang kanilang tinitirhan ay may bentilador (e-fan) o access sa malamig na lugar.</li>
@@ -318,7 +318,7 @@ function InfoSubPage() {
                             <path d="M18.7 17.7l.7 .7" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Mga Nagtatrabaho sa Labas</h4>
+                            <h3 className="name">Mga Nagtatrabaho sa Labas</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -335,12 +335,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Sila ang direktang exposed sa araw at init sa loob ng maraming oras.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Ito ang mga power users ng PRESKO. Hikayatin silang gamitin ang 24-hour forecast para i-plano ang kanilang pinaka-mabibigat na gawain sa mas malamig na oras.</li>
                             <li>Mag-break nang mas madalas sa lilim o sa isang PreskoSpot.</li>
@@ -356,7 +356,7 @@ function InfoSubPage() {
                             <path d="M20.207 3.793a5.95 5.95 0 0 1 0 8.414l-8 8a5.95 5.95 0 0 1 -8.414 -8.414l8 -8a5.95 5.95 0 0 1 8.414 0m-7 1.414l-4.294 4.293l5.586 5.586l4.294 -4.292a3.95 3.95 0 1 0 -5.586 -5.586" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">May Sakit o Umiinom ng Maintenance na Gamot</h4>
+                            <h3 className="name">May Sakit o Umiinom ng Maintenance na Gamot</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -373,12 +373,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Ang mga may sakit (lalo na sa puso, high blood, diabetes) ay mas nahihirapang mag-adjust sa init. Ang ibang mga gamot (tulad ng diuretics) ay nakaka-dagdag ng risk.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Doble-ingat. Huwag mag-babad sa init.</li>
                             <li>Mag-konsulta sa doktor kung paano nakaka-apekto ang kanilang gamot sa init.</li>
@@ -399,7 +399,7 @@ function InfoSubPage() {
                             <path d="M16 14l1 3" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Mga Buntis</h4>
+                            <h3 className="name">Mga Buntis</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -416,12 +416,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Mas mataas ang kanilang base body temperature at ang kanilang katawan ay mas nagsisikap na palamigin ang sarili at si baby.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Uminom ng extra na tubig.</li>
                             <li>Iwasan ang matagal na pagtayo sa init. Magpahinga agad kapag nakaramdam ng hilo.</li>
@@ -441,7 +441,7 @@ function InfoSubPage() {
                             <path d="M7 13v-3a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1v3" />
                         </svg>
                         <div className="container">
-                            <h4 className="name">Walang Access sa Aircon o Maaliwalas na Tahanan</h4>
+                            <h3 className="name">Walang Access sa Aircon o Maaliwalas na Tahanan</h3>
                         </div>
                         <svg 
                             className={`nav-btn-icon caret ${isOpen.stroke ? "rotated" : ""}`}
@@ -458,12 +458,12 @@ function InfoSubPage() {
                     <div className="content">
                         <hr />
 
-                        <p className="why label">Bakit?</p>
+                        <h4 className="why label">Bakit?</h4>
                         <p className="why">
                             Walang lugar para "mag-charge" at palamigin ang katawan, lalo na sa gabi.
                         </p>
 
-                        <p className="care label">Paano Alagaan:</p>
+                        <h4 className="care label">Paano Alagaan:</h4>
                         <ul className="care">
                             <li>Ito ang pinaka-importanteng rason para sa PreskoSpots.</li>
                             <li>Gamitin ang PreskoSpots tab para maghanap ng pinakamalapit na library, mall, o community center kung saan pwedeng magpalamig."</li>
