@@ -27,6 +27,7 @@
   --large-font: 1.75rem;
   --grey-color: #7b7b7b;
   --dark-grey-color: #424242;
+  --dark-mode-grey: #9c9c9c;
 }
 
 * {
@@ -48,4 +49,152 @@ html, body {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+/* Dark mode styles */
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark {
+  background-color: #0b181f;
+  color: #e6e6e6;
+}
+
+body.dark span {
+  color: white;
+}
+
+body.dark header,
+body.dark footer {
+  background-color: #00161c;
+}
+
+body.dark main {
+  background-color: #0f1f26;
+}
+
+body.dark .raised-widget {
+  background-color: #142830;
+  border: 0;
+}
+
+body.dark .mobile-nav {
+  background-color: #00161c;
+}
+
+body.dark .mobile-nav a {
+  color: #1ac6a2;
+}
+
+body.dark .theme-toggle-btn {
+  color: #1ac6a2;
+}
+
+/* greeting widget */
+
+body.dark .location-outer-container {
+  border: 0;
+}
+
+/* clock */
+
+body.dark .inner-clock {
+  background: #142830;
+}
+
+body.dark .inner-clock span {
+  color: var(--dark-mode-grey);
+}
+
+/* nearest preskospot */
+
+body.dark .nearest-preskospot-widget {
+  background-color: rgb(2, 204, 180, 0.1);
+}
+
+body.dark .nearest-preskospot-widget .outer-container .inner-container span:nth-child(1) {
+    color: var(--dark-mode-grey);
+}
+
+/* inittips */
+
+body.dark .inittips-widget .tip-container.do {
+  background-color: rgba(2, 204, 180, 0.279);
+}
+
+body.dark .inittips-widget .tip-container.dont {
+  background-color: rgba(204, 2, 2, 0.279);
+}
+
+body.dark .inittips-widget .tip-texts .sub-text {
+  color: var(--dark-mode-grey);
+}
+
+/* settings */
+
+body.dark .profile-info .info-group label,
+body.dark .settings-widget.heat-info .desc-1,
+body.dark .settings-widget .accordion h4,
+body.dark .settings-widget.whyheat h4,
+body.dark .settings-widget.action h4,
+body.dark .settings-widget.about h4 {
+  color: #b7b7b7;
+}
+
+body.dark .settings-widget ul,
+body.dark .settings-widget ol,
+body.dark .settings-widget li,
+body.dark .settings-widget p,
+body.dark .settings-widget .profile-info input,
+body.dark .settings-widget .accordion p
+{
+  color: var(--dark-mode-grey);
+}
+
+body.dark .settings-btn.back {
+  color: var(--dark-mode-grey);
+}
+
+body.dark .settings-widget a {
+  color: var(--dark-mode-grey);
+}
+
+body.dark .settings-widget .profile-info input,
+body.dark .settings-widget .accordion {
+  border: 0;
+  background-color: #0f1f26;
+}
+
+/* heat info */
+
+body.dark .settings-widget.heat-info .heat-data {
+  background-color: #0f1f26;
+}
+
+body.dark .settings-widget.heat-info {
+  background-color: rgba(255, 0, 0, 0.279);
+}
+
+body.dark .settings-widget.atrisk {
+  background-color: rgba(255, 106, 0, 0.279);
+}
+
+body.dark .settings-widget.whyheat {
+  background-color: rgba(242, 255, 0, 0.200);
+}
+
+body.dark .settings-widget.action {
+  background-color: rgba(2, 204, 180, 0.279);
+}
+
+/* about */
+
+body.dark .settings-widget.about .highlight {
+  color: #1ac6a2;
+}
+
+body.dark .settings-widget.about .team-container .member:hover .name {
+  color: #1ac6a2;
 }
