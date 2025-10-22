@@ -59,33 +59,54 @@ barangays_data = [
     },
 ]
 
+from sqlmodel import Session, select
+from app.models import CoolSpot
+import csv
+from pathlib import Path
+
 @app.on_event("startup")
 def on_startup():
-    # Initialize DB tables
     init_db()
 
-    # Prepopulate barangays table if empty
+    # --- Barangays prepopulation (existing code) ---
     with Session(engine) as session:
         result = session.exec(select(Barangay)).first()
         if not result:
             print("Barangays table is empty. Populating now...")
             for b in barangays_data:
-                barangay = Barangay(
-                    id=b["id"],
-                    barangay=b["barangay"],
-                    locality=b["locality"],
-                    province=b["province"],
-                    lat=b["lat"],
-                    lon=b["lon"]
-                )
+                barangay = Barangay(**b)
                 session.add(barangay)
             session.commit()
             print("Barangays added!")
 
-    # Schedule job: run every 60 minutes
+    # --- CoolSpots prepopulation ---
+    data_file = Path(__file__).parent / "data" / "coolspots_data.csv"
+    with Session(engine) as session:
+        result = session.exec(select(CoolSpot)).first()
+        if not result:
+            print("CoolSpot table is empty. Populating now...")
+            with open(data_file, newline='', encoding="utf-8") as csvfile:
+                reader = csv.DictReader(csvfile)
+                count = 0
+                for row in reader:
+                    spot = CoolSpot(
+                        barangay_id=int(row["barangay_id"]),
+                        name=row["name"].strip(),
+                        description=(row["description"] or "").strip(),
+                        type=row["type"].strip(),
+                        lat=float(row["lat"]),
+                        lon=float(row["long"]),
+                    )
+                    session.add(spot)
+                    count += 1
+                session.commit()
+                print(f"✅ {count} CoolSpots added!")
+
+    # Scheduler (existing)
     scheduler.add_job(collect_heat_data, "interval", minutes=60)
     scheduler.start()
     print("APScheduler started. Collecting heat data every hour.")
+
 
 @app.on_event("shutdown")
 def shutdown_event():

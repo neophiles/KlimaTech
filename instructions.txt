@@ -58,8 +58,8 @@ Look inside the database:
 Add initial barangays data:
     python -m app.scripts.add_barangays
 
-Train the ML Model:
-    python -m app.ml.model
+Prepopulate coolspots:
+    python -m app.scripts.prepopulate_coolspots
 
 ==========================
 4. Running FastAPI
