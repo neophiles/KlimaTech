@@ -108,6 +108,10 @@ body.dark .inner-clock span {
   color: var(--dark-mode-grey);
 }
 
+body.dark .inner-clock .clock-heat-info .current-hour-heat-index {
+  color: white;
+}
+
 /* nearest preskospot */
 
 body.dark .nearest-preskospot-widget {
