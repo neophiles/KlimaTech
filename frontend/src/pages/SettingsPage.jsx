@@ -22,13 +22,17 @@ function Settings() {
     // 1. Remove user data
     localStorage.removeItem("userData");
 
-    // 2. Notify user
+    // 2. Reset theme to light mode
+    localStorage.setItem("theme", "light");
+    document.body.classList.remove("dark");
+
+    // 3. Notify user
     alert("Logged out successfully!");
 
-    // 3. Navigate to home page
+    // 4. Navigate to home page
     navigate("/");
 
-    // 4. Wait briefly to ensure navigation finishes, then reload
+    // 5. Wait briefly to ensure navigation finishes, then reload
     setTimeout(() => {
       setMessage("");
       window.location.reload();
