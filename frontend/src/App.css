@@ -19,7 +19,7 @@ header, footer {
   position: fixed;
   width: 100%;
   height: 48px;
-  z-index: 10;
+  z-index: 2;
 }
 
 header {
@@ -37,6 +37,11 @@ footer .container
 {
   width: min(100%, 850px);
   display: flex;
+  align-items: center;
+}
+
+header .container {
+  justify-content: space-between;
 }
 
 .button.logo-btn {
@@ -59,7 +64,7 @@ footer {
   width: 100%;
   bottom: 0;
   left: 0;
-  display: flex;
+  display: none;
   justify-content: space-evenly;
 }
 
@@ -102,6 +107,71 @@ footer {
 .nav-btn-label {
   font-size: var(--small-font);
   color: inherit;
+}
+
+.button.hamburger-btn {
+  padding: 0;
+}
+
+.button.hamburger-btn svg {
+  min-width: 28px;
+  height: auto;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 220px;
+  background-color: #012a36;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+}
+
+.mobile-nav.open {
+  transform: translateX(0);
+}
+
+.mobile-nav a {
+  color: #1ac6a2;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.button.close-btn {
+  padding: 0;
+  align-self: flex-end;
+  color: white;
+  cursor: pointer;
+}
+
+/* Dim overlay when sidebar is open */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 998;
+}
+
+@media (max-width: 500px) {
+  footer {
+    display: flex;
+  }
+
+  .button.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #02b9a3;
+    cursor: pointer;
+  }
 }
 
 main {
