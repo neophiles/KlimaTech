@@ -24,6 +24,10 @@
     color: #494949;
 }
 
+.nearest-preskospot-widget .outer-container .inner-container span:nth-child(2) {
+    font-weight: bold;
+}
+
 .nearest-preskospot-widget .outer-container .inner-container span:nth-child(3) {
     color: #02ccb4;
 }
