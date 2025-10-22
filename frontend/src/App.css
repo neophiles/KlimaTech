@@ -35,7 +35,7 @@ header {
 header .container,
 footer .container
 {
-  width: min(100%, 650px);
+  width: min(100%, 850px);
   display: flex;
 }
 
@@ -128,7 +128,7 @@ main {
 }
 
 .base-widget {
-  width: min(90%, 600px); /* Responsive: 90% until 500px max */
+  width: min(90%, 800px);
   height: auto;
   padding: 1rem;
   border: 0;
