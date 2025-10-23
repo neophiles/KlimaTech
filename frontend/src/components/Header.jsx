@@ -56,31 +56,41 @@ function Header() {
     return (
         <>
             <header>
-                <div className="container">
-                    <Button
-                        otherClass={"logo-btn"}
-                        onClick={handleGoToHome}
-                        children={
-                            <>
-                                <img className="logo" src="/logo/presko-logo.png" alt="PRESKO LOGO" />
-                                <span className="title">PRESKO</span>
-                            </>
-                        }
-                    />
+            <div className="container">
+                <Button
+                otherClass={"logo-btn"}
+                onClick={handleGoToHome}
+                children={
+                    <>
+                    <img className="logo" src="/logo/presko-logo.png" alt="PRESKO LOGO" />
+                    <span className="title">PRESKO</span>
+                    </>
+                }
+                />
 
-                    {/* Hamburger (visible only on larger screens) */}
-                    <Button
-                        otherClass={"hamburger-btn"}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        children={
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        }
-                    />
+                {/* Nav buttons (visible on large screens) */}
 
-                    {toggleContainer}
+                <div style={{display: "flex", gap: "16px"}}>
+                    <nav className="main-nav">
+                        <a href="/">Home</a>
+                        <a href="/map">PreskoSpots</a>
+                        <a href="/settings">Settings</a>
+                    </nav>
+
+                    {/* Keep hamburger visible on large screens */}
+                    <Button
+                    otherClass={"hamburger-btn"}
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    children={
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    }
+                    />
                 </div>
+                
+                {toggleContainer}
+            </div>
             </header>
 
             {/* Sidebar / overlay nav for larger screens */}

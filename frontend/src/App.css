@@ -111,6 +111,9 @@ footer {
 
 .button.hamburger-btn {
   padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .button.hamburger-btn svg {
@@ -138,6 +141,23 @@ footer {
   transform: translateX(0);
 }
 
+.mobile-nav .subnav {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+}
+
+.mobile-nav .subnav a {
+  padding: 4px 0;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95em;
+}
+
+.mobile-nav .subnav a:hover {
+  color: var(--accent);
+}
+
 .mobile-nav a {
   color: white;
   text-decoration: none;
@@ -159,20 +179,34 @@ footer {
   z-index: 998;
 }
 
+/* Header nav buttons (desktop view) */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.main-nav a:hover {
+  color: #1ac6a2;
+}
+
 @media (max-width: 500px) {
   footer {
     display: flex;
   }
 
-  .button.hamburger-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: #02b9a3;
-    cursor: pointer;
-  }
-
-  .overlay, .mobile-nav {
+  .main-nav,
+  .button.hamburger-btn,
+  .overlay, .mobile-nav 
+  {
     display: none;
   }
 }
