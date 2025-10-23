@@ -29,8 +29,6 @@ function NearestPreskoSpotWidget({ userLocation }) {
     fetchSpots();
   }, [userLocation]);
 
-  const handleGoToMap = () => navigate("/map");
-
   const nextSpot = () => {
     setCurrentIndex((prev) => (prev + 1) % spots.length);
   };
@@ -40,6 +38,17 @@ function NearestPreskoSpotWidget({ userLocation }) {
   };
 
   const currentSpot = spots[currentIndex];
+
+  const handleGoToMap = () => {
+    if (currentSpot) {
+      console.log(currentSpot)
+      navigate("/map", {
+        state: { focusSpot: { lat: currentSpot.lat, lon: currentSpot.lon } }
+      });
+    } else {
+      navigate("/map");
+    }
+  };
 
   return (
     <div className="base-widget raised-widget nearest-preskospot-widget">

@@ -1,5 +1,6 @@
-import { useState, useRef, useMemo, useCallback } from "react";
-import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { MapContainer, TileLayer, ZoomControl, useMap } from "react-leaflet";
+
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -18,6 +19,7 @@ import UserMarker from "./markers/UserMarker";
 import CenterMarker from "./markers/CenterMarker";
 import ZoomToUserButton from "./controls/ZoomToUserButton";
 import ConfirmLocationPanel from "./controls/ConfirmLocationPanel";
+import ZoomToPreskoSpot from "./controls/ZoomToPreskoSpot";
 
 function Map({ currentUser }) {
   const mapRef = useRef(null);
@@ -133,6 +135,7 @@ function Map({ currentUser }) {
           <AddSpotOnClick addMode={false} pendingSpot={pendingSpot} onAddSpot={() => {}} />
           <CenterMarker isAdding={isAdding} onCenterChange={handleCenterChange} />
           <ZoomToUserButton userLocation={userLocation} />
+          <ZoomToPreskoSpot />
 
           <Button
             otherClass={"map-btn add"}
