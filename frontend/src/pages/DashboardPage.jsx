@@ -66,9 +66,7 @@ function Dashboard({ userData }) {
   const {
     barangay,
     locality,
-    province,
-    current: { temperature, humidity, wind_speed, uv_index, heat_index, risk_level, updated_at },
-    daily_briefing: { advice },
+    province
   } = weatherData;
 
   // use id directly
