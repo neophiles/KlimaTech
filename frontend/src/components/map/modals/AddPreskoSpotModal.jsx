@@ -87,13 +87,21 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
           onChange={(e) => setType(e.target.value)}
           className="input-field"
         >
-          <option value="" disabled hidden>-- Select Spot Type --</option>
-          <option value="Park">Park</option>
-          <option value="Shaded Area">Shaded Area</option>
-          <option value="Water Source">Water Source</option>
-          <option value="Air-Conditioned Area">Air-Conditioned Area</option>
-          <option value="Waiting Shed">Waiting Shed</option>
-          <option value="Gazebo / Pavilion">Gazebo / Pavilion</option>
+          <option value="" disabled hidden>Piliin ang uri ng PreskoSpot</option>
+          <option value="Park">Parke o Plaza</option>
+          <option value="Covered Court">Covered Court</option>
+          <option value="Barangay Hall">Barangay Hall</option>
+          <option value="Place of Worship">Simbahan</option>
+          <option value="Water Fountain">Water Fountain</option>
+          <option value="Shaded Walkway">May Bubong na Lakaran</option>
+          <option value="Waiting Shed">Hintayan / Waiting Shed</option>
+          <option value="Waterside">Tabing-Tubig</option>
+          <option value="Mall">Mall</option>
+          <option value="Stall">Tindahan ng Palamig</option>
+          <option value="Convenience Store">Convenience Store</option>
+          <option value="Sari-sari Store">Sari-sari Store</option>
+          <option value="Transportation Hub">Terminal o Sakayan</option>
+          <option value="Eatery">Karinderya</option>
         </select>
 
         {/* Description Field */}
