@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Carousel from "../modals/Carousel";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // This component contains ALL the logic and state
 function PreskoSpotPopupContent({ spot, currentUser, setCoolSpots, setSelectedSpot, onViewDetails, isPopupOpen }) {
