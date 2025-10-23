@@ -21,6 +21,7 @@ scheduler = BackgroundScheduler()
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://presko-frontend.onrender.com"
 ]
 
 app.add_middleware(
@@ -80,7 +81,7 @@ def on_startup():
             print("Barangays added!")
 
     # --- CoolSpots prepopulation ---
-    data_file = Path(__file__).parent / "data" / "coolspots_data.csv"
+    data_file = Path(__file__).resolve().parent / "scripts" / "data" / "coolspots_data.csv"
     with Session(engine) as session:
         result = session.exec(select(CoolSpot)).first()
         if not result:
