@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TipContainer from "./TipContainer";
 import "./InitTipsWidget.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function InitTipsWidget({ barangayId, currentUser }) {
   const [tips, setTips] = useState([]);
@@ -14,7 +15,7 @@ function InitTipsWidget({ barangayId, currentUser }) {
       setError(null);
 
       const res = await fetch(
-        `/api/suggestions/tips/${barangayId}?user_id=${currentUser?.id ?? ""}&force=${force}`
+        `${API_BASE_URL}/suggestions/tips/${barangayId}?user_id=${currentUser?.id ?? ""}&force=${force}`
       );
 
       if (!res.ok) throw new Error("Failed to fetch tips");

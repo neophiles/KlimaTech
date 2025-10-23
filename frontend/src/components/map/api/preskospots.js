@@ -1,4 +1,5 @@
-const BASE = "/api/coolspots";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE = `${API_BASE_URL}/coolspots`;
 
 export async function getAll() {
   const res = await fetch(`${BASE}/all`);
