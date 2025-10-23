@@ -21,7 +21,8 @@ scheduler = BackgroundScheduler()
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://presko-frontend.onrender.com"
+    "https://presko-frontend.onrender.com",
+    "https://presko.vercel.app",
 ]
 
 app.add_middleware(
