@@ -19,15 +19,6 @@
     <br />
     <a href="https://github.com/neophiles/KlimaTech"><strong>Explore the docs »</strong></a>
     <br />
-    <!--
-    <br />
-    <a href="https://github.com/neophiles/KlimaTech">View Demo</a>
-    &middot;
-    <a href="https://github.com/neophiles/KlimaTech/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/neophiles/KlimaTech/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
--->    
 </div>
 
 
@@ -42,11 +33,9 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
     <li><a href="#features">Features</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#installation">Installation</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -71,26 +60,21 @@ The app also features an interactive map that helps users locate the nearest “
 ### Built With
 
 Frontend:
-
+- [![React][React.js]][React-url]
 
 Backend:
+- [![Python][Python]][Python-url]
+- [![FastAPI][FastAPI]][FastAPI-url]
 
 Database:
+- [![PostgresSQL][Postgres]][Postgres-url]
 
 APIs:
+- **Open-Meteo** for weather data
+- **OpenStreetMap** for maps
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-To get a local copy up and running, see `instructions.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- FEATURES -->
@@ -107,18 +91,21 @@ To get a local copy up and running, see `instructions.txt` for more information.
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- SCREENSHOTS -->
+## Screenshots
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/neophiles/KlimaTech/issues) for a full list of proposed features (and known issues).
+<div>
+  <h3>Onboarding</h3>
+</div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- INSTALLATION -->
+## Installation
+
+To get a local copy up and running, see `instructions.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
@@ -165,4 +152,9 @@ Project Link: [https://github.com/neophiles/KlimaTech](https://github.com/neophi
 <!-- Shields.io badges-->
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
-
+[Postgres]: https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white
+[Postgres-url]: https://www.postgresql.org
+[FastAPI]: https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white
+[FastAPI-url]: https://fastapi.tiangolo.com
+[Python]: https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff
+[Python-url]: https://www.python.org
