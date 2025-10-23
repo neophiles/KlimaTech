@@ -12,10 +12,10 @@
     <img src="frontend/public/logo/presko-logo.png" alt="Logo" width="80" height="auto">
   </a>
 
-<h3 align="center">Presko</h3>
+<h3 align="center">PRESKO</h3>
 
   <p align="center">
-    Welcome to Presko, your go-to platform for <b>real-time local heat indices</b> and discovering nearby <b>cooling/hydration spots</b> tailored for different user types—students, outdoor workers, office workers, and home-based users.
+    Welcome to PRESKO, your go-to platform for <b>real-time local heat indices</b> and discovering nearby <b>cooling/hydration spots</b> tailored for different user types—students, outdoor workers, office workers, and home-based users.
     <br />
     <a href="https://github.com/neophiles/KlimaTech"><strong>Explore the docs »</strong></a>
     <br />
@@ -43,18 +43,15 @@
 </details>
 
 
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
 [![Presko_Logo Screen Shot][Presko-screenshot]](https://github.com/neophiles/KlimaTech/blob/main/frontend/public/logo/name_logo.png)
 
-Presko is a web-based, mobile-first application that provides real-time local heat indices and personalized dashboards based on user type — such as students, outdoor workers, office employees, and home-based users.
-With tailored “Init Tips”, Presko helps users adapt their daily routines to the weather and stay safe during rising temperatures.
+PRESKO is a web-based, mobile-first application that provides real-time local heat indices and personalized dashboards based on user type — such as students, outdoor workers, office employees, and home-based users.
+With tailored “InitTips”, Presko helps users adapt their daily routines to the weather and stay safe during rising temperatures.
 
-The app also features an interactive map that helps users locate the nearest “Presko Spots” — designated cool areas or safe zones where people can rest, recover, and stay hydrated during extreme heat.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+The app also features an interactive map that helps users locate the nearest “PreskoSpots” — designated cool areas or safe zones where people can rest, recover, and stay hydrated during extreme heat.
 
 
 ### Built With
@@ -74,9 +71,6 @@ APIs:
 - **OpenStreetMap** for maps
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 <!-- FEATURES -->
 
 ## Features
@@ -86,9 +80,6 @@ APIs:
 - Mobile-first, responsive design
 - Dynamic color-coded dashboard 
 - Optional notifications based on heat index thresholds
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- SCREENSHOTS -->
@@ -112,30 +103,15 @@ APIs:
   <img src="demo_screenshots/HeatInfo1.png" alt="Heat Info 1 png">
 </div>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- INSTALLATION -->
 ## Installation
 
 To get a local copy up and running, see `instructions.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the project_license. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Email us at: feedback@presko.ph
-
-Project Link: [https://github.com/neophiles/KlimaTech](https://github.com/neophiles/KlimaTech)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
