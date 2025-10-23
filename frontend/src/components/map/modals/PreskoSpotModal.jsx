@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Carousel from "./Carousel";
 import "./PreskoSpotModal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const CoolSpotModal = ({
   spot,
@@ -25,7 +26,7 @@ const CoolSpotModal = ({
   useEffect(() => {
     async function fetchVotes() {
       try {
-        const url = `/api/coolspots/${spot.id}/votes${currentUser && currentUser.id ? `?user_id=${currentUser.id}` : ""}`;
+        const url = `${API_BASE_URL}/coolspots/${spot.id}/votes${currentUser && currentUser.id ? `?user_id=${currentUser.id}` : ""}`;
         const res = await fetch(url);
         if (!res.ok) {
           const text = await res.text();
@@ -50,7 +51,7 @@ const CoolSpotModal = ({
     }
 
     try {
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, { method: "POST" });
+      const res = await fetch(`${API_BASE_URL}/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, { method: "POST" });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(`Server error: ${text}`);

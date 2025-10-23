@@ -4,6 +4,7 @@ import Clock from "../components/Clock/Clock";
 import NearestPreskoSpotWidget from "../components/widgets/NearestPreskoSpotWidget/NearestPreskoSpotWidget";
 import GreetingWidget from "../components/widgets/GreetingWidget/GreetingWidget";
 import InitTipsWidget from "../components/widgets/InitTipsWidget/InitTipsWidget";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Dashboard({ userData }) {
   const [weatherData, setWeatherData] = useState(null);
@@ -24,7 +25,7 @@ function Dashboard({ userData }) {
         if (!userLocation) return;
 
         const res = await fetch(
-          `/api/barangays/nearest?lat=${userLocation.lat}&lon=${userLocation.lon}`
+          `${API_BASE_URL}/barangays/nearest?lat=${userLocation.lat}&lon=${userLocation.lon}`
         );
 
         if (!res.ok) throw new Error("Failed to fetch nearest barangay");

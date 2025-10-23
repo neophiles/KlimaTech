@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * Manages fetching and mutating cool spots.
@@ -14,7 +15,7 @@ export default function usePreskoSpots(initial = []) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/coolspots/all");
+      const res = await fetch(`${API_BASE_URL}/coolspots/all`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setCoolSpots(data);
@@ -32,7 +33,7 @@ export default function usePreskoSpots(initial = []) {
 
   const getSpotById = useCallback(async (id) => {
     try {
-      const res = await fetch(`/api/coolspots/${id}`);
+      const res = await fetch(`${API_BASE_URL}/coolspots/${id}`);
       if (!res.ok) throw new Error(await res.text());
       return await res.json();
     } catch (err) {
@@ -43,7 +44,7 @@ export default function usePreskoSpots(initial = []) {
 
   const addSpot = useCallback(async (formData) => {
     try {
-      const res = await fetch("/api/coolspots/add", {
+      const res = await fetch(`${API_BASE_URL}/coolspots/add`, {
         method: "POST",
         body: formData
       });
@@ -59,7 +60,7 @@ export default function usePreskoSpots(initial = []) {
 
   const submitReport = useCallback(async (spotId, formData) => {
     try {
-      const res = await fetch(`/api/coolspots/${spotId}/report`, {
+      const res = await fetch(`${API_BASE_URL}/coolspots/${spotId}/report`, {
         method: "POST",
         body: formData
       });
@@ -68,7 +69,7 @@ export default function usePreskoSpots(initial = []) {
         throw new Error(text || "Failed to submit report");
       }
       // refresh specific spot
-      const updated = await (await fetch(`/api/coolspots/${spotId}`)).json();
+      const updated = await (await fetch(`${API_BASE_URL}/coolspots/${spotId}`)).json();
       setCoolSpots(prev => {
         const copy = [...prev];
         const idx = copy.findIndex(s => s.id === updated.id);

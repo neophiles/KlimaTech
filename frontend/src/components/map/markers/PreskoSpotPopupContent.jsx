@@ -26,8 +26,8 @@ function PreskoSpotPopupContent({ spot, currentUser, setCoolSpots, setSelectedSp
     async function fetchVotes() {
       try {
         const url = currentUser && currentUser.id
-          ? `/api/coolspots/${spot.id}/votes?user_id=${currentUser.id}`
-          : `/api/coolspots/${spot.id}/votes`;
+          ? `${API_BASE_URL}/coolspots/${spot.id}/votes?user_id=${currentUser.id}`
+          : `${API_BASE_URL}/coolspots/${spot.id}/votes`;
         const res = await fetch(url);
         if (!res.ok) throw new Error (await res.text());
         const data = await res.json();
@@ -54,7 +54,7 @@ function PreskoSpotPopupContent({ spot, currentUser, setCoolSpots, setSelectedSp
     setVoting(true);
     try {
       console.log("voting as user:", currentUser);
-      const res = await fetch(`/api/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, {
+      const res = await fetch(`${API_BASE_URL}/coolspots/${spot.id}/${type}?user_id=${currentUser.id}`, {
         method: "POST"
       });
       if (!res.ok) {

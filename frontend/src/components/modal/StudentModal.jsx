@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
 import { apiFetch } from "../../api/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function StudentModal({ userId, onClose, existingProfile = null, editMode = false }) {
     const [selectedDays, setSelectedDays] = useState([]);
@@ -16,7 +17,7 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
     // Prefill data if edit mode
     useEffect(() => {
         if (!existingProfile && userId) {
-            fetch(`api/user/student/${userId}`)
+            fetch(`${API_BASE_URL}/user/student/${userId}`)
                 .then(res => {
                     if (!res.ok) throw new Error("No existing profile");
                     return res.json();
@@ -61,7 +62,7 @@ function StudentModal({ userId, onClose, existingProfile = null, editMode = fals
 
         try {
             const method = editMode ? "PUT" : "POST";
-            const url = `api/user/student/${userId}`;
+            const url = `${API_BASE_URL}/user/student/${userId}`;
 
             const res = await fetch(url, {
                 method,

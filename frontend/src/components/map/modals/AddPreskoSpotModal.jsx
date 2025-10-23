@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AddPreskoSpotModal.css";
 import Button from "../../Button";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
   const [name, setName] = useState("");
@@ -12,6 +13,7 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
 
   const [barangay, setBarangay] = useState(null);
   const [loadingBarangay, setLoadingBarangay] = useState(true);
+  
 
   // Get user location and fetch nearest barangay
   useEffect(() => {
@@ -24,7 +26,7 @@ function AddCoolSpotModal({ show, onClose, onSubmit, barangays }) {
 
             try {
               const res = await fetch(
-                `api/barangays/nearest?lat=${lat}&lon=${lon}`
+                `${API_BASE_URL}/barangays/nearest?lat=${lat}&lon=${lon}`
               );
               const data = await res.json();
               setBarangay(data); // { id, name }

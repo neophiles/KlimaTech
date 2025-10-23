@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
 function LoginModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
@@ -9,7 +10,7 @@ function LoginModal({ isOpen, onClose, onConfirm, onSwitchMode }) {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`/api/user/login`, {
+            const response = await fetch(`${API_BASE_URL}/user/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username: username.trim() }),

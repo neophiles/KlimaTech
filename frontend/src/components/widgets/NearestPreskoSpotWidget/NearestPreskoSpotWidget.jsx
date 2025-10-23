@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../Button";
 import "./NearestPreskoSpotWidget.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function NearestPreskoSpotWidget({ userLocation }) {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function NearestPreskoSpotWidget({ userLocation }) {
     const fetchSpots = async () => {
       try {
         const res = await fetch(
-          `/api/coolspots/preskospots/nearest?lat=${userLocation.lat}&lon=${userLocation.lon}`
+          `${API_BASE_URL}/coolspots/preskospots/nearest?lat=${userLocation.lat}&lon=${userLocation.lon}`
         );
         if (!res.ok) throw new Error("Failed to fetch Presko spots");
         const data = await res.json();

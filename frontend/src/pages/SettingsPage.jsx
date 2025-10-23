@@ -19,20 +19,20 @@ function Settings() {
     localStorage.removeItem("userData");
     setMessage("Logged out successfully!");
 
-    // 1. Remove user data
+    // Remove user data
     localStorage.removeItem("userData");
 
-    // 2. Reset theme to light mode
+    // Reset theme to light mode
     localStorage.setItem("theme", "light");
     document.body.classList.remove("dark");
 
-    // 3. Notify user
+    // Notify user
     alert("Logged out successfully!");
 
-    // 4. Navigate to home page
+    // Navigate to home page
     navigate("/");
 
-    // 5. Wait briefly to ensure navigation finishes, then reload
+    // Wait briefly to ensure navigation finishes, then reload
     setTimeout(() => {
       setMessage("");
       window.location.reload();

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function HomeBasedModal({ userId, onClose, existingProfile = null, editMode = false }) {
     const [activities, setActivities] = useState([]);
@@ -31,7 +32,7 @@ function HomeBasedModal({ userId, onClose, existingProfile = null, editMode = fa
         }
 
         // If no existingProfile, attempt to fetch
-        fetch(`/api/user/home-based/${userId}`)
+        fetch(`${API_BASE_URL}/user/home-based/${userId}`)
             .then((res) => {
                 if (!res.ok) throw new Error("No existing profile");
                 return res.json();
@@ -65,7 +66,7 @@ function HomeBasedModal({ userId, onClose, existingProfile = null, editMode = fa
 
         try {
             const method = editMode ? "PUT" : "POST";
-            const url = `/api/user/home-based/${userId}`;
+            const url = `${API_BASE_URL}/user/home-based/${userId}`;
 
             const res = await fetch(url, {
                 method,

@@ -11,7 +11,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: LOCALBACKEND_URL,
+        target: BACKEND_URL,
         changeOrigin: true,       // Makes the request appear as coming from the backend host
         secure: true,             // Use HTTPS
         rewrite: (path) => path.replace(/^\/api/, ''), // Remove /api prefix

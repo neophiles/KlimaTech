@@ -21,6 +21,8 @@ scheduler = BackgroundScheduler()
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://presko-frontend.onrender.com",
+    "https://presko.vercel.app",
 ]
 
 app.add_middleware(
@@ -59,6 +61,7 @@ barangays_data = [
     },
 ]
 
+
 @app.on_event("startup")
 def on_startup():
     init_db()
@@ -73,6 +76,7 @@ def on_startup():
                 session.add(barangay)
             session.commit()
             print("Barangays added!")
+
 
     # Scheduler (existing)
     scheduler.add_job(collect_heat_data, "interval", minutes=60)

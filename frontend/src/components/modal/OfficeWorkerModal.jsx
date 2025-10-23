@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode = false }) {
   const [selectedDays, setSelectedDays] = useState([]);
@@ -19,11 +20,11 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
     "No, I eat inside the building / bring baon",
   ];
 
-  // ✅ Prefill form on mount or when edit mode changes
+  // Prefill form on mount or when edit mode changes
   useEffect(() => {
     const prefillProfile = async () => {
       try {
-        // Case 1: Profile already passed as prop
+        // Profile already passed as prop
         if (existingProfile) {
           setSelectedDays(existingProfile.selectedDays || []);
           setWorkHours(existingProfile.workHours || { start: "", end: "" });
@@ -34,11 +35,11 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
 
         // Case 2: Fetch from API if not passed
         if (userId) {
-          const res = await fetch(`/api/user/office-worker/${userId}`);
+          const res = await fetch(`${API_BASE_URL}/user/office-worker/${userId}`);
           if (!res.ok) throw new Error("No existing profile found");
           const data = await res.json();
 
-          // ✅ Normalize fetched data
+          // Normalize fetched data
           setSelectedDays(data.selectedDays || []);
           setWorkHours(data.workHours || { start: "", end: "" });
           setCommuteType(data.commuteType || "");
@@ -71,7 +72,7 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
 
     try {
       const method = editMode ? "PUT" : "POST";
-      const res = await fetch(`/api/user/office-worker/${userId}`, {
+      const res = await fetch(`${API_BASE_URL}/user/office-worker/${userId}`, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -81,7 +82,7 @@ function OfficeWorkerModal({ userId, onClose, existingProfile = null, editMode =
       const data = await res.json();
 
       alert(editMode ? "Profile updated successfully!" : "Profile created successfully!");
-      if (onClose) onClose(data); // ✅ Pass updated data back
+      if (onClose) onClose(data);
     } catch (err) {
       console.error("Error:", err);
       alert("Something went wrong while saving your profile.");

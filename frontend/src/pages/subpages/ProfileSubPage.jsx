@@ -5,6 +5,7 @@ import StudentModal from "../../components/modal/StudentModal";
 import OutdoorWorkerModal from "../../components/modal/OutdoorWorkerModal";
 import OfficeWorkerModal from "../../components/modal/OfficeWorkerModal";
 import HomeBasedModal from "../../components/modal/HomeBasedModal";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function ProfileSubPage({ currentUser, setCurrentUser }) {
   const [editMode, setEditMode] = useState(false);
@@ -15,7 +16,7 @@ function ProfileSubPage({ currentUser, setCurrentUser }) {
         if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
 
         try {
-            const response = await fetch(`api/user/${currentUser.id}`, { method: "DELETE" });
+            const response = await fetch(`${API_BASE_URL}/user/${currentUser.id}`, { method: "DELETE" });
 
             if (response.status === 204) {
                 alert("Account deleted successfully.");

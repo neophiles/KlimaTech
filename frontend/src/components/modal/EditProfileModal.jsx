@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
 function EditProfileModal({ isOpen, onClose, currentUser, onUpdate, onUserTypeChosen }) {
@@ -15,7 +16,7 @@ function EditProfileModal({ isOpen, onClose, currentUser, onUpdate, onUserTypeCh
                 user_type: userType,
             };
 
-            const response = await fetch(`api/user/${currentUser.id}`, {
+            const response = await fetch(`${API_BASE_URL}/user/${currentUser.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),

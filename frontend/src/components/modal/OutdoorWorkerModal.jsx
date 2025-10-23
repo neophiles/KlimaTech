@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function OutdoorWorkerModal({ userId, onClose, existingProfile = null, editMode = false }) {
   const [workType, setWorkType] = useState("");
@@ -29,7 +30,7 @@ function OutdoorWorkerModal({ userId, onClose, existingProfile = null, editMode 
       setWorkHours(existingProfile.workHours || { start: "", end: "" });
       setBreakPreference(existingProfile.breakPreference || "");
     } else {
-      fetch(`/api/user/outdoor-worker/${userId}`)
+      fetch(`${API_BASE_URL}/user/outdoor-worker/${userId}`)
         .then(res => {
           if (!res.ok) throw new Error("No existing outdoor profile");
           return res.json();
@@ -56,7 +57,7 @@ function OutdoorWorkerModal({ userId, onClose, existingProfile = null, editMode 
 
     try {
       const method = editMode ? "PUT" : "POST";
-      const url = `/api/user/outdoor-worker/${userId}`;
+      const url = `${API_BASE_URL}/user/outdoor-worker/${userId}`;
 
       const res = await fetch(url, {
         method,

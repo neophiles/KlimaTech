@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import * as api from "../api/coolspots";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * useSpotVotes(spotId)
