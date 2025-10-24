@@ -86,21 +86,21 @@ APIs:
 
 <div>
   <h3>Onboarding</h3>
-    <span><img src="demo_screenshots/Onboarding1.png" alt="Onboarding 1 png"> 
-    <img src="demo_screenshots/Onboarding2.png" alt="Onboarding 2 png"> </span>
+    <span><img src="demo_screenshots/Onboarding1.png" alt="Onboarding 1 png" width="430"> 
+    <img src="demo_screenshots/Onboarding2.png" alt="Onboarding 2 png" width="430"> </span>
   <hr>
   <h3>Dashboard</h3>
-    <img src="demo_screenshots/Dashboard1.png" alt="Dashboard 1 png">
+    <img src="demo_screenshots/Dashboard1.png" alt="Dashboard 1 png" width="430">
   <hr>
   <h3>Map</h3>
-    <img src="demo_screenshots/Map1.png" alt="Map 1 png">
-  <img src="demo_screenshots/Map2.png" alt="Map 2 png">
+    <img src="demo_screenshots/Map1.png" alt="Map 1 png" width="430">
+  <img src="demo_screenshots/Map2.png" alt="Map 2 png" width="430">
   <hr>
   <h3>Settings</h3>
-    <img src="demo_screenshots/Settings1.png" alt="Settings 1 png">
+    <img src="demo_screenshots/Settings1.png" alt="Settings 1 png" width="430">
   <hr>
   <h3>Heat Info</h3>
-    <img src="demo_screenshots/HeatInfo1.png" alt="Heat Info 1 png">
+    <img src="demo_screenshots/HeatInfo1.png" alt="Heat Info 1 png" width="430">
 </div>
 
 <!-- INSTALLATION -->
