@@ -165,6 +165,14 @@ body.dark .coolspot-header span {
   color: black;
 }
 
+body.dark .title-group span {
+  color: #012a36;
+}
+
+body.dark .modal .toggle-text p {
+  color: black;
+}
+
 body.dark .modal.preskospot .modal-title {
   color: black;
 }
