@@ -5,9 +5,20 @@ from app.db import get_session
 from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile, OfficeWorkerProfile, HomeBasedProfile
 from pydantic import BaseModel
 from app.schemas.profile import UserCreate, UserLogin
+from app.schemas.user_type import (
+                                OfficeWorkerProfileIn,
+                                OfficeWorkerProfileOut,
+                                OutdoorWorkerProfileIn,
+                                OutdoorWorkerProfileOut,
+                                HomeBasedIn,
+                                HomeBasedOut,
+                                StudentProfileIn,
+                                StudentProfileOut
+                            )
 
 router = APIRouter(prefix="/user", tags=["Users"])
 
+# TODO: Put the operations into a different directory
 
 @router.get("/all", response_model=list[UserProfile])
 async def get_all_users(session: Session = Depends(get_session)):
@@ -105,8 +116,8 @@ def login_user(data: UserLogin, session: Session = Depends(get_session)):
     }
 
 
-@router.api_route("/student/{user_id}", methods=["POST", "PUT"], response_model=StudentProfile)
-def create_or_update_student_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
+@router.api_route("/student/{user_id}", methods=["POST", "PUT"], response_model=StudentProfileOut)
+def create_or_update_student_profile(user_id: int, data: StudentProfileIn, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -115,15 +126,18 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
 
     payload = StudentProfile(
         user_id=user_id,
-        days_on_campus=",".join(data["selectedDays"]),
-        commute_mode=data["commuteType"],
-        class_hours=f"{data['classHours']['start']}-{data['classHours']['end']}",
-        has_outdoor_activities=(data["hasOutdoorActivities"] == "Yes"),
-        outdoor_hours=f"{data['activityHours']['start']}-{data['activityHours']['end']}" if data["hasOutdoorActivities"] == "Yes" else None
+        days_on_campus=",".join(data.selectedDays),
+        commute_mode=data.commuteType,
+        class_hours=f"{data.classHours.start}-{data.classHours.end}",
+        has_outdoor_activities=(data.hasOutdoorActivities == "Yes"),
+        outdoor_hours=(
+            f"{data.activityHours.start}-{data.activityHours.end}"
+            if data.hasOutdoorActivities == "Yes"
+            else None
+        ),
     )
 
     if existing:
-        # update existing
         for field, value in payload.dict(exclude_unset=True).items():
             setattr(existing, field, value)
         session.add(existing)
@@ -137,7 +151,8 @@ def create_or_update_student_profile(user_id: int, data: dict, session: Session 
     return payload
 
 
-@router.get("/student/{user_id}")
+
+@router.get("/student/{user_id}", response_model=StudentProfileOut)
 def get_student_profile(user_id: int, session: Session = Depends(get_session)):
     profile = session.exec(select(StudentProfile).where(StudentProfile.user_id == user_id)).first()
     if not profile:
@@ -158,16 +173,6 @@ def get_student_profile(user_id: int, session: Session = Depends(get_session)):
     }
 
 
-class OutdoorWorkerProfileIn(BaseModel):
-    workType: Optional[str] = None
-    workHours: Optional[dict] = None    # { "start": "08:00", "end": "16:00" }
-    breakPreference: Optional[str] = None
-
-
-class OutdoorWorkerProfileOut(BaseModel):
-    workType: Optional[str] = None
-    workHours: dict
-    breakPreference: Optional[str] = None
 
 @router.api_route("/outdoor-worker/{user_id}", methods=["POST", "PUT"], response_model=OutdoorWorkerProfileIn)
 def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: Session = Depends(get_session)):
@@ -188,7 +193,7 @@ def create_or_update_outdoor_worker_profile(user_id: int, data: dict, session: S
 
 
     if existing:
-        for field, value in payload.dict(exclude_unset=True).items():
+        for field, value in payload.model_dump(exclude_unset=True).items():
             setattr(existing, field, value)
         session.add(existing)
         session.commit()
@@ -219,19 +224,6 @@ def get_outdoor_worker_profile(user_id: int, session: Session = Depends(get_sess
         "breakPreference": profile.break_type,
     }
 
-
-class OfficeWorkerProfileIn(BaseModel):
-    selectedDays: Optional[List[str]] = None
-    workHours: Optional[dict] = None    # { "start": "09:00", "end": "18:00" }
-    commuteType: Optional[str] = None
-    lunchHabit: Optional[str] = None 
-
-
-class OfficeWorkerProfileOut(BaseModel):
-    selectedDays: List[str]
-    workHours: dict
-    commuteType: Optional[str]
-    lunchHabit: Optional[str]
 
 
 
@@ -324,16 +316,6 @@ def get_office_worker_profile(user_id: int, session: Session = Depends(get_sessi
         "lunchHabit": lunch_habit,
     }
 
-
-
-
-class HomeBasedIn(BaseModel):
-    activities: Optional[List[str]] = None
-    preferredTimes: Optional[List[str]] = None
-
-class HomeBasedOut(BaseModel):
-    activities: List[str]
-    preferredTimes: List[str]
 
 
 @router.api_route("/home-based/{user_id}", methods=["POST", "PUT"], response_model=HomeBasedIn)
