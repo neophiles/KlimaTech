@@ -82,3 +82,32 @@
 .coolspot-panel.active {
   width: 30%;
 }
+
+.confirm-new-preskospot {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  background: transparent;
+  padding: 0;
+}
+
+.confirm-new-preskospot .confirm,
+.confirm-new-preskospot .cancel
+{
+  padding: 8px;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.confirm-new-preskospot .confirm {
+  background-color: #1AC6A2;
+}
+
+.confirm-new-preskospot .cancel {
+  background-color: #FF4D4D;
+}

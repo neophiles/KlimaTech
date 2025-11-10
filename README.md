@@ -12,22 +12,13 @@
     <img src="frontend/public/logo/presko-logo.png" alt="Logo" width="80" height="auto">
   </a>
 
-<h3 align="center">Presko</h3>
+<h3 align="center">PRESKO</h3>
 
   <p align="center">
-    Welcome to Presko, your go-to platform for <b>real-time local heat indices</b> and discovering nearby <b>cooling/hydration spots</b> tailored for different user types—students, outdoor workers, office workers, and home-based users.
+    Welcome to PRESKO, your go-to platform for <b>real-time local heat indices</b> and discovering nearby <b>cooling/hydration spots</b> tailored for different user types—students, outdoor workers, office workers, and home-based users.
     <br />
     <a href="https://github.com/neophiles/KlimaTech"><strong>Explore the docs »</strong></a>
     <br />
-    <!--
-    <br />
-    <a href="https://github.com/neophiles/KlimaTech">View Demo</a>
-    &middot;
-    <a href="https://github.com/neophiles/KlimaTech/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/neophiles/KlimaTech/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
--->    
 </div>
 
 
@@ -42,17 +33,13 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
     <li><a href="#features">Features</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#installation">Installation</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
-
 
 
 <!-- ABOUT THE PROJECT -->
@@ -60,37 +47,27 @@
 
 [![Presko_Logo Screen Shot][Presko-screenshot]](https://github.com/neophiles/KlimaTech/blob/main/frontend/public/logo/name_logo.png)
 
-Presko is a web-based, mobile-first application that provides real-time local heat indices and personalized dashboards based on user type — such as students, outdoor workers, office employees, and home-based users.
-With tailored “Init Tips”, Presko helps users adapt their daily routines to the weather and stay safe during rising temperatures.
+PRESKO is a web-based, mobile-first application that provides real-time local heat indices and personalized dashboards based on user type — such as students, outdoor workers, office employees, and home-based users.
+With tailored “InitTips”, Presko helps users adapt their daily routines to the weather and stay safe during rising temperatures.
 
-The app also features an interactive map that helps users locate the nearest “Presko Spots” — designated cool areas or safe zones where people can rest, recover, and stay hydrated during extreme heat.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+The app also features an interactive map that helps users locate the nearest “PreskoSpots” — designated cool areas or safe zones where people can rest, recover, and stay hydrated during extreme heat.
 
 
 ### Built With
 
 Frontend:
-
+- [![React][React.js]][React-url]
 
 Backend:
+- [![Python][Python]][Python-url]
+- [![FastAPI][FastAPI]][FastAPI-url]
 
 Database:
+- [![PostgresSQL][Postgres]][Postgres-url]
 
 APIs:
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-To get a local copy up and running, see `instructions.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+- **Open-Meteo** for weather data
+- **OpenStreetMap** for maps
 
 
 <!-- FEATURES -->
@@ -103,51 +80,46 @@ To get a local copy up and running, see `instructions.txt` for more information.
 - Dynamic color-coded dashboard 
 - Optional notifications based on heat index thresholds
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- SCREENSHOTS -->
+## Screenshots
 
+<div>
+  <h3>Onboarding</h3>
+    <span>
+      <img src="demo_screenshots/Onboarding1.png" alt="Onboarding 1 png" height="700"> 
+      <img src="demo_screenshots/Onboarding2.png" alt="Onboarding 2 png" height="700"> 
+    </span>
+  <hr>
+  <h3>Dashboard</h3>
+    <img src="demo_screenshots/Dashboard1.png" alt="Dashboard 1 png" height="700">
+  <hr>
+  <h3>Map</h3>
+    <span>
+      <img src="demo_screenshots/Map1.png" alt="Map 1 png" height="700">
+      <img src="demo_screenshots/Map2.png" alt="Map 2 png" height="700">
+    </span>
+  <hr>
+  <h3>Settings</h3>
+    <img src="demo_screenshots/Settings1.png" alt="Settings 1 png" height="700">
+  <hr>
+  <h3>Heat Info</h3>
+    <img src="demo_screenshots/HeatInfo1.png" alt="Heat Info 1 png" height="700">
+</div>
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- INSTALLATION -->
+## Installation
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/neophiles/KlimaTech/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+To get a local copy up and running, see `instructions.txt` for more information.
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the project_license. See `LICENSE.txt` for more information.
+Distributed under the project_license. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- CONTACT -->
-## Contact
-
-Email us at: feedback@presko.ph
-
-Project Link: [https://github.com/neophiles/KlimaTech](https://github.com/neophiles/KlimaTech)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -160,10 +132,14 @@ Project Link: [https://github.com/neophiles/KlimaTech](https://github.com/neophi
 [stars-shield]: https://img.shields.io/github/stars/neophiles/KlimaTech.svg?style=for-the-badge
 [stars-url]: https://github.com/neophiles/KlimaTech/stargazers
 [license-shield]: https://img.shields.io/github/license/neophiles/KlimaTech.svg?style=for-the-badge
-[license-url]: https://github.com/neophiles/KlimaTech/blob/main/LICENSE.txt
+[license-url]: https://github.com/neophiles/KlimaTech/blob/main/LICENSE
 [Presko-screenshot]: frontend/public/logo/name_logo.png
 <!-- Shields.io badges-->
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
-
-
+[Postgres]: https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white
+[Postgres-url]: https://www.postgresql.org
+[FastAPI]: https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white
+[FastAPI-url]: https://fastapi.tiangolo.com
+[Python]: https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff
+[Python-url]: https://www.python.org
