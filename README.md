@@ -1,6 +1,6 @@
 <a id="readme-top"></a>
 
-[![Contributors][contributors-shield]][[eigenlambda123](https://github.com/eigenlambda123/)]
+[![Contributors][contributors-shield]]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![project_license][license-shield]][license-url]
