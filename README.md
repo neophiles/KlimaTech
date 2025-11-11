@@ -1,6 +1,6 @@
 <a id="readme-top"></a>
 
-[![Contributors][contributors-shield]]
+[![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![project_license][license-shield]][license-url]
