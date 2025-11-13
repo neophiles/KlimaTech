@@ -41,6 +41,8 @@ async def add_user(user: UserCreate, session: Session = Depends(get_session)):
     new_user = UserProfile(
         username=user.username,
         user_type=user.user_type,
+        lat=user.lat,
+        lon=user.lon
     )
     session.add(new_user)
     session.commit()
