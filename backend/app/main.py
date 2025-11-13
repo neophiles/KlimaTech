@@ -66,7 +66,7 @@ barangays_data = [
 def on_startup():
     init_db()
 
-    # --- Barangays prepopulation (existing code) ---
+    # Barangays prepopulation 
     with Session(engine) as session:
         result = session.exec(select(Barangay)).first()
         if not result:
