@@ -8,6 +8,7 @@ from app.models import (
     OutdoorWorkerProfile,
     OfficeWorkerProfile,
     HomeBasedProfile,
+    UserType, 
 )
 from app.schemas.profile import UserCreate, UserEdit
 from app.schemas.user_type import (
@@ -28,9 +29,19 @@ def add_user(session: Session, user: UserCreate) -> UserProfile:
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
 
+    # validate/cast user_type to the enum used by the model
+    try:
+        user_type_enum = UserType(user.user_type)
+    except Exception:
+        allowed = ", ".join([e.value for e in UserType])
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid user_type. Allowed values: {allowed}"
+        )
+
     new_user = UserProfile(
         username=user.username,
-        user_type=user.user_type,
+        user_type=user_type_enum,
         lat=user.lat,
         lon=user.lon,
     )

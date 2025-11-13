@@ -49,12 +49,12 @@ async def get_all_users_route(session: Session = Depends(get_session)):
     return get_all_users(session)
 
 
-@router.post("/add", response_model=UserProfile)
+@router.post("/add", response_model=UserRead)
 async def add_user_route(user: UserCreate, session: Session = Depends(get_session)):
     return add_user(session, user)
 
 
-@router.get("/{user_id}", response_model=UserProfile)
+@router.get("/{user_id}", response_model=UserRead)
 async def get_user_route(user_id: int, session: Session = Depends(get_session)):
     user = get_user(session, user_id)
     if not user:
@@ -67,7 +67,7 @@ async def delete_user_route(user_id: int, session: Session = Depends(get_session
     return delete_user(session, user_id)
 
 
-@router.patch("/{user_id}", response_model=UserEdit)
+@router.patch("/{user_id}", response_model=UserRead)
 async def update_user_route(user_id: int, user_data: UserEdit, session: Session = Depends(get_session)):
     return update_user(session, user_id, user_data)
 
