@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 from typing import Optional, List
 from app.db import get_session
-from app.models import UserProfile, StudentProfile, OutdoorWorkerProfile, OfficeWorkerProfile, HomeBasedProfile
-from pydantic import BaseModel
-from app.schemas.profile import UserCreate, UserLogin
+
+from app.schemas.profile import UserCreate, UserLogin, UserRead
 from app.schemas.user_type import (
                                 OfficeWorkerProfileIn,
                                 OfficeWorkerProfileOut,
@@ -15,12 +14,21 @@ from app.schemas.user_type import (
                                 StudentProfileIn,
                                 StudentProfileOut
                             )
+from app.models import (
+                    UserProfile,
+                    StudentProfile, 
+                    OutdoorWorkerProfile, 
+                    OfficeWorkerProfile, 
+                    HomeBasedProfile
+                    )
+
+
 
 router = APIRouter(prefix="/user", tags=["Users"])
 
 # TODO: Put the operations into a different directory
 
-@router.get("/all", response_model=list[UserProfile])
+@router.get("/all", response_model=list[UserRead])
 async def get_all_users(session: Session = Depends(get_session)):
     users = session.exec(select(UserProfile)).all()
     return users
