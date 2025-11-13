@@ -1,10 +1,8 @@
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from datetime import datetime, timedelta, timezone
+from sqlmodel import Session
 from app.models import Barangay
 from app.db import get_session
-from app.utils.heat_index import calculate_heat_index
 from fastapi import status
 
 from app.crud.forecast import get_today_hourly_forecast, PH_TZ

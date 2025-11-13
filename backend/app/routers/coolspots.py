@@ -1,23 +1,11 @@
 from fastapi import APIRouter, Depends, File, UploadFile, Form, HTTPException
-import os
-from sqlmodel import Session, select
 from app.db import get_session
-from app.models import CoolSpot, Report, Vote
-from app.schemas.coolspots import ReportRead, CoolSpotRead, CoolSpotCreate
+from app.schemas.coolspots import CoolSpotRead
 from fastapi import Query
-from sqlmodel import select
-from app.models import CoolSpot, Vote
-from math import radians, sin, cos, sqrt, atan2
-from typing import List, Optional
-from pydantic import BaseModel
-from app.models import UserProfile, Report
 from app.schemas.coolspots import CoolSpotOut, ReportOut
-
-# ...existing code...
 
 from app.crud.coolspots import (
     save_upload_file,
-    haversine,
     vote_spot,
     get_all_coolspots,
     get_coolspot_with_reports,
@@ -115,4 +103,3 @@ def get_sorted_preskospots_route(
     if not spots_with_distance:
         raise HTTPException(status_code=404, detail="No CoolSpots found")
     return {"spots": spots_with_distance}
-# ...existing code...
