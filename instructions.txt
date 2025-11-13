@@ -29,10 +29,24 @@ Create the PostgreSQL database:
     \q
 
 Look inside the database:
-    
     \dt
     SELECT * FROM heatlog;
     SELECT * FROM barangay;
+
+Remove the data's:
+TRUNCATE TABLE
+  barangay,
+  coolspot,
+  homebasedprofile,
+  officeworkerprofile,
+  outdoorworkerprofile,
+  report,
+  studentprofile,
+  tip,
+  tiplog,
+  userprofile,
+  vote
+RESTART IDENTITY CASCADE;
 
 (For SQLite only, to ensure `recorded_at` is TEXT:)
     ALTER TABLE heatlog RENAME TO heatlog_old;
