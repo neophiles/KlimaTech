@@ -3,6 +3,7 @@ from app.db import get_session
 from app.schemas.coolspots import CoolSpotRead
 from fastapi import Query
 from app.schemas.coolspots import CoolSpotOut, ReportOut
+from sqlmodel import Session
 
 from app.crud.coolspots import (
     save_upload_file,
@@ -17,7 +18,6 @@ from app.crud.coolspots import (
 
 router = APIRouter(prefix="/coolspots", tags=["CoolSpots"])
 
-# ...existing code...
 
 @router.get("/all", response_model=list[CoolSpotRead])
 async def get_all_coolspots_route(session: Session = Depends(get_session)):
