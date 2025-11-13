@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from typing import Optional, List
 from app.db import get_session
 
-from app.schemas.profile import UserCreate, UserLogin, UserRead
+from app.schemas.profile import UserCreate, UserLogin, UserRead, UserEdit
 from app.schemas.user_type import (
                                 OfficeWorkerProfileIn,
                                 OfficeWorkerProfileOut,
@@ -83,8 +83,8 @@ async def delete_user(user_id: int, session: Session = Depends(get_session)):
     return
 
 
-@router.put("/{user_id}", response_model=UserProfile)
-async def update_user(user_id: int, user_data: UserCreate, session: Session = Depends(get_session)):
+@router.patch("/{user_id}", response_model=UserEdit)
+async def update_user(user_id: int, user_data: UserEdit, session: Session = Depends(get_session)):
     user = session.get(UserProfile, user_id)
     if not user:
         raise HTTPException(
@@ -92,14 +92,20 @@ async def update_user(user_id: int, user_data: UserCreate, session: Session = De
             detail="User not found"
         )
 
-    user.username = user_data.username
-    user.user_type = user_data.user_type
+    # Update fields only if they are provided
+    if user_data.username is not None:
+        user.username = user_data.username
+    if user_data.user_type is not None:
+        user.user_type = user_data.user_type
+    if user_data.lat is not None:
+        user.lat = user_data.lat
+    if user_data.lon is not None:
+        user.lon = user_data.lon
 
     session.add(user)
     session.commit()
     session.refresh(user)
     return user
-
 
 
 @router.post("/login")
