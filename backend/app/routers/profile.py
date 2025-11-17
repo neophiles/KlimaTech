@@ -14,13 +14,6 @@ from app.schemas.user_type import (
                                 StudentProfileIn,
                                 StudentProfileOut
                             )
-from app.models import (
-                    UserProfile,
-                    StudentProfile, 
-                    OutdoorWorkerProfile, 
-                    OfficeWorkerProfile, 
-                    HomeBasedProfile
-                    )
 
 
 from app.crud.profile import (

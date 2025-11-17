@@ -5,7 +5,7 @@ from app.models import Barangay
 from app.db import get_session
 from fastapi import status
 
-from app.crud.forecast import get_today_hourly_forecast, PH_TZ
+from app.crud.forecast import get_today_hourly_forecast
 
 router = APIRouter(prefix="/barangays", tags=["Barangays"])
 

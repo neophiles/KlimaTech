@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from app.schemas.barangay import (
     BarangaySummary,
     BarangayDetail
