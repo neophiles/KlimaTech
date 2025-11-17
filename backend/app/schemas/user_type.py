@@ -1,8 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
 
-# TODO: Fix all the schemas and response
-
 class TimeRange(BaseModel):
     start: str
     end: str

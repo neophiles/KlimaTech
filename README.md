@@ -55,19 +55,19 @@ The app also features an interactive map that helps users locate the nearest “
 
 ### Built With
 
-Frontend:
-- [![React][React.js]][React-url]
+**Frontend**
+- ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-Backend:
-- [![Python][Python]][Python-url]
-- [![FastAPI][FastAPI]][FastAPI-url]
+**Backend**
+- ![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
+- ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 
-Database:
-- [![PostgresSQL][Postgres]][Postgres-url]
+**Database**
+- ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
-APIs:
-- **Open-Meteo** for weather data
-- **OpenStreetMap** for maps
+**APIs**
+- **Open-Meteo** — weather ingestion layer  
+- **OpenStreetMap** — geospatial data pipeline
 
 
 <!-- FEATURES -->
