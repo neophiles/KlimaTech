@@ -70,7 +70,6 @@ The app also features an interactive map that helps users locate the nearest “
 - **OpenStreetMap** — geospatial data pipeline
 
 
-
 <!-- FEATURES -->
 
 ## Features
