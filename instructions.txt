@@ -112,3 +112,8 @@ npm run dev
 URL: http://localhost:5173/
 
 ==========================
+
+=========================
+Run this if service worker issues occur:
+=========================
+navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).then(() => location.reload());
