@@ -3,8 +3,7 @@ import {
 	FormControl, FormLabel, Input, FormErrorMessage,
 	Container, Flex, VStack, HStack,
 	Button, Link,
-	Text, Heading,
-	Image
+	Text, Heading, Image,
 } from "@chakra-ui/react";
 import AlertTemplate from "../../components/AlertTemplate";
 import { useAuth } from "../../context/AuthProvider";
