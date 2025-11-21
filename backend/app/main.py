@@ -20,7 +20,8 @@ scheduler = BackgroundScheduler()
 
 # Allow frontend origins
 origins = [
-    "https://presko-crg5-npbpr2g89-eigenlambda123s-projects.vercel.app"
+    "https://presko-crg5-npbpr2g89-eigenlambda123s-projects.vercel.app",
+    "https://presko-crg5.vercel.app/",
     "http://localhost:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
