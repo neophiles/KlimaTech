@@ -32,6 +32,14 @@ barangays_data = [
         "lat": 13.9968,
         "lon": 121.7309
     },
+        {
+        "id": 3,
+        "barangay": "UP Campus",
+        "locality": "Quezon City",
+        "province": "Manila",
+        "lat": 14.6478,
+        "lon": 121.0654
+    },
 ]
 
 app = FastAPI()

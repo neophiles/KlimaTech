@@ -9,7 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-export default function Clock() {
+export default function Clock({ barangayId }) {
   const [time, setTime] = useState(new Date());
   const [forecast, setForecastData] = useState([]);
   const [error, setError] = useState(null);
@@ -26,7 +26,8 @@ export default function Clock() {
   useEffect(() => {
     async function getData() {
       try {
-        const data = await fetchForecastData(1);
+        if (!barangayId) return; // Don't fetch if barangayId is undefined
+        const data = await fetchForecastData(barangayId);
         console.log(data);
         setForecastData(data.forecast);
       } catch (err) {
@@ -35,7 +36,7 @@ export default function Clock() {
       }
     }
     getData();
-  }, []);
+  }, [barangayId]);
 
   // Classify hours
   const classifiedHours = forecast.map(({ time, heat_index }) => {
