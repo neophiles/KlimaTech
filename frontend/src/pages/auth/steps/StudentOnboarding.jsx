@@ -64,13 +64,26 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
   };
 
   return (
-    <Flex h="100%" align="center" justify="center" bg="gray.50">
-      <Container maxW="min(90%, 500px)" py="30px">
+    <Flex
+      minH="100vh"
+      align="center"
+      justify="center"
+      bg="gray.50"
+      pt="30px"
+      pb="200px"
+    >
+      <Container
+        maxW="min(90%, 450px)"
+        py="30px"
+        border="1px solid"
+        borderColor="gray.300"
+        borderRadius="5px"
+      >
         <form onSubmit={handleSubmit}>
           <VStack spacing="25px">
             <VStack spacing="10px" align="center">
               <Image src="/logo/PRESKO-name-logo.png" alt="PRESKO Logo" w="80px" />
-              <Heading size="lg">Personalize Your Presko</Heading>
+              <Heading size={["md", "lg"]}>Personalize Your Presko</Heading>
               <Text color="gray.600" textAlign="center">
                 Tell us about your weekly student life
               </Text>
@@ -84,7 +97,7 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={day}
                     onClick={() => toggleDay(day)}
-                    colorScheme={selectedDays.includes(day) ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={selectedDays.includes(day) ? "solid" : "outline"}
                     size="sm"
                   >
@@ -103,9 +116,12 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => setCommuteType(commuteType === option ? "" : option)}
-                    colorScheme={commuteType === option ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={commuteType === option ? "solid" : "outline"}
+                    size="sm"
                     justifyContent="flex-start"
+                    height="auto"
+                    py="10px"
                   >
                     {option}
                   </Button>
@@ -120,14 +136,20 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
               <HStack spacing="10px">
                 <Input
                   type="time"
+                  size="sm"
                   value={classHours.start}
                   onChange={(e) => setClassHours({ ...classHours, start: e.target.value })}
+                  borderColor="brand.500"
+                  focusBorderColor="brand.600"
                 />
                 <Text>to</Text>
                 <Input
                   type="time"
+                  size="sm"
                   value={classHours.end}
                   onChange={(e) => setClassHours({ ...classHours, end: e.target.value })}
+                  borderColor="brand.500"
+                  focusBorderColor="brand.600"
                 />
               </HStack>
               {errors.hours && <Text color="red.500" fontSize="sm" mt="5px">{errors.hours}</Text>}
@@ -141,8 +163,9 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => setHasOutdoorActivities(hasOutdoorActivities === option ? null : option)}
-                    colorScheme={hasOutdoorActivities === option ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={hasOutdoorActivities === option ? "solid" : "outline"}
+                    size="sm"
                     flex="1"
                   >
                     {option}
@@ -159,14 +182,20 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
                 <HStack spacing="10px">
                   <Input
                     type="time"
+                    size="sm"
                     value={activityHours.start}
                     onChange={(e) => setActivityHours({ ...activityHours, start: e.target.value })}
+                    borderColor="brand.500"
+                    focusBorderColor="brand.600"
                   />
                   <Text>to</Text>
                   <Input
                     type="time"
+                    size="sm"
                     value={activityHours.end}
                     onChange={(e) => setActivityHours({ ...activityHours, end: e.target.value })}
+                    borderColor="brand.500"
+                    focusBorderColor="brand.600"
                   />
                 </HStack>
                 {errors.activityHours && <Text color="red.500" fontSize="sm" mt="5px">{errors.activityHours}</Text>}
@@ -175,7 +204,13 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
 
             {/* Action buttons */}
             <HStack w="100%" spacing="10px" pt="10px">
-              <Button onClick={onBack} variant="outline" flex="1" isDisabled={isLoading}>
+              <Button
+                onClick={onBack}
+                variant="outline"
+                borderColor="gray.500"
+                flex="1"
+                isDisabled={isLoading}
+              >
                 Back
               </Button>
               <Button
@@ -184,7 +219,7 @@ function StudentOnboarding({ onComplete, onBack, isLoading }) {
                 flex="1"
                 isLoading={isLoading}
               >
-                Complete Setup
+                Complete
               </Button>
             </HStack>
           </VStack>

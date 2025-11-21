@@ -59,7 +59,7 @@ function CredentialsStep({ onSubmit, userData, setUserData }) {
   };
 
   return (
-    <Flex h="100vh" align="center" justify="center">
+    <Flex minH="100vh" align="center" justify="center">
       <Container
         maxW="min(90%, 450px)"
         py="30px"
@@ -70,7 +70,7 @@ function CredentialsStep({ onSubmit, userData, setUserData }) {
         <form onSubmit={handleSubmit}>
           <VStack spacing="20px">
             <VStack spacing="0">
-              <Heading size={["md", "lg"]}>Welcome to</Heading>
+              <Heading size={["md", "lg"]}>Hey there! Let's keep you</Heading>
               <Image src="/logo/PRESKO-name-logo.png" alt="PRESKO Logo" w="100px" />
             </VStack>
 

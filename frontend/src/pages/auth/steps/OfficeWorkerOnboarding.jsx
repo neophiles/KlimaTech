@@ -29,7 +29,7 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
   ];
   const lunchOptions = [
     "Yes, I walk/commute out",
-    "No, I eat inside the building / bring baon",
+    "No, I eat inside / bring baon",
   ];
 
   const toggleDay = (day) => {
@@ -63,13 +63,26 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
   };
 
   return (
-    <Flex h="100%" align="center" justify="center" bg="gray.50">
-      <Container maxW="min(90%, 500px)" py="30px">
+    <Flex
+      minH="100vh"
+      align="center"
+      justify="center"
+      bg="gray.50"
+      pt="30px"
+      pb="200px"
+    >
+      <Container
+        maxW="min(90%, 450px)"
+        py="30px"
+        border="1px solid"
+        borderColor="gray.300"
+        borderRadius="5px"
+      >
         <form onSubmit={handleSubmit}>
           <VStack spacing="25px">
             <VStack spacing="10px" align="center">
               <Image src="/logo/PRESKO-name-logo.png" alt="PRESKO Logo" w="80px" />
-              <Heading size="lg">Personalize Your Presko</Heading>
+              <Heading size={["md", "lg"]}>Personalize Your Presko</Heading>
               <Text color="gray.600" textAlign="center">
                 Tell us about your office work routine
               </Text>
@@ -83,7 +96,7 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={day}
                     onClick={() => toggleDay(day)}
-                    colorScheme={selectedDays.includes(day) ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={selectedDays.includes(day) ? "solid" : "outline"}
                     size="sm"
                   >
@@ -100,14 +113,20 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
               <HStack spacing="10px">
                 <Input
                   type="time"
+                  size="sm"
                   value={workHours.start}
                   onChange={(e) => setWorkHours({ ...workHours, start: e.target.value })}
+                  borderColor="brand.500"
+                  focusBorderColor="brand.600"
                 />
                 <Text>to</Text>
                 <Input
                   type="time"
+                  size="sm"
                   value={workHours.end}
                   onChange={(e) => setWorkHours({ ...workHours, end: e.target.value })}
+                  borderColor="brand.500"
+                  focusBorderColor="brand.600"
                 />
               </HStack>
               {errors.hours && <Text color="red.500" fontSize="sm" mt="5px">{errors.hours}</Text>}
@@ -121,13 +140,15 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => setCommuteType(commuteType === option ? "" : option)}
-                    colorScheme={commuteType === option ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={commuteType === option ? "solid" : "outline"}
+                    size="sm"
                     justifyContent="flex-start"
-                    h="auto"
-                    py="12px"
+                    whiteSpace="normal"
+                    height="auto"
+                    py="10px"
                   >
-                    {option}
+                    <Text textAlign="left">{option}</Text>
                   </Button>
                 ))}
               </VStack>
@@ -142,13 +163,15 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => setLunchHabit(lunchHabit === option ? "" : option)}
-                    colorScheme={lunchHabit === option ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={lunchHabit === option ? "solid" : "outline"}
+                    size="sm"
                     justifyContent="flex-start"
-                    h="auto"
-                    py="12px"
+                    whiteSpace="normal"
+                    height="auto"
+                    py="10px"
                   >
-                    {option}
+                    <Text textAlign="left">{option}</Text>
                   </Button>
                 ))}
               </VStack>
@@ -156,8 +179,14 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
             </FormControl>
 
             {/* Action buttons */}
-            <HStack w="100%" spacing="10px" pt="10px">
-              <Button onClick={onBack} variant="outline" flex="1" isDisabled={isLoading}>
+            <HStack w="100%" spacing="10px">
+              <Button
+                onClick={onBack}
+                variant="outline"
+                borderColor="gray.500"
+                flex="1"
+                isDisabled={isLoading}
+              >
                 Back
               </Button>
               <Button
@@ -166,7 +195,7 @@ function OfficeWorkerOnboarding({ onComplete, onBack, isLoading }) {
                 flex="1"
                 isLoading={isLoading}
               >
-                Complete Setup
+                Complete
               </Button>
             </HStack>
           </VStack>
