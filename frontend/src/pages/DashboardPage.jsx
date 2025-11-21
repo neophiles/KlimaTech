@@ -30,7 +30,7 @@ function Dashboard() {
 
   if (locationLoading || userLoading) {
     return (
-      <Flex justify="center" align="center" h="100vh">
+      <Flex justify="center" align="center" h="100%">
         <Spinner size="xl" />
       </Flex>
     );
