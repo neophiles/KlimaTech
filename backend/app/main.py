@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.routers import (
     auth,
     barangays,
@@ -10,7 +11,6 @@ from app.routers import (
 from app.db import init_db, engine
 from app.tasks.collector import collect_heat_data
 from apscheduler.schedulers.background import BackgroundScheduler
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 from app.models import Barangay
@@ -21,7 +21,7 @@ scheduler = BackgroundScheduler()
 # Allow frontend origins
 origins = [
     "https://presko-crg5-npbpr2g89-eigenlambda123s-projects.vercel.app",
-    "https://presko-crg5.vercel.app/",
+    "https://presko-crg5.vercel.app",
     "http://localhost:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
