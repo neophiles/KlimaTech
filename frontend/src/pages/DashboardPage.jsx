@@ -1,7 +1,7 @@
 import {
   Flex,
 } from "@chakra-ui/react";
-import Clock from "../components/clock/Clock";
+import Clock from "../components/Clock/Clock";
 import NearestPresko from "../widgets/NearestPresko";
 import Greetings from "../widgets/Greetings";
 import InitTips from "../components/InitTips/InitTips";
