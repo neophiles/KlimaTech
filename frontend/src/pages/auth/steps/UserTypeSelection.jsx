@@ -8,8 +8,14 @@ import {
   SimpleGrid,
   Box,
   Text,
-  Center,
+  Icon,
 } from "@chakra-ui/react";
+import { 
+  GraduationCap,
+  CloudSun,
+  LampDesk,
+  House,
+} from "lucide-react";
 
 function UserTypeSelection({ onSelect, onBack }) {
   const userTypes = [
@@ -17,32 +23,32 @@ function UserTypeSelection({ onSelect, onBack }) {
       id: "student",
       label: "Student",
       description: "I attend school or university",
-      icon: "🎓",
+      icon: GraduationCap,
     },
     {
       id: "outdoor_worker",
       label: "Outdoor Worker",
       description: "I work primarily outdoors",
-      icon: "🏗️",
+      icon: CloudSun,
     },
     {
       id: "office_worker",
       label: "Office Worker",
       description: "I work in an office setting",
-      icon: "🏢",
+      icon: LampDesk,
     },
     {
       id: "home_based",
       label: "Home-Based",
       description: "I work or stay mostly at home",
-      icon: "🏠",
+      icon: House,
     },
   ];
 
   return (
-    <Flex h="100%" align="center" justify="center">
-      <Container maxW="min(90%, 600px)" py="30px">
-        <VStack spacing="30px">
+    <Flex minH="100vh" align="center" justify="center">
+      <Container maxW="min(90%, 600px)" pt="50px" pb="200px">
+        <VStack spacing="20px">
           <VStack spacing="10px" align="center">
             <Image src="/logo/PRESKO-name-logo.png" alt="PRESKO Logo" w="100px" />
             <Heading size="lg" textAlign="center">
@@ -77,7 +83,7 @@ function UserTypeSelection({ onSelect, onBack }) {
                 justifyContent="center"
                 gap="10px"
               >
-                <Box fontSize="40px">{type.icon}</Box>
+                <Icon as={type.icon} boxSize={7} />
                 <Text fontWeight="600" fontSize="md">
                   {type.label}
                 </Text>
@@ -89,10 +95,12 @@ function UserTypeSelection({ onSelect, onBack }) {
           </SimpleGrid>
 
           <Button
-            onClick={onBack}
             variant="outline"
+            borderColor="gray.500"
             w="100%"
             mt="10px"
+            onClick={onBack}
+            
           >
             Back
           </Button>

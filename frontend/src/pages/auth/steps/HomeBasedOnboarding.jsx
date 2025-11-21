@@ -61,13 +61,26 @@ function HomeBasedOnboarding({ onComplete, onBack, isLoading }) {
   };
 
   return (
-    <Flex h="100%" align="center" justify="center" bg="gray.50">
-      <Container maxW="min(90%, 500px)" py="30px">
+    <Flex
+      minH="100vh"
+      align="center"
+      justify="center"
+      bg="gray.50"
+      pt="30px"
+      pb="200px"
+    >
+      <Container
+        maxW="min(90%, 450px)"
+        py="30px"
+        border="1px solid"
+        borderColor="gray.300"
+        borderRadius="5px"
+      >
         <form onSubmit={handleSubmit}>
           <VStack spacing="25px">
             <VStack spacing="10px" align="center">
               <Image src="/logo/PRESKO-name-logo.png" alt="PRESKO Logo" w="80px" />
-              <Heading size="lg">Personalize Your Presko</Heading>
+              <Heading size={["md", "lg"]}>Personalize Your Presko</Heading>
               <Text color="gray.600" textAlign="center">
                 Tell us about your daily home-based routine
               </Text>
@@ -81,9 +94,12 @@ function HomeBasedOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => toggleOption(option, activities, setActivities)}
-                    colorScheme={activities.includes(option) ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={activities.includes(option) ? "solid" : "outline"}
+                    size="sm"
                     justifyContent="flex-start"
+                    height="auto"
+                    py="10px"
                   >
                     {option}
                   </Button>
@@ -100,11 +116,12 @@ function HomeBasedOnboarding({ onComplete, onBack, isLoading }) {
                   <Button
                     key={option}
                     onClick={() => toggleOption(option, preferredTimes, setPreferredTimes)}
-                    colorScheme={preferredTimes.includes(option) ? "brand" : "gray"}
+                    colorScheme="brand"
                     variant={preferredTimes.includes(option) ? "solid" : "outline"}
+                    size="sm"
                     justifyContent="flex-start"
-                    h="auto"
-                    py="12px"
+                    height="auto"
+                    py="10px"
                   >
                     {option}
                   </Button>
@@ -115,7 +132,13 @@ function HomeBasedOnboarding({ onComplete, onBack, isLoading }) {
 
             {/* Action buttons */}
             <HStack w="100%" spacing="10px" pt="10px">
-              <Button onClick={onBack} variant="outline" flex="1" isDisabled={isLoading}>
+              <Button
+                onClick={onBack}
+                variant="outline"
+                borderColor="gray.500"
+                flex="1"
+                isDisabled={isLoading}
+              >
                 Back
               </Button>
               <Button
@@ -124,7 +147,7 @@ function HomeBasedOnboarding({ onComplete, onBack, isLoading }) {
                 flex="1"
                 isLoading={isLoading}
               >
-                Complete Setup
+                Complete
               </Button>
             </HStack>
           </VStack>

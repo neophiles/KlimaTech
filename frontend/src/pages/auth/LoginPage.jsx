@@ -83,7 +83,7 @@ function Login() {
 				<AlertTemplate alertInfo={alertInfo} onClose={() => setAlertInfo(null)} />
 			)}
 
-			<Flex h="100vh" align="center" justify="center">
+			<Flex minH="100vh" align="center" justify="center">
 				<Container maxW="min(90%, 450px)" py="30px" border="1px solid" borderColor="gray.300" borderRadius="5px">
 					<form onSubmit={handleSubmit}>
 						<VStack spacing="20px">
