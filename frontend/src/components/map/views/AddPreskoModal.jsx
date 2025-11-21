@@ -92,14 +92,10 @@ function AddPreskoModal({ isOpen, onClose, userLocation, onPreskoAdded }) {
       formDataToSend.append("barangay_id", 3); // Default to UP Campus for now
       formDataToSend.append("name", formData.name);
       formDataToSend.append("type", formData.type);
+      formDataToSend.append("address", formData.address);
+      formDataToSend.append("description", formData.description);
       formDataToSend.append("lat", userLocation.lat);
       formDataToSend.append("lon", userLocation.lon);
-      
-      // Combine address and description
-      const fullDescription = formData.description 
-        ? `${formData.address}\n\n${formData.description}`
-        : `${formData.address}`;
-      formDataToSend.append("description", fullDescription);
 
       // Append the first image if available
       if (files.length > 0) {

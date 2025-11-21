@@ -46,6 +46,7 @@ async def create_coolspot_route(
     type: str = Form(...),
     lat: float = Form(...),
     lon: float = Form(...),
+    address: str = Form(None),
     file: UploadFile = File(None),
     session: Session = Depends(get_session)
 ):
@@ -61,6 +62,7 @@ async def create_coolspot_route(
         type=type,
         lat=lat,
         lon=lon,
+        address=address,
         photo_url=photo_url
     )
     return new_coolspot

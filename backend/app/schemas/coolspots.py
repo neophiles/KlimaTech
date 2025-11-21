@@ -22,6 +22,7 @@ class CoolSpotRead(BaseModel):
     id: int
     barangay_id: int
     name: str
+    address: Optional[str] = None
     description: str
     type: str
     lat: float
@@ -33,6 +34,7 @@ class CoolSpotRead(BaseModel):
 class CoolSpotCreate(BaseModel):
     barangay_id: int
     name: str
+    address: Optional[str] = None
     type: str
     lat: float
     lon: float
@@ -42,6 +44,7 @@ class CoolSpotOut(BaseModel):
     id: int
     barangay_id: int
     name: str
+    address: Optional[str] = None
     description: str
     type: str
     lat: float

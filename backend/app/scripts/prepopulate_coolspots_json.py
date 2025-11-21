@@ -22,19 +22,21 @@ def main():
 
         for row in spots_data:
             # Validate required fields
-            if not row.get("lat") or not row.get("long"):
+            if not row.get("lat") or not row.get("lon"):
                 skipped += 1
-                print(f"Skipping '{row.get('name', 'Unknown')}': Missing lat/long")
+                print(f"Skipping '{row.get('name', 'Unknown')}': Missing lat/lon")
                 continue
 
             try:
                 coolspot = CoolSpot(
                     barangay_id=int(row.get("barangay_id", 1)),
                     name=row.get("name", ""),
+                    address=row.get("address"),
                     description=row.get("description", ""),
                     type=row.get("type", ""),
                     lat=float(row["lat"]),
-                    lon=float(row["long"]),
+                    lon=float(row["lon"]),
+                    photo_url=row.get("photo_url"),
                 )
                 session.add(coolspot)
                 added += 1
