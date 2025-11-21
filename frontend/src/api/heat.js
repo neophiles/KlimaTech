@@ -12,3 +12,9 @@ export async function fetchForecastData(barangayId) {
   if (!res.ok) throw new Error('Failed to fetch forecast data');
   return await res.json();
 }
+
+export async function fetchnNearestBranch(lat, lon) {
+  const res = await fetch(`${API_BASE_URL}/barangays/nearest?lat=${lat}&lon=${lon}`);
+  if (!res.ok) throw new Error('Failed to fetch nearest branch');
+  return await res.json();
+}
