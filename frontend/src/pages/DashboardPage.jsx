@@ -8,10 +8,12 @@ import NearestPresko from "../widgets/NearestPresko";
 import Greetings from "../widgets/Greetings";
 import InitTips from "../components/InitTips/InitTips";
 import { useUserLocation } from "../hooks/useUserLocation";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 import { fetchnNearestBranch } from "../api/heat";
 
 function Dashboard() {
-  const { userLocation, isLoading } = useUserLocation();
+  const { userLocation, isLoading: locationLoading } = useUserLocation();
+  const { user, isLoading: userLoading } = useCurrentUser();
   const [barangayId, setBarangayId] = useState(null);
   const [barangayInfo, setBarangayInfo] = useState(null);
 
@@ -26,7 +28,7 @@ function Dashboard() {
     }
   }, [userLocation]);
 
-  if (isLoading) {
+  if (locationLoading || userLoading) {
     return (
       <Flex justify="center" align="center" h="100vh">
         <Spinner size="xl" />
@@ -54,7 +56,7 @@ function Dashboard() {
         />
         <Clock barangayId={barangayId} />
         <NearestPresko />
-        {barangayId && <InitTips barangayId={barangayId} userId={1} />}
+        {barangayId && <InitTips barangayId={barangayId} userId={user?.id} />}
       </Flex>
     </Flex>
   );
