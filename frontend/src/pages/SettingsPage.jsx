@@ -1,99 +1,95 @@
-import InfoSubPage from "./subpages/InfoSubPage";
-import AboutSubPage from "./subpages/AboutSubPage";
-import ProfileSubPage from "./subpages/ProfileSubPage";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./SettingsPage.css";
+import {
+  Button,
+  Flex,
+  Heading,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { Undo2 } from "lucide-react";
+import Profile from "./subpages/Profile";
+import About from "./subpages/About";
+import Info from "./subpages/Info";
 
 function Settings() {
-  const [message, setMessage] = useState("");
-  const [subPage, setSubPage] = useState("");
-
-  const navigate = useNavigate();
-
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem("userData"))
-  );
-
-  const handleLogout = () => {
-    localStorage.removeItem("userData");
-    setMessage("Logged out successfully!");
-
-    // Remove user data
-    localStorage.removeItem("userData");
-
-    // Reset theme to light mode
-    localStorage.setItem("theme", "light");
-    document.body.classList.remove("dark");
-
-    // Notify user
-    alert("Logged out successfully!");
-
-    // Navigate to home page
-    navigate("/");
-
-    // Wait briefly to ensure navigation finishes, then reload
-    setTimeout(() => {
-      setMessage("");
-      window.location.reload();
-    }, 100);
-  };
-
-  const backButton = (
-    <div className="base-widget back-btn-widget">
-      <button
-        className="settings-btn back"
-        onClick={() => setSubPage("")}
-      >
-        <svg className="nav-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M11 7l-5 5l5 5" />
-          <path d="M17 7l-5 5l5 5" />
-        </svg>
-        Back to Settings
-      </button>
-    </div>
-  )
+  const [subPage, setSubPage] = useState("settings");
+  const bgColor = useColorModeValue("gray.100", "gray.700");
 
   return (
-    <div className="dashboard">
-      {subPage !== "" && backButton}
+    <Flex
+      justify="center"
+      p={["20px", "30px"]}
+      h="100%"
+    >
+      <Flex
+        direction="column"
+        align="center"
+        gap="20px"
+        w="min(600px, 95%)"
+        h="auto"
+      >
+        {subPage !== "settings" && (
+          <Button
+            size="sm"
+            alignSelf="start"
+            variant="link"
+            leftIcon={<Undo2 />}
+            onClick={() => setSubPage("settings")}
+          >
+            Back to Settings
+          </Button>
+        )}
 
-      {subPage === "profile" ? <ProfileSubPage currentUser={currentUser} setCurrentUser={setCurrentUser} /> :
-        subPage === "info" ? <InfoSubPage /> :
-        subPage === "about" ? <AboutSubPage /> :
-        
-        <>
-          <div className="base-widget raised-widget settings-widget">
-            <span className="widget-title">ACCOUNT</span>
-            <a href="#" onClick={(e) => { e.preventDefault(); setSubPage("profile"); }}>
-              Profile
-            </a>
-            <a href="#" onClick={(e) => { }}>
-              Notifications
-            </a>
-          </div>
-          <div className="base-widget raised-widget settings-widget">
-            <span className="widget-title">RESOURCES</span>
-            <a href="#" onClick={(e) => { e.preventDefault(); setSubPage("info"); }}>
-              Heat Info
-            </a>
-          </div>
-          <div className="base-widget raised-widget settings-widget">
-            <span className="widget-title">ABOUT</span>
-            <a href="#" onClick={(e) => { e.preventDefault(); setSubPage("about"); }}>
-              About PRESKO
-            </a>
-            <a href="#" onClick={(e) => { }}>
-              Share the App
-            </a>
-            <button onClick={handleLogout} className="settings-btn logout">
-              Logout
-            </button>
-          </div>
-        </>
-      }
-      
-    </div>
+        {subPage === "profile" ? <Profile /> : 
+         subPage === "info" ? <Info /> : 
+         subPage === "about" ? <About /> : (
+          <>
+            <Flex
+              direction="column"
+              align="start"
+              gap="5px"
+              w="100%"
+              p="15px"
+              bg={bgColor}
+              borderRadius="lg"
+            >
+
+              <Heading size="sm" mb="5px">ACCOUNT</Heading>
+              <Button variant="link" onClick={() => setSubPage("profile")}>Profile</Button>
+              <Button variant="link" onClick={() => setSubPage("notifications")}>Notification</Button>
+
+            </Flex>
+            <Flex
+              direction="column"
+              align="start"
+              gap="5px"
+              w="100%"
+              p="15px"
+              bg={bgColor}
+              borderRadius="lg" 
+            >
+              
+              <Heading size="sm" mb="5px">RESOURCES</Heading>
+              <Button variant="link" onClick={() => setSubPage("info")}>Heat Info</Button>
+            </Flex>
+            <Flex
+              direction="column"
+              align="start"
+              gap="5px"
+              w="100%"
+              p="15px"
+              bg={bgColor}
+              borderRadius="lg"
+            >
+              
+              <Heading size="sm" mb="5px">ABOUT PRESKO</Heading>
+              <Button variant="link" onClick={() => setSubPage("about")}>About</Button>
+              <Button variant="link" onClick={() => setSubPage("share")}>Share the App</Button>
+
+            </Flex>
+          </>
+        )}
+        </Flex>
+    </Flex>
   );
 }
 

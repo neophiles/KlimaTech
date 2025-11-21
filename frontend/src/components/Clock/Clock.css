@@ -64,17 +64,6 @@
   background: red;
 }
 
-/* Center dot */
-/* .inner-clock::after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #333;
-  border-radius: 50%;
-  z-index: 10;
-} */
-
 .clock-heat-info {
   display: flex;
   flex-direction: column;
@@ -83,11 +72,12 @@
   gap: 5px;
 }
 
-/* Hour numbers around the clock */
 .inner-clock .hour {
   position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
   font-size: 1rem;
-  color: #333;
   font-weight: 500;
 }
 
@@ -103,6 +93,7 @@
 .risk-level {
   font-weight: bold;
   font-size: 1.75rem;
+  line-height: 1;
 }
 
 .current-hour-heat-index  {
@@ -111,7 +102,7 @@
   font-size: 0.9rem;
   font-weight: bold;
   width: auto;
-  padding: 4px 8px;
+  padding: 2px 8px;
 }
 
 .twelve { top: 3.3%; left: 50%; transform: translateX(-50%); }
@@ -129,7 +120,6 @@
 
 .active-hour {
   position: relative;
-  color: #000;
   font-weight: 700;
 }
 
@@ -140,7 +130,7 @@
   left: 50%;
   width: 1.5em;
   height: 1.5em;
-  border: 2px solid #ff5722; /* or match rim color dynamically later */
+  border: 2px solid #ff5722;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 2; /* keep behind the text */
@@ -151,15 +141,6 @@
 @keyframes pulse {
   0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
-}
-
-/* Heat index labels (optional) */
-[class$="-heat"] {
-  position: absolute;
-  font-size: 0.75rem;
-  color: #444;
-  opacity: 0.7;
-  transform: translate(-50%, -50%);
 }
 
 .twelve-heat  { top: 12%;  left: 50%; }
@@ -175,7 +156,6 @@
 .ten-heat     { top: 35%; left: 14%; }
 .eleven-heat  { top: 20%; left: 24%; }
 
-/* Responsiveness */
 @media (max-width: 500px) {
   .clock-container {
     width: 180px;

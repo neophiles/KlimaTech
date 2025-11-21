@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class UserCreate(BaseModel):
     username: str
+    password: str
     lat: Optional[float] = None
     lon: Optional[float] = None
     user_type: str
@@ -15,10 +16,11 @@ class UserEdit(BaseModel):
 
 class UserLogin(BaseModel):
     username: str
+    password: str
 
 class UserRead(BaseModel):
     id: int
     username: str
     lat: Optional[float] = None
     lon: Optional[float] = None
-    user_type: str
+    user_type: Optional[str] = None

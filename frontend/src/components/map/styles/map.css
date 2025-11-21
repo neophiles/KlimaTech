@@ -1,0 +1,33 @@
+/* Remove default Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  border: none;
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+  max-width: 250px;
+  font-size: inherit;
+  color: inherit;
+}
+
+.leaflet-popup-tip {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-popup {
+  margin-bottom: 0;
+}
+
+.leaflet-popup-content-wrapper p {
+  margin: 0;
+}
+
+.leaflet-popup-close-button {
+  display: none;
+}

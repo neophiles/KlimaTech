@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routers import (
+    auth,
     barangays,
     coolspots,
     forecast,
@@ -19,6 +20,7 @@ scheduler = BackgroundScheduler()
 
 # Allow frontend origins
 origins = [
+    "http://localhost:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://presko-frontend.onrender.com",
@@ -33,6 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(barangays.router)
 app.include_router(forecast.router)
 app.include_router(coolspots.router)

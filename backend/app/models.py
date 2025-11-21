@@ -66,6 +66,7 @@ class UserType(str, Enum):
 class UserProfile(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
+    password_hash: str
     lat: Optional[float] = None
     lon: Optional[float] = None
     user_type: Optional[UserType] = Field(default=None)

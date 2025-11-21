@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 from typing import Optional, List
 from app.db import get_session
+from app.security import get_current_user
 
 from app.schemas.profile import UserCreate, UserLogin, UserRead, UserEdit
 from app.schemas.user_type import (
@@ -16,6 +17,7 @@ from app.schemas.user_type import (
                             )
 
 
+from app.models import UserProfile
 from app.crud.profile import (
     get_all_users,
     add_user,
@@ -33,9 +35,25 @@ from app.crud.profile import (
     get_home_based_profile,
 )
 
-router = APIRouter(prefix="/user", tags=["Users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 # TODO: Fix response models
+
+@router.get("/me", response_model=UserRead)
+async def get_current_user_route(current_user: UserProfile = Depends(get_current_user)):
+    """Get current authenticated user"""
+    return current_user
+
+
+@router.patch("/me", response_model=UserRead)
+async def update_current_user_route(
+    user_data: UserEdit, 
+    current_user: UserProfile = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Update current authenticated user"""
+    return update_user(session, current_user.id, user_data)
+
 
 @router.get("/all", response_model=list[UserRead])
 async def get_all_users_route(session: Session = Depends(get_session)):
