@@ -10,10 +10,12 @@ from app.routers import (
 )
 from app.db import init_db, engine
 from app.tasks.collector import collect_heat_data
+from app.scripts.prepopulate_coolspots_json import main as prepopulate_coolspots
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 from app.models import Barangay
+
 
 app = FastAPI()
 scheduler = BackgroundScheduler()
@@ -79,6 +81,14 @@ barangays_data = [
 def on_startup():
     init_db()
 
+    # Run prepopulate coolspots
+    try:
+        print("Running coolspots prepopulation...")
+        prepopulate_coolspots()
+        print("Coolspots prepopulation completed!")
+    except Exception as e:
+        print(f"Coolspots prepopulation error: {e}")
+
     # Barangays prepopulation 
     with Session(engine) as session:
         result = session.exec(select(Barangay)).first()
@@ -90,8 +100,7 @@ def on_startup():
             session.commit()
             print("Barangays added!")
 
-
-    # Scheduler (existing)
+    # Scheduler
     scheduler.add_job(collect_heat_data, "interval", minutes=60)
     scheduler.start()
     print("APScheduler started. Collecting heat data every hour.")
