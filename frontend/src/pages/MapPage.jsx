@@ -59,16 +59,29 @@ function Map() {
     }
   }, [searchParams]);
 
-  // Fetch coolspots from backend
+  // Fetch coolspots from backend with fallback to local JSON
   useEffect(() => {
     const fetchCoolspots = async () => {
       try {
         const response = await api.get("/coolspots/all");
         setPreskospots(response.data);
       } catch (error) {
-        console.error("Error fetching coolspots:", error);
-        // Fall back to empty array if API fails
-        setPreskospots([]);
+        console.warn("Backend offline or failed, loading from local fallback:", error);
+        // Fall back to local JSON file if API fails
+        try {
+          const fallbackResponse = await fetch("/preskospots.json");
+          if (fallbackResponse.ok) {
+            const fallbackData = await fallbackResponse.json();
+            setPreskospots(fallbackData);
+            console.log("Loaded preskospots from local fallback");
+          } else {
+            console.error("Fallback file not found");
+            setPreskospots([]);
+          }
+        } catch (fallbackError) {
+          console.error("Error loading fallback file:", fallbackError);
+          setPreskospots([]);
+        }
       }
     };
 
