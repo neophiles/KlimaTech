@@ -80,7 +80,7 @@ function CredentialsStep({ onSubmit, userData, setUserData }) {
                 type="text"
                 name="username"
                 value={userData.username}
-                placeholder="johndoe"
+                placeholder="juandelacruz"
                 onChange={handleChange}
                 variant="filled"
               />
