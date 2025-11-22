@@ -56,7 +56,7 @@ function Dashboard() {
         />
         <Clock barangayId={barangayId} />
         <NearestPresko />
-        {barangayId && <InitTips barangayId={barangayId} userId={user?.id} />}
+        <InitTips barangayId={barangayId} userId={user?.id} />
       </Flex>
     </Flex>
   );
