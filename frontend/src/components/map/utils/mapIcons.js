@@ -8,8 +8,8 @@ delete L.Icon.Default.prototype._getIconUrl;
 const userIcon = new Icon({
   iconUrl: youPNG,
   iconSize: [20, 20],
-  iconAnchor: [10, 10], // <-- Change this to perfectly center
-  popupAnchor: [0, -10]  // <-- Adjust popup anchor to match center
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10]
 });
 
 const preskoIcon = new Icon({

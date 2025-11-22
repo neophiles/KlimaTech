@@ -1,11 +1,12 @@
 import { 
   Box, Flex,
-  Heading, Text,
+  Heading, Text, Image,
   Button, Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
 
 import { Maximize } from "lucide-react";
+import api from "../../../api/axios";
 
 function PreskoPopup({ spot, onOpen, setSelectedSpot }) {
   const bgColor = useColorModeValue("gray.50", "gray.700");
@@ -15,6 +16,12 @@ function PreskoPopup({ spot, onOpen, setSelectedSpot }) {
   const handleMaximizeClick = () => {
     setSelectedSpot(spot);
     onOpen();
+  };
+
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    const baseUrl = api.defaults.baseURL;
+    return path.startsWith('http') ? path : `${baseUrl}${path}`;
   };
 
   return (
@@ -27,7 +34,13 @@ function PreskoPopup({ spot, onOpen, setSelectedSpot }) {
       bg={bgColor}
       boxShadow="md"
     >
-      <Box h="125px" w="100%" bg="whiteAlpha.500" gap="10px">
+      <Box position="relative">
+        {spot.photo_url ? (
+          <Image src={getImageUrl(spot.photo_url)} h="125px" w="100%" objectFit="cover" />
+        ) : (
+          <Box h="125px" w="100%" bg="whiteAlpha.500" gap="10px" />
+        )}
+
         <Button
           size="xs"
           position="absolute"
@@ -50,7 +63,7 @@ function PreskoPopup({ spot, onOpen, setSelectedSpot }) {
           {spot?.type || "Location"}
         </Text>
         <Text fontSize="xs" color={textColor}>
-          {spot?.Address || ""}
+          {spot?.description || ""}
         </Text>
       </Flex>
     </Flex>

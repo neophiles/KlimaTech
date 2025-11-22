@@ -58,11 +58,13 @@ def create_coolspot(
     type: str,
     lat: float,
     lon: float,
+    address: Optional[str] = None,
     photo_url: Optional[str] = None
 ) -> CoolSpot:
     new_coolspot = CoolSpot(
         barangay_id=barangay_id,
         name=name,
+        address=address,
         description=description,
         type=type,
         lat=lat,

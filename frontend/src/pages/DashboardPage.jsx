@@ -9,7 +9,7 @@ import Greetings from "../widgets/Greetings";
 import InitTips from "../components/InitTips/InitTips";
 import { useUserLocation } from "../hooks/useUserLocation";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import { fetchnNearestBranch } from "../api/heat";
+import { fetchNearestBranch } from "../api/heat";
 
 function Dashboard() {
   const { userLocation, isLoading: locationLoading } = useUserLocation();
@@ -19,7 +19,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (userLocation) {
-      fetchnNearestBranch(userLocation.lat, userLocation.lon)
+      fetchNearestBranch(userLocation.lat, userLocation.lon)
         .then((data) => {
           setBarangayInfo(data);
           setBarangayId(data.id);
@@ -56,7 +56,7 @@ function Dashboard() {
         />
         <Clock barangayId={barangayId} />
         <NearestPresko />
-        {barangayId && <InitTips barangayId={barangayId} userId={user?.id} />}
+        <InitTips barangayId={barangayId} userId={user?.id} />
       </Flex>
     </Flex>
   );

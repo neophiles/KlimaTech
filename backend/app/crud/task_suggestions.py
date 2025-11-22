@@ -118,12 +118,24 @@ async def generate_task_suggestions(data: TaskInput, session: Session) -> List[T
 
     tasks_text = "\n".join(task_contexts)
 
-    prompt = f"""
-You are an AI that gives short, practical advice about each task 
-based on the current weather conditions. You must only reply to 
-the provided tasks — do not invent new ones.
 
-Weather in {weather['barangay']}, {weather['province']}: 
+    prompt = f"""
+Role: You are a concise, authoritative Safety & Wellness Advisor. Your goal is to provide practical, health-focused advice based on the current weather conditions and location.
+
+Instructions:
+Analyze the provided weather/context.
+Generate exactly 6 tips: strictly 3 "Do's" and 3 "Don'ts".
+Language: Use natural, conversational Tagalog/Filipino.
+Tone: Trustworthy, urgent, and "punchy" (direct commands).
+
+Content Rules:
+Main Text: Must be an imperative command (e.g., "Inom lang ng inom"). Keep it under 8 words.
+Sub Text: A single sentence explaining why or how. Focus on health and safety.
+
+Output Format: Respond with a single JSON array with objects like:
+[ {{ "is_do": true/false, "main_text": "string", "sub_text": "string" }} ]
+
+Weather in {weather['barangay']}, {weather['province']}:
 {weather['temperature']}°C, humidity {weather['humidity']}%, 
 UV index {weather['uv_index']}, heat index {weather['heat_index']}°C ({weather['risk_level']}).
 
@@ -131,9 +143,10 @@ Tasks to evaluate:
 {tasks_text}
 
 Respond ONLY with suggestions for these exact tasks.
-For each, follow this format exactly:
+For each, follow this format:
 - [Task name] at [time] -> [one-sentence suggestion]
 """
+
 
     if co is None:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="AI client not configured")
@@ -270,6 +283,7 @@ based on the following weather data and the person's profile. Tailor tips to the
 so they are realistic and actionable for that person. Also, make sure that the tips are 
 hyperspecific, concise, and accurate.
 Make the responses Tagalog/Filipino language.
+Ensure the tips adheres to Philippine PAGASA and DOH heat safety guidelines.
 
 {weather_summary}
 
