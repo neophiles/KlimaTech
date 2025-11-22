@@ -98,7 +98,7 @@ function Login() {
 									type="text"
 									name="username"
 									value={loginData.username}
-									placeholder="johndoe"
+									placeholder="juandelacruz"
 									onChange={handleChange}
 									variant="filled"
 								/>
