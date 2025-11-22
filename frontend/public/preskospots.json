@@ -1,0 +1,332 @@
+[
+  {
+    "barangay_id": 3,
+    "name": "UP Town Center",
+    "address": "UP Diliman",
+    "type": "Mall",
+    "lat": 14.65061406,
+    "lon": 121.0752119,
+    "photo_url": "/static/uploads/up-town-center.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Sunken Garden",
+    "address": "UP Diliman",
+    "type": "Park",
+    "lat": 14.65492544,
+    "lon": 121.0728552,
+    "photo_url": "/static/uploads/up-sunken-garden.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Promenade",
+    "address": "UP Diliman",
+    "type": "Park",
+    "lat": 14.6550108,
+    "lon": 121.0702716,
+    "photo_url": "/static/uploads/up-promenade.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP College of Science Ampitheater",
+    "address": "UP Diliman",
+    "type": "Shaded Area",
+    "lat": 14.64959362,
+    "lon": 121.0718754,
+    "photo_url": "/static/uploads/up-cos-ampitheater.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Waiting Shed / Rest Stop",
+    "address": "UP Diliman",
+    "type": "Shaded Area",
+    "lat": 14.6498006,
+    "lon": 121.0686777,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "7-Eleven",
+    "address": "Katipunan Avenue",
+    "type": "Convenience Store",
+    "lat": 14.64376872,
+    "lon": 121.0611132,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "7-Eleven (UP Diliman 1)",
+    "address": "UP Diliman",
+    "type": "Convenience Store",
+    "lat": 14.65830843,
+    "lon": 121.0672113,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "7-Eleven (UP Diliman 2)",
+    "address": "UP Diliman",
+    "type": "Convenience Store",
+    "lat": 14.64988787,
+    "lon": 121.0746693,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Shopping Center",
+    "address": "UP Diliman",
+    "type": "Plaza",
+    "lat": 14.65963492,
+    "lon": 121.06993,
+    "photo_url": "/static/uploads/up-shopping-center.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "7-Eleven (UP Diliman 3)",
+    "address": "UP Diliman",
+    "type": "Convenience Store",
+    "lat": 14.66392982,
+    "lon": 121.0698229,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "7-Eleven (UP Diliman 4)",
+    "address": "UP Diliman",
+    "type": "Convenience Store",
+    "lat": 14.66436782,
+    "lon": 121.0680052,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Gym",
+    "address": "UP Diliman",
+    "type": "Covered Court",
+    "lat": 14.65947769,
+    "lon": 121.0627697,
+    "photo_url": "/static/uploads/up-gym.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Jeepney Stop",
+    "address": "UP Diliman",
+    "type": "Shaded Area",
+    "lat": 14.64902555,
+    "lon": 121.0689974,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Uncle John's",
+    "address": "Katipunan Avenue",
+    "type": "Convenience Store",
+    "lat": 14.65324958,
+    "lon": 121.0528042,
+    "photo_url": "/static/uploads/uncle-johns-up-technohub.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Ayala Land Technohub Central Park",
+    "address": "UP Diliman",
+    "type": "Park",
+    "lat": 14.6572387,
+    "lon": 121.0551602,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Simplicity Mini Stop",
+    "address": "UP Diliman",
+    "type": "Convenience Store",
+    "lat": 14.66836775,
+    "lon": 121.0736829,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Vargas Museum",
+    "address": "UP Diliman",
+    "type": "Museum",
+    "lat": 14.653286,
+    "lon": 121.06979,
+    "photo_url": "/static/uploads/vargas-museum.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Washington SyCip Garden of Native Trees",
+    "address": "UP Diliman",
+    "type": "Park",
+    "lat": 14.654611,
+    "lon": 121.070583,
+    "photo_url": "/static/uploads/washington-sycip-garden.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Gyud Food",
+    "address": "UP Diliman",
+    "type": "Food Court",
+    "lat": 14.6562,
+    "lon": 121.0688,
+    "photo_url": "/static/uploads/gyud-food.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Art Circle Cafe (Bahay ng Alumni)",
+    "address": "UP Diliman",
+    "type": "Cafe",
+    "lat": 14.65925,
+    "lon": 121.06958,
+    "photo_url": "/static/uploads/art-circle-cafe.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Nomu Cafe",
+    "address": "UP Diliman",
+    "type": "Cafe",
+    "lat": 14.6585,
+    "lon": 121.0682,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Arboretum",
+    "address": "UP Diliman",
+    "type": "Nature Reserve",
+    "lat": 14.6638,
+    "lon": 121.0575,
+    "photo_url": "/static/uploads/up-arboretum.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 4,
+    "name": "Regis Center",
+    "address": "Maginhawa Street",
+    "type": "Mall",
+    "lat": 14.6434,
+    "lon": 121.0739,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "University Hotel",
+    "address": "UP Diliman",
+    "type": "Hotel/Cafe",
+    "lat": 14.6518,
+    "lon": 121.0671,
+    "photo_url": "/static/uploads/university-hotel.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP Diliman Lagoon",
+    "address": "UP Diliman",
+    "type": "Park",
+    "lat": 14.653800,
+    "lon": 121.068900,
+    "photo_url": "/static/uploads/up-diliman-lagoon.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Parish of the Holy Sacrifice (UP Chapel)",
+    "address": "UP Diliman",
+    "type": "Sanctuary",
+    "lat": 14.659200,
+    "lon": 121.071700,
+    "photo_url": "/static/uploads/parish-of-holy-sacrifice.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Bulwagan ng Dangal (University Heritage Museum)",
+    "address": "UP Diliman",
+    "type": "Museum",
+    "lat": 14.654400,
+    "lon": 121.068600,
+    "photo_url": "/static/uploads/bulwagan-ng-dangal.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "The Glass House Study Hub",
+    "address": "University Hotel, UP Diliman",
+    "type": "Coworking Space",
+    "lat": 14.651800,
+    "lon": 121.067100,
+    "photo_url": "/static/uploads/glass-house-study-hub.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "Cine Adarna (UP Film Institute)",
+    "address": "UP Diliman",
+    "type": "Theater",
+    "lat": 14.654300,
+    "lon": 121.071100,
+    "photo_url": "/static/uploads/cine-adarna.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 3,
+    "name": "UP NIGS Geology Museum",
+    "address": "UP Diliman",
+    "type": "Museum",
+    "lat": 14.651500,
+    "lon": 121.071500,
+    "photo_url": "/static/uploads/geology-museum.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 4,
+    "name": "Gubat QC",
+    "address": "UP Village Area",
+    "type": "Restaurant",
+    "lat": 14.647000,
+    "lon": 121.056500,
+    "photo_url": null,
+    "reports": []
+  },
+  {
+    "barangay_id": 4,
+    "name": "Talisay The Garden Cafe",
+    "address": "Maginhawa Street",
+    "type": "Restaurant",
+    "lat": 14.645500,
+    "lon": 121.060500,
+    "photo_url": "/static/uploads/talisay-garden-cafe.png",
+    "reports": []
+  },
+  {
+    "barangay_id": 4,
+    "name": "47 East",
+    "address": "Loyola Heights/Katipunan",
+    "type": "Coworking Space",
+    "lat": 14.641500,
+    "lon": 121.074000,
+    "photo_url": "/static/uploads/47-east.png",
+    "reports": []
+  }
+]
