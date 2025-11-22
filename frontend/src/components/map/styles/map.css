@@ -8,6 +8,8 @@
 }
 
 .leaflet-popup-content {
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 0;
   min-width: 250px;

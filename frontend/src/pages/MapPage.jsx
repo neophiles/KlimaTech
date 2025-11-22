@@ -27,6 +27,7 @@ import {
 import { userIcon, preskoIcon } from "../components/map/utils/mapIcons";
 import { useUserLocation } from "../hooks/useUserLocation";
 import api from "../api/axios";
+import UserPopup from "../components/map/views/UserPopup";
 
 function Map() {
   const { userLocation } = useUserLocation();
@@ -131,7 +132,7 @@ function Map() {
             icon={userIcon}
           >
             <Popup>
-              <strong>Your Location</strong>
+              <UserPopup />
             </Popup>
           </Marker>
         )}
