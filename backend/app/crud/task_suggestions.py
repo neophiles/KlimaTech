@@ -283,6 +283,7 @@ based on the following weather data and the person's profile. Tailor tips to the
 so they are realistic and actionable for that person. Also, make sure that the tips are 
 hyperspecific, concise, and accurate.
 Make the responses Tagalog/Filipino language.
+Ensure the tips adheres to Philippine PAGASA and DOH heat safety guidelines.
 
 {weather_summary}
 
